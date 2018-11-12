@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from account.models import User
+from .models import User
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('pk', 'email', 'password',)

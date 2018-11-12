@@ -1,6 +1,8 @@
 from django.urls import path, include
-from apis.v1.urls import router
+from account.urls import router as userRouter
+from .v1 import urls
 
 urlpatterns = [
-    path('v1/', include(router.urls))
+    path('', include(userRouter.urls)),
+    path('v1/', include(urls))
 ]
