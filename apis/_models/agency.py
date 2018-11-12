@@ -12,5 +12,8 @@ class Agency(models.Model):
     members = models.ManyToManyField('Profile', related_name='agency_members')
     posts = models.ManyToManyField(Post, blank=True)
 
+    class Meta:
+        verbose_name_plural = 'Agencies'
+
     def __str__(self):
         return self.name

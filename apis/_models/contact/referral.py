@@ -1,6 +1,6 @@
 from django.db import models
 
-from .schedule import Schedule
+from apis._models.schedule import Schedule
 
 class ReferralStatus(models.Model):
     status = models.CharField(max_length=30)

@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 
-from .referral import Referral
+from .contact.contact import Contact
 from .schedule import Schedule
 from .point import Point
 from .group import Group
@@ -22,7 +22,7 @@ class Profile(models.Model):
     profile_image = models.ImageField()
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
-    referrals = models.ManyToManyField(Referral, blank=True)
+    contacts = models.ManyToManyField(Contact, blank=True)
     schedules = models.ManyToManyField(Schedule, blank=True)
     sales = models.ManyToManyField(Sales, blank=True)
     points = models.ManyToManyField(Point, blank=True)
