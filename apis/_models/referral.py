@@ -2,7 +2,7 @@ from django.db import models
 
 from .schedule import Schedule
 
-class Referral_status(models.Model):
+class ReferralStatus(models.Model):
     status = models.CharField(max_length=30)
 
     def __str__(self):
@@ -10,7 +10,7 @@ class Referral_status(models.Model):
 
 class Referral(models.Model):
     name = models.CharField(max_length=200)
-    status = models.ForeignKey(Referral_status, on_delete=models.CASCADE)
+    status = models.ForeignKey(ReferralStatus, on_delete=models.CASCADE)
     remark = models.TextField(blank=True, null=True)
     contact_no = models.CharField(max_length=30)
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, blank=True, null=True)

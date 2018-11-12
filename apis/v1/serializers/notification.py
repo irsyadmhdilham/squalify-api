@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apis._models.notification import Notification, Notification_type
+from apis._models.notification import Notification
 from apis._models.profile import Profile
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):

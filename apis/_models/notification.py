@@ -1,6 +1,6 @@
 from django.db import models
 
-class Notification_type(models.Model):
+class NotificationType(models.Model):
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -8,7 +8,7 @@ class Notification_type(models.Model):
 
 class Notification(models.Model):
     notified_by = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    notification_type = models.OneToOneField(Notification_type, on_delete=models.CASCADE)
+    notification_type = models.OneToOneField(NotificationType, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

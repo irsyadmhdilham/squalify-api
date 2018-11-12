@@ -2,7 +2,7 @@ from django.db import models
 from .sales import Sales
 from .referral import Referral
 
-class Post_type(models.Model):
+class PostType(models.Model):
     post_type = models.CharField(max_length=30)
 
     def __str__(self):
@@ -25,7 +25,7 @@ class Applause(models.Model):
 
 class Post(models.Model):
     posted_by = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    post_type = models.ForeignKey(Post_type, on_delete=models.CASCADE)
+    post_type = models.ForeignKey(PostType, on_delete=models.CASCADE)
     sales_relation = models.ForeignKey(Sales, on_delete=models.CASCADE, blank=True, null=True)
     users_tagged = models.ManyToManyField('Profile', blank=True, related_name='users')
     referral_tagged = models.ForeignKey(Referral, on_delete=models.CASCADE, blank=True, null=True)

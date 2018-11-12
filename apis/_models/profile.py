@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 
 from .referral import Referral
@@ -20,7 +20,7 @@ class Designation(models.Model):
 class Profile(models.Model):
     name = models.CharField(max_length=200)
     profile_image = models.ImageField()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     referrals = models.ManyToManyField(Referral, blank=True)
     schedules = models.ManyToManyField(Schedule, blank=True)
