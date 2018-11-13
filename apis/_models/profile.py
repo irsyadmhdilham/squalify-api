@@ -34,9 +34,12 @@ default_settings = {
     }
 }
 
+def user_directory_path(instance, filename):
+    return 'users/{}/{}'.format(instance.user.id, filename)
+
 class Profile(models.Model):
     name = models.CharField(max_length=200)
-    profile_image = models.ImageField()
+    profile_image = models.ImageField(upload_to=user_directory_path)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     contacts = models.ManyToManyField(Contact, blank=True)

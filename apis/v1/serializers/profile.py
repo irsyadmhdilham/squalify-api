@@ -3,7 +3,7 @@ from apis._models.profile import Profile, Designation
 from apis._models.agency import Agency
 from apis._models.group import Group
 
-from .referral import ReferralSerializer
+from .contact import ContactSerializer
 from .schedule import ScheduleSerializer
 from .point import PointSerializer
 from .inbox import InboxSerializer
@@ -28,7 +28,7 @@ class uplineSerializer(serializers.HyperlinkedModelSerializer):
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     designation = serializers.StringRelatedField()
     user = serializers.StringRelatedField()
-    referrals = ReferralSerializer(many=True, allow_null=True)
+    contacts = ContactSerializer(many=True, allow_null=True)
     schedules = ScheduleSerializer(many=True, allow_null=True)
     points = PointSerializer(many=True, allow_null=True)
     group = GroupSerializer(allow_null=True)
