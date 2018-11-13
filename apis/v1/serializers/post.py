@@ -3,7 +3,7 @@ from apis._models.post import Post, Comment, Applause
 from apis._models.profile import Profile
 
 from .sales import SalesSerializer
-from .referral import ReferralSerializer
+from .contact import ContactSerializer
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -30,7 +30,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     post_type = serializers.CharField(max_length=30)
     sales_relation = SalesSerializer()
     users_tagged = ProfileSerializer(read_only=True)
-    referral_tagged = ReferralSerializer(read_only=True)
+    contact_relation = ContactSerializer(read_only=True)
     applause = ApplauseSerializer(many=True)
     comments = CommentSerializer(many=True)
 

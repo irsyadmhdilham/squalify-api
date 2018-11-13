@@ -8,9 +8,9 @@ from ._models.inbox import Inbox, Conversation
 from ._models.notification import Notification, NotificationType
 from ._models.point import Point
 from ._models.profile import Profile, Designation
-from ._models.referral import Referral, ReferralStatus
+from ._models.contact import Contact, ContactStatus, ContactType
 from ._models.schedule import Schedule
-from ._models.sales import Sales, SalesType, Surcharge
+from ._models.sales import Sales, SalesType, Surcharge, SalesStatus
 from ._models.post import Post, PostType
 
 admin.site.register(Industry)
@@ -30,14 +30,16 @@ admin.site.register(Point)
 admin.site.register(Designation)
 admin.site.register(Profile)
 
-admin.site.register(ReferralStatus)
-admin.site.register(Referral)
+admin.site.register(ContactStatus)
+admin.site.register(Contact)
+admin.site.register(ContactType)
 
 admin.site.register(Schedule)
 
 admin.site.register(SalesType)
 admin.site.register(Sales)
 admin.site.register(Surcharge)
+admin.site.register(SalesStatus)
 
 admin.site.register(PostType)
 admin.site.register(Post)

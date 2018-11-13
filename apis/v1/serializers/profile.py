@@ -46,7 +46,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
             'profile_image',
             'user',
             'designation',
-            'referrals',
+            'contacts',
             'schedules',
             'points',
             'group',

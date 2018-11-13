@@ -6,6 +6,11 @@ from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 
 class UserViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        queryset = User.objects.all()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data)
     
     def create(self, request):
         email = request.data.get('email')

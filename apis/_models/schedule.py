@@ -9,7 +9,7 @@ class Schedule(models.Model):
     location = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='contacts')
     repetition = JSONField(null=True, blank=True)
 
     def __str__(self):

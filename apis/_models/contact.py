@@ -9,6 +9,9 @@ class ContactType(models.Model):
 class ContactStatus(models.Model):
     status = models.CharField(max_length=30, unique=True)
 
+    class Meta:
+        verbose_name_plural = 'Contact status'
+
     def __str__(self):
         return self.status
 
@@ -21,7 +24,7 @@ class Contact(models.Model):
     contact_type = models.ForeignKey(ContactType, on_delete=models.CASCADE)
     remark = models.TextField(blank=True, null=True)
     contact_no = models.CharField(max_length=30)
-    schedule = models.ManyToManyField('Schedule', on_delete=models.CASCADE, blank=True)
+    schedule = models.ManyToManyField('Schedule', blank=True, related_name='contact_schedules')
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to=contact_directory_path, null=True, blank=True)

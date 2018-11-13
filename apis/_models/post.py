@@ -1,6 +1,6 @@
 from django.db import models
 from .sales import Sales
-from .referral import Referral
+from .contact import Contact
 
 class PostType(models.Model):
     post_type = models.CharField(max_length=30)
@@ -28,7 +28,7 @@ class Post(models.Model):
     post_type = models.ForeignKey(PostType, on_delete=models.CASCADE)
     sales_relation = models.ForeignKey(Sales, on_delete=models.CASCADE, blank=True, null=True)
     users_tagged = models.ManyToManyField('Profile', blank=True, related_name='users')
-    referral_tagged = models.ForeignKey(Referral, on_delete=models.CASCADE, blank=True, null=True)
+    contact_relation = models.ForeignKey(Contact, on_delete=models.CASCADE, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     comments = models.ManyToManyField(Comment, blank=True)
     applause = models.ManyToManyField(Applause, blank=True)

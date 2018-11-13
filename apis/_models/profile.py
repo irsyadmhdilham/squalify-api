@@ -1,5 +1,5 @@
 from django.db import models
-from django.conf import settings.AUTH_USER_MODEL as User
+from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 
 from .contact import Contact
@@ -17,22 +17,23 @@ class Designation(models.Model):
     def __str__(self):
         return self.designation
 
-default_settings = {
-    'social_net_acc': {
-        'facebook': None,
-        'google': None,
-        'dropbox': None
-    },
-    'notifications': {
-        'push_notification': {
-            'reminder': True,
-            'mentions': True,
-            'direct_message': True,
-            'activities': True
+def default_settings():
+    return {
+        'social_net_acc': {
+            'facebook': None,
+            'google': None,
+            'dropbox': None
         },
-        'email_notification': True
+        'notifications': {
+            'push_notification': {
+                'reminder': True,
+                'mentions': True,
+                'direct_message': True,
+                'activities': True
+            },
+            'email_notification': True
+        }
     }
-}
 
 def user_directory_path(instance, filename):
     return 'users/{}/{}'.format(instance.user.id, filename)
@@ -40,7 +41,7 @@ def user_directory_path(instance, filename):
 class Profile(models.Model):
     name = models.CharField(max_length=200)
     profile_image = models.ImageField(upload_to=user_directory_path)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     contacts = models.ManyToManyField(Contact, blank=True)
     schedules = models.ManyToManyField(Schedule, blank=True)

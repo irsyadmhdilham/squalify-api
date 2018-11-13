@@ -7,7 +7,7 @@ from apis.v1._views.group import GroupViewSet
 router = routers.DefaultRouter()
 router.register('profiles', ProfileViewSet)
 router.register('agencies', AgencyViewSet)
-router.register('groups', GroupViewSet)
+router.register(r'groups', GroupViewSet, basename='groups')
 
 urlpatterns = [
     path('', include(router.urls))

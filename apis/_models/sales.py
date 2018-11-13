@@ -17,6 +17,9 @@ class Surcharge(models.Model):
 class SalesStatus(models.Model):
     sales_status = models.CharField(max_length=30, unique=True)
 
+    class Meta:
+        verbose_name_plural = 'Sales status'
+
     def __str__(self):
         return self.sales_status
 
@@ -30,6 +33,9 @@ class Sales(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
     sales_status = models.ForeignKey(SalesStatus, on_delete=models.CASCADE, to_field='sales_status', default='Submitted')
     document_id = models.CharField(max_length=100, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Sales'
 
     def __str__(self):
         return str(self.timestamp)
