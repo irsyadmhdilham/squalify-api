@@ -1,8 +1,8 @@
 from django.db import models
-from django.conf import settings
+from django.conf import settings.AUTH_USER_MODEL as User
 from django.contrib.postgres.fields import JSONField
 
-from .contact.contact import Contact
+from .contact import Contact
 from .schedule import Schedule
 from .point import Point
 from .group import Group
@@ -17,10 +17,27 @@ class Designation(models.Model):
     def __str__(self):
         return self.designation
 
+default_settings = {
+    'social_net_acc': {
+        'facebook': None,
+        'google': None,
+        'dropbox': None
+    },
+    'notifications': {
+        'push_notification': {
+            'reminder': True,
+            'mentions': True,
+            'direct_message': True,
+            'activities': True
+        },
+        'email_notification': True
+    }
+}
+
 class Profile(models.Model):
     name = models.CharField(max_length=200)
     profile_image = models.ImageField()
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     contacts = models.ManyToManyField(Contact, blank=True)
     schedules = models.ManyToManyField(Schedule, blank=True)
@@ -31,7 +48,7 @@ class Profile(models.Model):
     notifications = models.ManyToManyField(Notification, blank=True)
     upline = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     inbox = models.ManyToManyField(Inbox, blank=True)
-    settings = JSONField()
+    settings = JSONField(default=default_settings)
 
     def __str__(self):
         return self.name
