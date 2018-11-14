@@ -8,7 +8,7 @@ class NotificationType(models.Model):
 
 class Notification(models.Model):
     notified_by = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    notification_type = models.OneToOneField(NotificationType, on_delete=models.CASCADE)
+    notification_type = models.ForeignKey(NotificationType, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

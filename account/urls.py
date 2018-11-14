@@ -1,6 +1,10 @@
 from django.urls import path, include
-from rest_framework import routers
-from .views import UserViewSet
+from rest_framework.urlpatterns import format_suffix_patterns
+from .views import UserViewSet, CreateAccountViewSet
 
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet, basename='user')
+urlpatterns = [
+    path('users', UserViewSet.as_view()),
+    path('create-account', CreateAccountViewSet.as_view())
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])

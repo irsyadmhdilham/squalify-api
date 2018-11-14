@@ -1,4 +1,5 @@
 from rest_framework import routers
+from rest_framework.urlpatterns import format_suffix_patterns
 from django.urls import path, include
 from apis.v1._views.profile import ProfileViewSet
 from apis.v1._views.agency import AgencyViewSet
