@@ -1,15 +1,15 @@
-from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
-from django.urls import path, include
-from apis.v1._views.profile import ProfileViewSet
-from apis.v1._views.agency import AgencyViewSet
-from apis.v1._views.group import GroupViewSet
+from rest_framework import routers
+from django.urls import re_path, include
+from apis.v1._views.profile import CreateAccountView, ProfileViewSet
 
 router = routers.DefaultRouter()
 router.register('profiles', ProfileViewSet)
-router.register('agencies', AgencyViewSet)
-router.register(r'groups', GroupViewSet, basename='groups')
 
+app_name = 'v1'
 urlpatterns = [
-    path('', include(router.urls))
+    re_path(r'^create-account$', CreateAccountView.as_view(), name='create-account'),
+    re_path(r'^', include(router.urls))
 ]
+
+# urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])

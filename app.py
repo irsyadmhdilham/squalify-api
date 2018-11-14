@@ -1,10 +1,17 @@
 import requests
 
 data = {
-    'email': 'irsyadmhdilham@gmail.com',
-    'password': 'Irsyad89'
+    'email': 'irsyadmhdilham@squalify.com',
+    'password': 'Irsyad89',
+    'name': 'Irsyad Mhd Ilham',
+    'designation': 'Group Agency Manager',
+    'agency_name': 'Vision Victory Empire',
+    'industry': 'Unit trust investment',
+    'company': 'Public Mutual'
 }
 
-req = requests.post('http://localhost:8030/account/create-account', data=data)
+url = 'http://localhost:8030/api/v1/create-account'
 
-print(req.text)
+req = requests.post(url, data=data)
+
+print(req.json())

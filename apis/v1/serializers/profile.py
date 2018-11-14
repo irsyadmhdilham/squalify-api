@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apis._models.profile import Profile, Designation
+from apis._models.profile import Profile
 from apis._models.agency import Agency
 from apis._models.group import Group
 
@@ -10,41 +10,49 @@ from .inbox import InboxSerializer
 from .notification import NotificationSerializer
 from .sales import SalesSerializer
 
-class AgencySerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Agency
-        fields = ('url','id', 'name', 'agency_image', 'company', 'industry',)
+class MemberSerializer(serializers.ModelSerializer):
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ('url', 'id',)
-
-class uplineSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ('url', 'id', 'name', 'profile_image',)
+        fields = ('url',)
+
+class AgencySerializer(serializers.HyperlinkedModelSerializer):
+    company = serializers.StringRelatedField(read_only=True)
+    industry = serializers.StringRelatedField(read_only=True)
+    members = MemberSerializer(many=True)
+
+    class Meta:
+        model = Agency
+        fields = ('pk', 'name', 'agency_image', 'company', 'industry', 'members',)
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('pk')
+
+class uplineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('pk', 'name', 'profile_image',)
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     designation = serializers.StringRelatedField()
-    user = serializers.StringRelatedField()
-    contacts = ContactSerializer(many=True, allow_null=True)
-    schedules = ScheduleSerializer(many=True, allow_null=True)
-    points = PointSerializer(many=True, allow_null=True)
-    group = GroupSerializer(allow_null=True)
-    agency = AgencySerializer(read_only=True)
-    notifications = NotificationSerializer(many=True, allow_null=True)
-    inbox = InboxSerializer(many=True, allow_null=True)
-    upline = uplineSerializer(read_only=True)
-    sales = SalesSerializer(many=True, allow_null=True)
+    contacts = ContactSerializer(many=True, allow_null=True, read_only=True)
+    schedules = ScheduleSerializer(many=True, allow_null=True, read_only=True)
+    points = PointSerializer(many=True, allow_null=True, read_only=True)
+    group = serializers.PrimaryKeyRelatedField(read_only=True)
+    agency = AgencySerializer()
+    notifications = NotificationSerializer(many=True, allow_null=True, read_only=True)
+    inbox = InboxSerializer(many=True, allow_null=True, read_only=True)
+    upline = uplineSerializer(allow_null=True)
+    sales = SalesSerializer(many=True, allow_null=True, read_only=True)
 
     class Meta:
         model = Profile
         fields = (
-            'url',
+            'pk',
             'name',
             'profile_image',
-            'user',
             'designation',
             'contacts',
             'schedules',

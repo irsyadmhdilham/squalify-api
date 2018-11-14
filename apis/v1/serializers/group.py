@@ -2,12 +2,12 @@ from rest_framework import serializers
 from apis._models.group import Group
 from apis._models.profile import Profile
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('url', 'id', 'name', 'profile_image',)
+        fields = ('pk', 'name', 'profile_image',)
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField()
     industry = serializers.CharField(max_length=30)
     company = serializers.CharField(max_length=30)
@@ -15,4 +15,4 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Group
-        fields = ('url', 'owner', 'members', 'industry', 'company',)
+        fields = ('pk','owner', 'members', 'industry', 'company',)

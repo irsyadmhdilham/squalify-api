@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from .contact import Contact
 from .schedule import Schedule
@@ -10,6 +11,8 @@ from .agency import Agency
 from .inbox import Inbox
 from .notification import Notification
 from .sales import Sales
+
+User = get_user_model()
 
 class Designation(models.Model):
     designation = models.CharField(max_length=30)
@@ -38,10 +41,13 @@ def default_settings():
 def user_directory_path(instance, filename):
     return 'users/{}/{}'.format(instance.user.id, filename)
 
+def default_image():
+    return '{}/no_image.jpeg'.format(settings.STATICFILES_DIRS[0])
+
 class Profile(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    profile_image = models.ImageField(upload_to=user_directory_path)
+    profile_image = models.ImageField(upload_to='assets', default=default_image())
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     contacts = models.ManyToManyField(Contact, blank=True)
     schedules = models.ManyToManyField(Schedule, blank=True)
