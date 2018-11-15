@@ -1,9 +1,17 @@
 from rest_framework import serializers
 from apis._models.profile import Profile
+from apis._models.agency import Agency
+
+class AgencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agency
+        fields = ('pk', 'name', 'agency_image',)
 
 class ProfileSerializer(serializers.ModelSerializer):
     designation = serializers.StringRelatedField(read_only=True)
-    contacts = serializers.HyperlinkedRelatedField(view_name='contact-detail', read_only=True, many=True)
+    group = serializers.PrimaryKeyRelatedField(read_only=True)
+    agency = AgencySerializer(read_only=True)
+    upline = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Profile
@@ -12,5 +20,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             'name',
             'profile_image',
             'designation',
-            'contacts',
+            'settings',
+            'group',
+            'agency',
+            'upline',
         )

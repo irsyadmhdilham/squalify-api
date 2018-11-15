@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from apis._models.point import Point
 
-class PointSerializer(serializers.HyperlinkedModelSerializer):
+class PointSerializer(serializers.ModelSerializer):
     class Meta:
         model = Point
         fields = (
-            'url',
             'millionnaire_suit',
             'calls_emails_socmed',
             'appointment_secured',
