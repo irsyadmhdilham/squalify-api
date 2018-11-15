@@ -1,11 +1,17 @@
 from rest_framework import serializers
 from apis._models.contact import Contact
-from .schedule import ScheduleSerializer
+from apis._models.profile import Profile
 
-class ContactSerializer(serializers.HyperlinkedModelSerializer):
-    schedule = ScheduleSerializer(allow_null=True, many=True)
-    contact_type = serializers.CharField(max_length=30)
+class ContactsSerializer(serializers.HyperlinkedModelSerializer):
+    contact_type = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Contact
-        fields = ('url', 'name', 'status', 'contact_type', 'remark', 'contact_no', 'schedule', 'image',)
+        fields = ('url', 'name', 'contact_type',)
+
+class ProfileContacts(serializers.ModelSerializer):
+    contacts = ContactsSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Profile
+        fields = ('contacts',)

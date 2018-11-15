@@ -41,13 +41,12 @@ def default_settings():
 def user_directory_path(instance, filename):
     return 'users/{}/{}'.format(instance.user.id, filename)
 
-def default_image():
-    return '{}/no_image.jpeg'.format(settings.STATICFILES_DIRS[0])
+default_image = 'no_image.jpeg'
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    profile_image = models.ImageField(upload_to='assets', default=default_image())
+    profile_image = models.ImageField(upload_to='uploads/users', default=default_image)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     contacts = models.ManyToManyField(Contact, blank=True)
     schedules = models.ManyToManyField(Schedule, blank=True)
@@ -61,4 +60,4 @@ class Profile(models.Model):
     settings = JSONField(default=default_settings)
 
     def __str__(self):
-        return self.name
+        return 'pk {}: {}'.format(self.pk, self.name)
