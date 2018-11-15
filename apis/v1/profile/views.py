@@ -1,9 +1,12 @@
-from rest_framework import status, generics, viewsets
+from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
 from account.models import User
 from apis._models.profile import Profile
-from apis.v1.serializers.profile import ProfileSerializer
+
+from .serializers import ProfileSerializer
+
 from apis.functions.create_account import CreateAccount
 
 class CreateAccountView(APIView):
@@ -79,6 +82,13 @@ class CreateAccountView(APIView):
         except ValueError as err:
             return Response({ 'error': str(err)},status=status.HTTP_400_BAD_REQUEST)
 
-class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
+class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'pk'
     serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return Profile.objects.all()
+    
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return Profile.objects.get(pk=pk)
