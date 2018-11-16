@@ -12,6 +12,5 @@ data = {
 
 url = 'http://localhost:8030/api/v1/create-account'
 
-req = requests.post(url, data=data)
+# req = requests.post(url, data=data)
 
-print(req.json())

@@ -7,11 +7,11 @@ class AgencySerializer(serializers.ModelSerializer):
         model = Agency
         fields = ('pk', 'name', 'agency_image',)
 
-class ProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     designation = serializers.StringRelatedField(read_only=True)
-    group = serializers.PrimaryKeyRelatedField(read_only=True)
     agency = AgencySerializer(read_only=True)
-    upline = serializers.PrimaryKeyRelatedField(read_only=True)
+    upline = serializers.StringRelatedField(read_only=True)
+    group = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Profile

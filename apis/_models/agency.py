@@ -8,7 +8,7 @@ from django.conf import settings
 User = get_user_model()
 
 def agency_directory_path(instance, filename):
-    return 'agency/{}/{}'.format(instance.user.id, filename)
+    return 'agencies/{}/{}'.format(instance.pk, filename)
 
 default_image = 'no_image.jpeg'
 
@@ -17,7 +17,7 @@ class Agency(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='agency_owner')
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    agency_image = models.ImageField(upload_to='uploads/agencies', default=default_image)
+    agency_image = models.ImageField(upload_to=agency_directory_path, default=default_image)
     members = models.ManyToManyField('Profile', related_name='agency_members')
     posts = models.ManyToManyField(Post, blank=True)
 

@@ -12,6 +12,9 @@ from .inbox import Inbox
 from .notification import Notification
 from .sales import Sales
 
+from apis.functions.image import resize_image
+import re
+
 User = get_user_model()
 
 class Designation(models.Model):
@@ -39,14 +42,14 @@ def default_settings():
     }
 
 def user_directory_path(instance, filename):
-    return 'users/{}/{}'.format(instance.user.id, filename)
+    return 'users/{}/{}'.format(instance.pk, filename)
 
 default_image = 'no_image.jpeg'
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
-    profile_image = models.ImageField(upload_to='uploads/users', default=default_image)
+    profile_image = models.ImageField(upload_to=user_directory_path, default=default_image)
     designation = models.ForeignKey(Designation, on_delete=models.CASCADE)
     contacts = models.ManyToManyField(Contact, blank=True)
     schedules = models.ManyToManyField(Schedule, blank=True)
