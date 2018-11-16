@@ -3,9 +3,11 @@ from apis._models.profile import Profile
 from apis._models.agency import Agency
 
 class AgencySerializer(serializers.ModelSerializer):
+    company = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Agency
-        fields = ('pk', 'name', 'agency_image',)
+        fields = ('pk', 'name', 'agency_image', 'company',)
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     designation = serializers.StringRelatedField(read_only=True)
