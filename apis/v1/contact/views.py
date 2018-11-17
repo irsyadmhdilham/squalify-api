@@ -20,17 +20,7 @@ class ContactList(generics.ListCreateAPIView):
         new_contact = serializer.save(status=status, contact_type=contact_type)
         user.contacts.add(new_contact)
 
-
-class CreateContact(generics.CreateAPIView):
+class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
+    lookup_field = 'pk'
     serializer_class = ContactSerializer
-
-    def perform_create(self, serializer):
-        user_pk = self.request.data.get('user_pk')
-        status_val = self.request.data.get('status')
-        contact_type_val = self.request.data.get('contact_type')
-        user = Profile.objects.get(pk=user_pk)
-        status = ContactStatus.objects.get(status=status_val)
-        contact_type = ContactType.objects.get(contact_type=contact_type_val)
-        new_contact = serializer.save(status=status, contact_type=contact_type)
-        user.contacts.add(new_contact)
