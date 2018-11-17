@@ -97,14 +97,6 @@ class CreateAccount:
         except:
             return False
     
-    def add_member_group(self):
-        try:
-            if self.profile is not None:
-                self.group.members.add(self.profile)
-            return True
-        except:
-            return False
-    
     def add_upline_group(self):
         if self.profile is not None and self.upline is not None:
             self.upline.group.members.add(self.profile)

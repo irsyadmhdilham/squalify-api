@@ -54,7 +54,6 @@ class CreateAccountView(APIView):
                 
                 """Add members in agency and group"""
                 create_account.add_member_agency()
-                create_account.add_member_group()
 
                 return Response({'details': 'Successfully create account'}, status=status.HTTP_200_OK)
             else:
@@ -70,7 +69,6 @@ class CreateAccountView(APIView):
                 
                 """Add members in agency and group"""
                 create_account.add_member_agency()
-                create_account.add_member_group()
                 create_account.add_upline_group()
 
                 return Response({'details': 'Successfully create account'}, status=status.HTTP_200_OK)
