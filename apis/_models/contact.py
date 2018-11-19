@@ -28,6 +28,7 @@ class Contact(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to=contact_directory_path, null=True, blank=True)
+    referrer = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

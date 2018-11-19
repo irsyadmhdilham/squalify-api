@@ -7,4 +7,4 @@ class ScheduleList(generics.ListCreateAPIView):
     
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
-        return Profile.objects.get(pk=user_pk).schedules
+        return Profile.objects.get(pk=user_pk).schedules.all()
