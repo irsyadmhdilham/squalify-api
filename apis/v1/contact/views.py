@@ -11,7 +11,7 @@ class ContactList(generics.ListCreateAPIView):
         return Profile.objects.get(pk=user_pk).contacts.all()
 
     def perform_create(self, serializer):
-        user_pk = self.request.data.get('user_pk')
+        user_pk = self.kwargs.get('user_pk')
         status_val = self.request.data.get('status')
         contact_type_val = self.request.data.get('contact_type')
         user = Profile.objects.get(pk=user_pk)
@@ -24,3 +24,15 @@ class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
     lookup_field = 'pk'
     serializer_class = ContactSerializer
+
+    def perform_update(self, serializer):
+        contact_type_val = self.request.data.get('contact_type')
+        status_val = self.request.data.get('status')
+        contact_type = ContactType.objects.get(contact_type=contact_type_val)
+        status = ContactStatus.objects.get(status=status_val)
+        instance = serializer.save(contact_type=contact_type, status=status)
+
+    def perform_destroy(self, instance):
+        user_pk = self.kwargs.get('user_pk')
+        user = Profile.objects.get(pk=user_pk)
+        user.contacts.remove(instance)
