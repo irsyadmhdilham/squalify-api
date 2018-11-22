@@ -1,23 +1,24 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
+
+class PointField(models.Model):
+    name = models.CharField(max_length=120)
+
+    def __str__(self):
+        return self.name
+
+class PointAttribute(models.Model):
+    point_attr = models.ForeignKey(PointField, on_delete=models.CASCADE)
+    point = models.IntegerField(default=0)
+    last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{}: {}'.format(str(self.timestamp), str(self.field))
 
 class Point(models.Model):
-    millionnaire_suit = models.IntegerField(default=0)
-    be_early_training = models.IntegerField(default=0)
-    calls_emails_socmed = models.IntegerField(default=0)
-    appointment_secured = models.IntegerField(default=0)
-    referrals = models.IntegerField(default=0)
-    sales_presentation = models.IntegerField(default=0)
-    ftf_booth_nesting = models.IntegerField(default=0)
-    case_closed = models.IntegerField(default=0)
-    career_presentation = models.IntegerField(default=0)
-    sign_up_contract = models.IntegerField(default=0)
-    personal_coaching = models.IntegerField(default=0)
-    joining_field_work = models.IntegerField(default=0)
-    servicing_follow_up = models.IntegerField(default=0)
-    update_upline = models.IntegerField(default=0)
-    agency_program = models.IntegerField(default=0)
+    points = models.ManyToManyField(PointAttribute, related_name='points')
+    logs = JSONField(default=dict)
     date = models.DateField(auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.date)
