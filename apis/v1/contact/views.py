@@ -8,7 +8,7 @@ class ContactList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
-        return Profile.objects.get(pk=user_pk).contacts.all()
+        return Profile.objects.get(pk=user_pk).contacts.all().order_by('-created_on')
 
     def perform_create(self, serializer):
         user_pk = self.kwargs.get('user_pk')
