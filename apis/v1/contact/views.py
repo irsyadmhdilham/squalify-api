@@ -14,11 +14,11 @@ class ContactList(generics.ListCreateAPIView):
         user_pk = self.kwargs.get('user_pk')
         status_val = self.request.data.get('status')
         contact_type_val = self.request.data.get('contact_type')
-        user = Profile.objects.get(pk=user_pk)
+        profile = Profile.objects.get(pk=user_pk)
         status = ContactStatus.objects.get(status=status_val)
         contact_type = ContactType.objects.get(contact_type=contact_type_val)
         new_contact = serializer.save(status=status, contact_type=contact_type)
-        user.contacts.add(new_contact)
+        profile.contacts.add(new_contact)
 
 class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
@@ -34,5 +34,6 @@ class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_destroy(self, instance):
         user_pk = self.kwargs.get('user_pk')
-        user = Profile.objects.get(pk=user_pk)
-        user.contacts.remove(instance)
+        profile = Profile.objects.get(pk=user_pk)
+        profile.contacts.remove(instance)
+        instance.delete()

@@ -6,7 +6,7 @@ from ._models.industry import Industry
 from ._models.group import Group
 from ._models.inbox import Inbox, Conversation
 from ._models.notification import Notification, NotificationType
-from ._models.point import Point, PointField
+from ._models.point import Point, PointField, PointAttribute
 from ._models.profile import Profile, Designation
 from ._models.contact import Contact, ContactStatus, ContactType
 from ._models.schedule import Schedule
@@ -25,6 +25,7 @@ admin.site.register(Inbox)
 admin.site.register(NotificationType)
 admin.site.register(Notification)
 
+admin.site.register(PointAttribute)
 admin.site.register(PointField)
 admin.site.register(Point)
 

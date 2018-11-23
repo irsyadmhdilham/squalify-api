@@ -12,9 +12,9 @@ class ScheduleList(generics.ListCreateAPIView):
     
     def perform_create(self, serializer):
         user_pk = self.kwargs.get('user_pk')
-        user = Profile.objects.get(pk=user_pk)
+        profile = Profile.objects.get(pk=user_pk)
         instance = serializer.save()
-        user.schedules.add(instance)
+        profile.schedules.add(instance)
 
 class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SchedulesSerializer
@@ -23,5 +23,6 @@ class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_destroy(self, instance):
         user_pk = self.kwargs.get('user_pk')
-        user = Profile.objects.get(pk=user_pk)
-        user.schedules.remove(instance)
+        profile = Profile.objects.get(pk=user_pk)
+        profile.schedules.remove(instance)
+        instance.delete()
