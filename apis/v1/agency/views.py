@@ -1,7 +1,8 @@
-from rest_framework import viewsets
+from rest_framework import generics
 from apis._models.agency import Agency
-from apis.v1.serializers.agency import AgencySerializer
+from apis._models.profile import Profile
+from .serializers import AgencySerializer
 
-class AgencyViewSet(viewsets.ModelViewSet):
-    queryset = Agency.objects.all()
+class AgencyDetail(generics.RetrieveUpdateAPIView):
     serializer_class = AgencySerializer
+    queryset = Agency.objects.all()
