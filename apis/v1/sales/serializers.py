@@ -8,4 +8,15 @@ class SalesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sales
-        fields = ('pk', 'timestamp', 'amount', 'commission', 'sales_type', 'surcharge', 'sales_status', 'document_id',)
+        fields = (
+            'pk',
+            'timestamp',
+            'amount',
+            'commission',
+            'sales_type',
+            'surcharge',
+            'sales_status',
+            'location',
+            'repeat_sales',
+            'commission',
+        )

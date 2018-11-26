@@ -3,10 +3,10 @@ from .sales import Sales
 from .contact import Contact
 
 class PostType(models.Model):
-    post_type = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.post_type
+        return self.name
 
 class Comment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -16,9 +16,9 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.timestamp)
 
-class Applause(models.Model):
+class Like(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
-    applausers = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    likers = models.ForeignKey('Profile', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.timestamp)
@@ -31,7 +31,7 @@ class Post(models.Model):
     contact_relation = models.ForeignKey(Contact, on_delete=models.CASCADE, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     comments = models.ManyToManyField(Comment, blank=True)
-    applause = models.ManyToManyField(Applause, blank=True)
+    likes = models.ManyToManyField(Like, blank=True)
 
     def __str__(self):
         return '{}, posted on {}'.format(self.posted_by.name, self.timestamp)

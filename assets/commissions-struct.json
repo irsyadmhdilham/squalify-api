@@ -1,0 +1,46 @@
+{
+  "Group Agency Manager": {
+    "Cash": {
+      "Direct": 3.95,
+      "Agency Manager": 0.26,
+      "Agency Supervisor": 0.63,
+      "Unit Trust Consultant": 1.20
+    },
+    "EPF": {
+      "Direct": 2.60,
+      "Agency Manager": 0.13,
+      "Agency Supervisor": 0.31,
+      "Unit Trust Consultant": 0.60
+    }
+  },
+  "Agency Manager": {
+    "Cash": {
+      "Direct": 3.69,
+      "Agency Supervisor": 0.37,
+      "Unit Trust Consultant": 0.94
+    },
+    "EPF": {
+      "Direct": 2.47,
+      "Agency Supervisor": 0.18,
+      "Unit Trust Consultant": 0.47
+    }
+  },
+  "Agency Supervisor": {
+    "Cash": {
+      "Direct": 3.32,
+      "Unit Trust Consultant": 0.57
+    },
+    "EPF": {
+      "Direct": 2.29,
+      "Unit Trust Consultant": 0.29
+    }
+  },
+  "Unit Trust Consultant": {
+    "Cash": {
+      "Direct": 2.57
+    },
+    "EPF": {
+      "Direct": 2.00
+    }
+  }
+}

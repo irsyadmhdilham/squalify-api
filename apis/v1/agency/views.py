@@ -6,3 +6,4 @@ from .serializers import AgencySerializer
 class AgencyDetail(generics.RetrieveUpdateAPIView):
     serializer_class = AgencySerializer
     queryset = Agency.objects.all()
+

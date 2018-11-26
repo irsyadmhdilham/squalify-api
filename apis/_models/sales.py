@@ -3,25 +3,25 @@ from .contact import Contact
 from django.utils import timezone
 
 class SalesType(models.Model):
-    sales_type = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.sales_type
+        return self.name
 
 class Surcharge(models.Model):
-    surcharge = models.FloatField(default=None)
+    name = models.FloatField(default=None)
 
     def __str__(self):
-        return str(self.surcharge)
+        return self.name
 
 class SalesStatus(models.Model):
-    sales_status = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=30, unique=True)
 
     class Meta:
         verbose_name_plural = 'Sales status'
 
     def __str__(self):
-        return self.sales_status
+        return self.name
 
 class Sales(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
@@ -31,8 +31,9 @@ class Sales(models.Model):
     sales_type = models.ForeignKey(SalesType, on_delete=models.CASCADE)
     surcharge = models.ForeignKey(Surcharge, on_delete=models.CASCADE, null=True, blank=True)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
-    sales_status = models.ForeignKey(SalesStatus, on_delete=models.CASCADE, to_field='sales_status', default='Submitted')
+    sales_status = models.ForeignKey(SalesStatus, on_delete=models.CASCADE, to_field='name', default='Submitted')
     document_id = models.CharField(max_length=100, null=True, blank=True)
+    repeat_sales = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Sales'

@@ -1,23 +1,23 @@
 from rest_framework import serializers
-from apis._models.post import Post, Comment, Applause
+from apis._models.post import Post, Comment, Like
 from apis._models.profile import Profile
 
-from .sales import SalesSerializer
-from .contact import ContactSerializer
+from apis.v1.sales.serializers import SalesSerializer
+from apis.v1.contact.serializers import ContactSerializer
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('url', 'id', 'name', 'profile_image',)
+        fields = ('pk', 'name', 'profile_image',)
 
-class ApplauseSerializer(serializers.HyperlinkedModelSerializer):
-    applausers = ProfileSerializer(many=True, read_only=True)
+class LikeSerializer(serializers.ModelSerializer):
+    likers = ProfileSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Applause
-        fields = ('applausers',)
+        model = Like
+        fields = ('likers',)
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     commented_by = ProfileSerializer(read_only=True)
     text = serializers.CharField(max_length=1000)
 
@@ -25,20 +25,19 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         model = Comment
         fields = ('commented_by', 'text', 'timestamp')
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     posted_by = ProfileSerializer(read_only=True)
     post_type = serializers.CharField(max_length=30)
     sales_relation = SalesSerializer()
     users_tagged = ProfileSerializer(read_only=True)
     contact_relation = ContactSerializer(read_only=True)
-    applause = ApplauseSerializer(many=True)
+    likes = LikeSerializer(many=True)
     comments = CommentSerializer(many=True)
 
     class Meta:
         model = Post
         fields = (
-            'url',
-            'id',
+            'pk',
             'posted_by',
             'post_type',
             'sales_relation',
@@ -46,5 +45,5 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
             'referral_tagged',
             'timestamp',
             'comments',
-            'applause',
+            'likes',
         )
