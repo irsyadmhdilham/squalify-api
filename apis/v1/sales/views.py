@@ -1,6 +1,8 @@
 from rest_framework import generics
 from .serializers import SalesSerializer
 from apis._models.profile import Profile
+from apis._models.agency import Agency
+from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, Surcharge
 from apis.functions.income import Income
 import json
@@ -40,6 +42,11 @@ class SalesList(generics.ListCreateAPIView):
         else:
             instance = serializer.save(sales_type=sales_type_instance, commission=income)
         profile.sales.add(instance)
+
+        """create post"""
+        post_type = PostType.objects.get(name='sales closed')
+        create_post = Post.objects.create(posted_by=profile, post_type=post_type, sales_rel=instance)
+        profile.agency.posts.add(create_post)
 
 class SalesRemove(generics.DestroyAPIView):
     serializer_class = SalesSerializer

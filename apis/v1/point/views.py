@@ -1,9 +1,12 @@
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from apis._models.profile import Profile
 from apis._models.point import Point, PointField, PointAttribute
 from datetime import datetime
+from functools import reduce
 
-from .serializers import PointSerializer
+from .serializers import PointSerializer, AllPointSerializer
 
 class PointList(generics.ListCreateAPIView):
     serializer_class = PointSerializer
@@ -94,3 +97,55 @@ class PointDetail(generics.RetrieveUpdateAPIView):
             get_point.logs['logs'].append(log)
             get_point.save()
             attr.save()
+
+class AllPointView(APIView):
+    
+    def get(self, request, user_pk):
+        data = {
+            'personal': 0,
+            'group': 0,
+            'agency': 0
+        }
+        profile = Profile.objects.get(pk=user_pk)
+
+        """today total point"""
+        my_points = profile.points.filter(date=datetime.now().date())
+        if my_points.count() == 1:
+            tday = my_points[0].attributes.all()
+            all_points = map(lambda val: val.point, tday)
+            total = reduce(lambda a,b: a + b, all_points)
+            data['personal'] = total
+        
+        """group total point"""
+        group_members = profile.group.members.all()
+        if group_members.count() != 0:
+            pass
+        
+        """agency total point"""
+        agency_members = profile.agency.members.all()
+        if agency_members.count() != 0:
+            all_points = map(lambda val: val.points.all(), agency_members)
+            flatlist_points = [val for sublist in all_points for val in sublist]
+            points = list(filter(lambda val: val.date == datetime.now().date(), flatlist_points))
+            if len(points) > 0:
+                members_attr = map(lambda val: val.attributes.all(), points)
+                members_attr_flatlist = [val for sublist in members_attr for val in sublist]
+                all_agency_points = map(lambda val: val.point, members_attr_flatlist)
+                sum_all = reduce(lambda a, b: a + b, all_agency_points)
+                data['agency'] = sum_all
+
+        """group total point"""
+        group_members = profile.group.members.all()
+        if group_members.count() != 0:
+            all_points = map(lambda val: val.points.all(), group_members)
+            flatlist_points = [val for sublist in all_points for val in sublist]
+            points = list(filter(lambda val: val.date == datetime.now().date(), flatlist_points))
+            if len(points) > 0:
+                members_attr = map(lambda val: val.attributes.all(), points)
+                members_attr_flatlist = [val for sublist in members_attr for val in sublist]
+                all_group_points = map(lambda val: val.point, members_attr_flatlist)
+                sum_all = reduce(lambda a, b: a + b, all_group_points)
+                data['group'] = sum_all
+
+        serializer = AllPointSerializer(data)
+        return Response(serializer.data)

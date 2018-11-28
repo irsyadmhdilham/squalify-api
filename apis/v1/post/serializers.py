@@ -27,10 +27,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     posted_by = ProfileSerializer(read_only=True)
-    post_type = serializers.CharField(max_length=30)
-    sales_relation = SalesSerializer()
+    post_type = serializers.StringRelatedField(read_only=True)
+    sales_rel = SalesSerializer(read_only=True)
     users_tagged = ProfileSerializer(read_only=True)
-    contact_relation = ContactSerializer(read_only=True)
+    contact_rel = ContactSerializer(read_only=True)
     likes = LikeSerializer(many=True)
     comments = CommentSerializer(many=True)
 
@@ -40,9 +40,9 @@ class PostSerializer(serializers.ModelSerializer):
             'pk',
             'posted_by',
             'post_type',
-            'sales_relation',
+            'sales_rel',
             'users_tagged',
-            'referral_tagged',
+            'contact_rel',
             'timestamp',
             'comments',
             'likes',

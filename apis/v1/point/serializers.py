@@ -14,3 +14,8 @@ class PointSerializer(serializers.ModelSerializer):
     class Meta:
         model = Point
         fields = ('pk', 'attributes', 'logs', 'date',)
+
+class AllPointSerializer(serializers.Serializer):
+    personal = serializers.IntegerField(read_only=True)
+    group = serializers.IntegerField(read_only=True)
+    agency = serializers.IntegerField(read_only=True)
