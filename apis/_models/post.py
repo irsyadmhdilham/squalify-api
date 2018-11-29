@@ -18,7 +18,7 @@ class Comment(models.Model):
 
 class Like(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
-    likers = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    liker = models.ForeignKey('Profile', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.timestamp)

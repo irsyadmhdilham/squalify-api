@@ -11,7 +11,7 @@ from ._models.profile import Profile, Designation
 from ._models.contact import Contact, ContactStatus, ContactType
 from ._models.schedule import Schedule
 from ._models.sales import Sales, SalesType, Surcharge, SalesStatus
-from ._models.post import Post, PostType
+from ._models.post import Post, PostType, Comment, Like
 
 admin.site.register(Industry)
 admin.site.register(Company)
@@ -43,5 +43,7 @@ admin.site.register(Sales)
 admin.site.register(Surcharge)
 admin.site.register(SalesStatus)
 
+admin.site.register(Comment)
 admin.site.register(PostType)
+admin.site.register(Like)
 admin.site.register(Post)
