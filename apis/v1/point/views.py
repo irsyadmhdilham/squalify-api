@@ -1,8 +1,10 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from apis._models.profile import Profile
 from apis._models.point import Point, PointField, PointAttribute
+
+from apis.functions.point_calculator import PointCalculator
 from datetime import datetime
 from functools import reduce
 import itertools
@@ -149,4 +151,18 @@ class AllPointView(APIView):
                 data['group'] = sum_all
 
         serializer = AllPointSerializer(data)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ContactPointView(APIView):
+
+    def get(self, request, user_pk):
+        referrals = PointCalculator(user_pk, 'Referrals')
+        ftf = PointCalculator(user_pk, 'FTF/Nesting/Booth')
+        calls = PointCalculator(user_pk, 'Calls/Email/Socmed')
+        data = {
+            'pk': referrals.today_pk(),
+            'referrals': referrals.today_total(),
+            'ftf': ftf.today_total(),
+            'calls': calls.today_total()
+        }
+        return Response(data, status=status.HTTP_200_OK)
