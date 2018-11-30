@@ -5,6 +5,7 @@ from apis._models.profile import Profile
 from apis._models.point import Point, PointField, PointAttribute
 from datetime import datetime
 from functools import reduce
+import itertools
 
 from .serializers import PointSerializer, AllPointSerializer
 
@@ -125,11 +126,11 @@ class AllPointView(APIView):
         agency_members = profile.agency.members.all()
         if agency_members.count() != 0:
             all_points = map(lambda val: val.points.all(), agency_members)
-            flatlist_points = [val for sublist in all_points for val in sublist]
+            flatlist_points = itertools.chain(*all_points)
             points = list(filter(lambda val: val.date == datetime.now().date(), flatlist_points))
             if len(points) > 0:
                 members_attr = map(lambda val: val.attributes.all(), points)
-                members_attr_flatlist = [val for sublist in members_attr for val in sublist]
+                members_attr_flatlist = itertools.chain(*members_attr)
                 all_agency_points = map(lambda val: val.point, members_attr_flatlist)
                 sum_all = reduce(lambda a, b: a + b, all_agency_points)
                 data['agency'] = sum_all
@@ -138,11 +139,11 @@ class AllPointView(APIView):
         group_members = profile.group.members.all()
         if group_members.count() != 0:
             all_points = map(lambda val: val.points.all(), group_members)
-            flatlist_points = [val for sublist in all_points for val in sublist]
+            flatlist_points = itertools.chain(*all_points)
             points = list(filter(lambda val: val.date == datetime.now().date(), flatlist_points))
             if len(points) > 0:
                 members_attr = map(lambda val: val.attributes.all(), points)
-                members_attr_flatlist = [val for sublist in members_attr for val in sublist]
+                members_attr_flatlist = itertools.chain(*members_attr)
                 all_group_points = map(lambda val: val.point, members_attr_flatlist)
                 sum_all = reduce(lambda a, b: a + b, all_group_points)
                 data['group'] = sum_all
