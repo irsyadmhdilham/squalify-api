@@ -3,8 +3,8 @@ from datetime import datetime
 from functools import reduce
 
 class PointCalculator:
-    attribute: None
-    today_points: None
+    attribute = None
+    today_points = None
     user_pk = None
 
     def __init__(self, user_pk, attribute):
@@ -15,20 +15,23 @@ class PointCalculator:
             self.today_points = points[0]
 
     def today_pk(self):
-        return self.today_points.pk
+        pk = None
+        if self.today_points is not None:
+            pk = self.today_points.pk
+        return pk
 
     def today_total(self):
         pk = None
-        total = 0
+        point = 0
         if self.today_points is not None:
             attributes = self.today_points.attributes.all()
             attr = list(filter(lambda val: val.attribute.name == self.attribute, attributes))
             if len(attr) > 0:
                 pk = attr[0].pk
-                total = reduce(lambda a, b: a + b, map(lambda val: val.point, attr))
+                point = reduce(lambda a, b: a + b, map(lambda val: val.point, attr))
         return {
             'pk': pk,
-            'total': total
+            'point': point
         }
 
 

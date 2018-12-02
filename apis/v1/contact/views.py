@@ -13,12 +13,14 @@ class ContactList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user_pk = self.kwargs.get('user_pk')
-        status_val = self.request.data.get('status')
+        referrer_pk = self.request.data.get('referrerId')
         contact_type_val = self.request.data.get('contact_type')
         profile = Profile.objects.get(pk=user_pk)
-        status = ContactStatus.objects.get(status=status_val)
         contact_type = ContactType.objects.get(contact_type=contact_type_val)
-        new_contact = serializer.save(status=status, contact_type=contact_type)
+        new_contact = serializer.save(contact_type=contact_type)
+        if referrer_pk is not None:
+            referrer = Contact.objects.get(pk=referrer_pk)
+            new_contact = serializer.save(contact_type=contact_type, referrer=referrer)
         profile.contacts.add(new_contact)
 
 class ContactDetail(generics.RetrieveUpdateDestroyAPIView):

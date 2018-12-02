@@ -9,10 +9,16 @@ class ScheduleSerializer(serializers.ModelSerializer):
         model = Schedule
         fields = ('pk', 'date', 'title',)
 
+class ReferrerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ('pk', 'name',)
+
 class ContactSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     contact_type = serializers.StringRelatedField(read_only=True)
     status = serializers.StringRelatedField(read_only=True)
     schedules = ScheduleSerializer(many=True, read_only=True)
+    referrer = ReferrerSerializer(read_only=True)
 
     class Meta:
         model = Contact
@@ -23,5 +29,6 @@ class ContactSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'status',
             'contact_no',
             'remark',
+            'referrer',
             'schedules',
         )

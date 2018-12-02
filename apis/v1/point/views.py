@@ -159,10 +159,12 @@ class ContactPointView(APIView):
         referrals = PointCalculator(user_pk, 'Referrals')
         ftf = PointCalculator(user_pk, 'FTF/Nesting/Booth')
         calls = PointCalculator(user_pk, 'Calls/Email/Socmed')
+        app_sec = PointCalculator(user_pk, 'Appointment secured')
         data = {
             'pk': referrals.today_pk(),
             'referrals': referrals.today_total(),
             'ftf': ftf.today_total(),
-            'calls': calls.today_total()
+            'calls': calls.today_total(),
+            'app_sec':app_sec.today_total()
         }
         return Response(data, status=status.HTTP_200_OK)
