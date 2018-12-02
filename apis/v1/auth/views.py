@@ -15,8 +15,8 @@ class AuthenticationView(APIView):
         if auth is not None:
             user = Profile.objects.get(user__email__exact=auth.email)
             data = {
-                'user_pk': user.pk,
-                'agency_pk': user.agency.pk
+                'user_id': user.pk,
+                'agency_id': user.agency.pk
             }
             return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
         return Response({'auth': False}, status=status.HTTP_401_UNAUTHORIZED)
