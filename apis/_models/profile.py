@@ -18,10 +18,10 @@ import re
 User = get_user_model()
 
 class Designation(models.Model):
-    designation = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.designation
+        return self.name
 
 def default_settings():
     return {
@@ -63,4 +63,5 @@ class Profile(models.Model):
     settings = JSONField(default=default_settings)
 
     def __str__(self):
-        return 'pk {}: {}'.format(self.pk, self.name)
+        agency = self.agency.name
+        return '{}: {} {}'.format(self.pk, agency, self.name)

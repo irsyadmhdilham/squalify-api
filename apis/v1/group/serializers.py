@@ -9,10 +9,8 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField(read_only=True)
-    industry = serializers.StringRelatedField(read_only=True)
-    company = serializers.StringRelatedField(read_only=True)
     members = ProfileSerializer(many=True, read_only=True)
 
     class Meta:
         model = Group
-        fields = ('pk','owner', 'industry', 'company', 'members',)
+        fields = ('pk','owner', 'members',)

@@ -10,8 +10,8 @@ def get_agency(agency_name, industry, company, agency_id):
         return Agency.objects.get(pk=agency_id)
     agency = Agency.objects.filter(
         Q(name__iexact=agency_name) &
-        Q(industry__industry=industry) &
-        Q(company__company=company)
+        Q(industry__name=industry) &
+        Q(company__name=company)
     )
     count = agency.count()
     if count == 0:
@@ -32,9 +32,9 @@ class CreateAccount:
         self.user = user
         self.name = name
         self.agency_name = agency_name
-        self.designation = Designation.objects.get(designation=designation)
-        self.industry = Industry.objects.get(industry=industry)
-        self.company = Company.objects.get(company=company)
+        self.designation = Designation.objects.get(name=designation)
+        self.industry = Industry.objects.get(name=industry)
+        self.company = Company.objects.get(name=company)
         self.agency = get_agency(agency_name, industry, company, agency_id)
         self.upline = get_upline(upline_id)
         self.group = None
@@ -62,8 +62,8 @@ class CreateAccount:
                 raise ValueError
             agency = Agency.objects.filter(
                 Q(name__iexact=self.agency_name) &
-                Q(industry__industry=self.industry) &
-                Q(company__company=self.company)
+                Q(industry__name=self.industry) &
+                Q(company__name=self.company)
             )
             count = agency.count()
             if count != 0:
@@ -90,7 +90,7 @@ class CreateAccount:
     
     def create_group(self):
         try:
-            group = Group.objects.create(industry=self.industry, company=self.company, owner=self.user)
+            group = Group.objects.create(owner=self.user)
             group.save()
             self.group = group
             return True

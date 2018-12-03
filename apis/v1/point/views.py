@@ -119,14 +119,9 @@ class AllPointView(APIView):
             total = reduce(lambda a,b: a + b, all_points)
             data['personal'] = total
         
-        """group total point"""
-        group_members = profile.group.members.all()
-        if group_members.count() != 0:
-            pass
-        
         """agency total point"""
         agency_members = profile.agency.members.all()
-        if agency_members.count() != 0:
+        if agency_members.count() > 0:
             all_points = map(lambda val: val.points.all(), agency_members)
             flatlist_points = itertools.chain(*all_points)
             points = list(filter(lambda val: val.date == datetime.now().date(), flatlist_points))
@@ -138,17 +133,18 @@ class AllPointView(APIView):
                 data['agency'] = sum_all
 
         """group total point"""
-        group_members = profile.group.members.all()
-        if group_members.count() != 0:
-            all_points = map(lambda val: val.points.all(), group_members)
-            flatlist_points = itertools.chain(*all_points)
-            points = list(filter(lambda val: val.date == datetime.now().date(), flatlist_points))
-            if len(points) > 0:
-                members_attr = map(lambda val: val.attributes.all(), points)
-                members_attr_flatlist = itertools.chain(*members_attr)
-                all_group_points = map(lambda val: val.point, members_attr_flatlist)
-                sum_all = reduce(lambda a, b: a + b, all_group_points)
-                data['group'] = sum_all
+        if profile.group is not None:
+            group_members = profile.group.members.all()
+            if group_members.count() > 0:
+                all_points = map(lambda val: val.points.all(), group_members)
+                flatlist_points = itertools.chain(*all_points)
+                points = list(filter(lambda val: val.date == datetime.now().date(), flatlist_points))
+                if len(points) > 0:
+                    members_attr = map(lambda val: val.attributes.all(), points)
+                    members_attr_flatlist = itertools.chain(*members_attr)
+                    all_group_points = map(lambda val: val.point, members_attr_flatlist)
+                    sum_all = reduce(lambda a, b: a + b, all_group_points)
+                    data['group'] = sum_all
 
         serializer = AllPointSerializer(data)
         return Response(serializer.data, status=status.HTTP_200_OK)

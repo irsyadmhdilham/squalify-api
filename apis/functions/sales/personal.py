@@ -13,8 +13,8 @@ class Personal:
     def __init__(self, user_pk, comm_struct):
         profile = Profile.objects.get(pk=user_pk)
         self.sales = profile.sales
-        self.company = profile.agency.company.company
-        self.designation = profile.designation.designation
+        self.company = profile.agency.company.name
+        self.designation = profile.designation.name
         self.comm_struct = comm_struct
     
     def year(self):
