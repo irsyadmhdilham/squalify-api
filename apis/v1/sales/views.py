@@ -1,12 +1,24 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 from .serializers import SalesSerializer
+
 from apis._models.profile import Profile
 from apis._models.agency import Agency
 from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, Surcharge
-from apis.functions.income import Income
+
+from apis.functions.sales.income import Income
+from apis.functions.sales.personal import Personal
 import json
 import os
+
+path = os.path.abspath(os.path.dirname(__file__) + "../../../../assets/commissions-struct.json")
+file = open(path, 'r')
+comm_struct = json.loads(file.read())
+file.close()
+
 
 class SalesList(generics.ListCreateAPIView):
     serializer_class = SalesSerializer
@@ -29,12 +41,8 @@ class SalesList(generics.ListCreateAPIView):
         company = str(profile.agency.company)
 
         """income calculations"""
-        path = os.path.abspath(os.path.dirname(__file__) + "../../../../assets/commissions-struct.json")
-        file = open(path, 'r')
-        comm_struct = json.loads(file.read())
         income_ins = Income(comm_struct, amount, designation, company, sales_type)
         income = income_ins.self_income()
-        file.close()
         
         instance = None
         if repeat_sales:
@@ -57,3 +65,14 @@ class SalesRemove(generics.DestroyAPIView):
         profile = Profile.objects.get(pk=user_pk)
         profile.sales.remove(instance)
         instance.delete()
+
+class PersonalSummary(APIView):
+
+    def get(self, request, user_pk):
+        personal = Personal(user_pk, comm_struct)
+        result = {
+            'year': personal.year(),
+            'month': personal.month(),
+            'today': personal.today()
+        }
+        return Response(result, status=status.HTTP_200_OK)

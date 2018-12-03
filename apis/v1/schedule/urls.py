@@ -5,5 +5,5 @@ app_name = 'schedule'
 
 urlpatterns = [
     url(r'^$', ScheduleList.as_view(), name='schedule-list'),
-    url(r'^(?P<pk>\d+)$', ScheduleDetail.as_view(), name='schedule-detail')
+    url(r'^(?P<pk>\d+)/$', ScheduleDetail.as_view(), name='schedule-detail')
 ]

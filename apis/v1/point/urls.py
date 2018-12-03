@@ -5,7 +5,7 @@ app_name = 'point'
 
 urlpatterns = [
     url(r'^$', PointList.as_view(), name='point-list'),
-    url(r'^(?P<pk>\d+)$', PointDetail.as_view(), name='point-detail'),
-    url(r'^all$', AllPointView.as_view(), name='all-points'),
-    url(r'^contact', ContactPointView.as_view(), name='contact-points'),
+    url(r'^(?P<pk>\d+)/$', PointDetail.as_view(), name='point-detail'),
+    url(r'^all/$', AllPointView.as_view(), name='all-points'),
+    url(r'^contact/$', ContactPointView.as_view(), name='contact-points'),
 ]
