@@ -13,7 +13,8 @@ class PointAttribute(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}: {}'.format(str(self.last_modified), str(self.attribute))
+        date = self.last_modified.date()
+        return '{}: {}'.format(str(date), str(self.attribute))
 
 class Point(models.Model):
     attributes = models.ManyToManyField(PointAttribute, related_name='attributes')

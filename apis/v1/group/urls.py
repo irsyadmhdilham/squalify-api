@@ -4,5 +4,5 @@ from .views import GroupDetail
 app_name = 'group'
 
 urlpatterns = [
-    url(r'^$', GroupDetail.as_view(), name='group-detail')
+    url(r'^$', GroupDetail.as_view(), name='group-detail'),
 ]

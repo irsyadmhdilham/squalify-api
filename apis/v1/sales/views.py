@@ -13,6 +13,7 @@ from apis.functions.sales.income import Income
 from apis.functions.sales.personal import Personal
 import json
 import os
+import itertools
 
 path = os.path.abspath(os.path.dirname(__file__) + "../../../../assets/commissions-struct.json")
 file = open(path, 'r')

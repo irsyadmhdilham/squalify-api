@@ -5,9 +5,11 @@ from apis._models.profile import Profile
 from apis.v1.post.serializers import PostSerializer
 
 class ProfileSerializer(serializers.ModelSerializer):
+    designation = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Profile
-        fields = ('pk', 'name', 'profile_image',)
+        fields = ('pk', 'name', 'profile_image', 'designation',)
 
 class AgencySerializer(QueryFieldsMixin, serializers.ModelSerializer):
     members = ProfileSerializer(many=True, read_only=True)

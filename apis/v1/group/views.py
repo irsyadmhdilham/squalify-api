@@ -3,7 +3,7 @@ from apis._models.profile import Profile
 from apis._models.group import Group
 from .serializers import GroupSerializer
 
-class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
+class GroupDetail(generics.RetrieveAPIView):
     serializer_class = GroupSerializer
     
     def get_object(self):

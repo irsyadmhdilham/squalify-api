@@ -13,7 +13,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     designation = serializers.StringRelatedField(read_only=True)
     agency = AgencySerializer(read_only=True)
     upline = serializers.StringRelatedField(read_only=True)
-    group = serializers.PrimaryKeyRelatedField(read_only=True)
+    group = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -27,3 +27,6 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
             'agency',
             'upline',
         )
+    
+    def get_group(self, obj):
+        return obj.group.members.count()

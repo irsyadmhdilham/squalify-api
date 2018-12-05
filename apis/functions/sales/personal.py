@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import date, timedelta, datetime
 from apis._models.profile import Profile
 from django.db.models import Q
 from .sales_type import Serializer
+import pytz
 
 class Personal:
 
@@ -27,7 +28,7 @@ class Personal:
         current_year = date.today().year
         current_month = date.today().month
         sales = self.sales.filter(
-            Q(timestamp__year=current_year),
+            Q(timestamp__year=current_year) &
             Q(timestamp__month=current_month)
         )
         response = Serializer(sales, self.designation, self.company, self.comm_struct)
