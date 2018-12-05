@@ -1,5 +1,11 @@
 from django.conf.urls import url
-from .views import PointList, PointDetail, AllPointView, ContactPointView
+from .views import (
+    PointList,
+    PointDetail,
+    AllPointView,
+    ContactPointView,
+    ScoreboardPoints
+)
 
 app_name = 'point'
 
@@ -8,4 +14,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', PointDetail.as_view(), name='point-detail'),
     url(r'^all/$', AllPointView.as_view(), name='all-points'),
     url(r'^contact/$', ContactPointView.as_view(), name='contact-points'),
+    url(r'^scoreboard/$', ScoreboardPoints.as_view(), name='scoreboard'),
 ]

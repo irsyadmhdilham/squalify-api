@@ -4,12 +4,13 @@ from rest_framework.response import Response
 from .. ._models.profile import Profile
 from .. ._models.point import Point, PointField, PointAttribute
 
-from apis.functions.point_calculator import PointCalculator
+from .functions.point_calculator import PointCalculator
+from .functions.scoreboard import Scoreboard
 from datetime import datetime
 from functools import reduce
 import itertools
 
-from .serializers import PointSerializer, AllPointSerializer
+from .serializers import PointSerializer, AllPointSerializer, ScoreboardSerializer
 
 class PointList(generics.ListCreateAPIView):
     serializer_class = PointSerializer
@@ -164,3 +165,22 @@ class ContactPointView(APIView):
             'app_sec':app_sec.today_total()
         }
         return Response(data, status=status.HTTP_200_OK)
+
+class ScoreboardPoints(APIView):
+    
+    def get(self, request, user_pk):
+        profile = Profile.objects.get(pk=user_pk)
+        members = profile.agency.members.all()
+        q = request.query_params.get('q')
+        scoreboard = Scoreboard(members)
+        data = None
+        if q == 'month':
+            data = scoreboard.month()
+        elif q == 'today':
+            data = scoreboard.today()
+        elif q == 'week':
+            data = scoreboard.week()
+        else:
+            data = scoreboard.year()
+        serializer = ScoreboardSerializer(data, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
