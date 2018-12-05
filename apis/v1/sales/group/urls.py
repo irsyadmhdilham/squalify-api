@@ -1,5 +1,11 @@
 from django.conf.urls import url
-from .views import YearGroupSales, MonthGroupSales, WeekGroupSales, TodayGroupSales
+from .views import (
+    YearGroupSales,
+    MonthGroupSales,
+    WeekGroupSales,
+    TodayGroupSales,
+    GroupSummarySales
+)
 
 app_name = 'group-sales'
 
@@ -8,4 +14,5 @@ urlpatterns = [
     url(r'^month/$', MonthGroupSales.as_view(), name='month'),
     url(r'^week/$', WeekGroupSales.as_view(), name='week'),
     url(r'^today/$', TodayGroupSales.as_view(), name='today'),
+    url(r'^summary/$', GroupSummarySales.as_view(), name='summary'),
 ]

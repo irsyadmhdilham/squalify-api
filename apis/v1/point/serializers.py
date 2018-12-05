@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apis._models.point import Point, PointAttribute
+from .. ._models.point import Point, PointAttribute
 
 class PointAttributeSerializer(serializers.ModelSerializer):
     attribute = serializers.StringRelatedField(read_only=True)

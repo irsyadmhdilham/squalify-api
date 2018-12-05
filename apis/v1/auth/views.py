@@ -2,9 +2,9 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from apis._models.profile import Profile
+from .. ._models.profile import Profile
 from account.models import User
-from apis.functions.create_account import CreateAccount
+from .. .functions.create_account import CreateAccount
 
 class AuthenticationView(APIView):
 

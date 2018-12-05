@@ -1,7 +1,7 @@
-from ._group.year import Year
-from ._group.month import Month
-from ._group.week import Week
-from ._group.today import Today
+from .period.month import Month
+from .period.week import Week
+from .period.today import Today
+from .period.year import Year
 
 class Group(Year, Month, Week, Today):
 

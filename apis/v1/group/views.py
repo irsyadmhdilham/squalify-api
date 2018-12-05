@@ -1,6 +1,6 @@
 from rest_framework import generics
-from apis._models.profile import Profile
-from apis._models.group import Group
+from .. ._models.profile import Profile
+from .. ._models.group import Group
 from .serializers import GroupSerializer
 
 class GroupDetail(generics.RetrieveAPIView):

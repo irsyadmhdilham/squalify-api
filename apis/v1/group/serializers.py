@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from apis._models.group import Group
-from apis._models.profile import Profile
+from .. ._models.group import Group
+from .. ._models.profile import Profile
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     downline = serializers.SerializerMethodField()

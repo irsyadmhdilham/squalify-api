@@ -1,9 +1,10 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-# from apis.functions.sales.group import Group
-from apis._models.profile import Profile
-from .serializers import GroupSerializer
+from ..functions.group import Group
+from ..functions.period.summary import Summary
+from .. .._models.profile import Profile
+from .serializers import GroupSerializer, GroupSummarySerializer
 
 class YearGroupSales(APIView):
 
@@ -87,4 +88,21 @@ class TodayGroupSales(APIView):
         else:
             data = group.today_total()
         serializer = GroupSerializer(data, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class GroupSummarySales(APIView):
+
+    def get(self, request, user_pk):
+        profile = Profile.objects.get(pk=user_pk)
+        members = profile.group.members.all()
+        q = request.query_params.get('q')
+        summary = Summary(members)
+
+        data = {
+            'year': summary.year(q),
+            'month': summary.month(q),
+            'week': summary.week(q),
+            'today': summary.today(q)
+        }
+        serializer = GroupSummarySerializer(data)
         return Response(serializer.data, status=status.HTTP_200_OK)

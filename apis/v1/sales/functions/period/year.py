@@ -1,6 +1,7 @@
 from django.db.models import Q
 from datetime import date
 from .serializer import Serializer
+from functools import reduce
 
 class Year(Serializer):
 
@@ -17,6 +18,10 @@ class Year(Serializer):
         profiles = map(profile, self.members)
         return list(profiles)
     
+    def year_sum_total(self):
+        amount = map(lambda val: val['amount'], self.year_total())
+        return reduce(lambda a, b: a + b, amount)
+    
     def year_epf(self):
         def profile(val):
             filter_sales = val.sales.filter(
@@ -26,6 +31,10 @@ class Year(Serializer):
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
         return list(profiles)
+
+    def year_sum_epf(self):
+        amount = map(lambda val: val['amount'], self.year_epf())
+        return reduce(lambda a, b: a + b, amount)
     
     def year_cash(self):
         def profile(val):
@@ -36,6 +45,10 @@ class Year(Serializer):
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
         return list(profiles)
+
+    def year_sum_cash(self):
+        amount = map(lambda val: val['amount'], self.year_cash())
+        return reduce(lambda a, b: a + b, amount)
     
     def year_asb(self):
         def profile(val):
@@ -46,6 +59,10 @@ class Year(Serializer):
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
         return list(profiles)
+
+    def year_sum_asb(self):
+        amount = map(lambda val: val['amount'], self.year_asb())
+        return reduce(lambda a, b: a + b, amount)
     
     def year_prs(self):
         def profile(val):
@@ -56,3 +73,7 @@ class Year(Serializer):
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
         return list(profiles)
+
+    def year_sum_prs(self):
+        amount = map(lambda val: val['amount'], self.year_prs())
+        return reduce(lambda a, b: a + b, amount)

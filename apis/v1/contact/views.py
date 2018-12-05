@@ -1,7 +1,7 @@
 from rest_framework import generics
-from apis._models.profile import Profile
-from apis._models.contact import Contact, ContactType, ContactStatus
-from apis._models.schedule import Schedule
+from .. ._models.profile import Profile
+from .. ._models.contact import Contact, ContactType, ContactStatus
+from .. ._models.schedule import Schedule
 from .serializers import ContactSerializer
 
 class ContactList(generics.ListCreateAPIView):

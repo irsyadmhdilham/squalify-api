@@ -1,8 +1,8 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from apis._models.profile import Profile
-from apis._models.point import Point, PointField, PointAttribute
+from .. ._models.profile import Profile
+from .. ._models.point import Point, PointField, PointAttribute
 
 from apis.functions.point_calculator import PointCalculator
 from datetime import datetime

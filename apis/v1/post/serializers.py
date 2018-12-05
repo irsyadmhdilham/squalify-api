@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from apis._models.post import Post, Comment, Like
-from apis._models.profile import Profile
+from .. ._models.post import Post, Comment, Like
+from .. ._models.profile import Profile
 
-from apis.v1.sales.serializers import SalesSerializer
-from apis.v1.contact.serializers import ContactSerializer
+from ..sales.serializers import SalesSerializer
+from ..contact.serializers import ContactSerializer
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:

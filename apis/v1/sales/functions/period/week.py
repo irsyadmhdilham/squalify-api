@@ -2,6 +2,7 @@ from .serializer import Serializer
 from django.db.models import Q
 from datetime import datetime, timedelta
 import pytz
+from functools import reduce
 
 class Week(Serializer):
 
@@ -15,6 +16,10 @@ class Week(Serializer):
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
         return list(profiles)
+
+    def week_sum_total(self):
+        amount = map(lambda val: val['amount'], self.week_total())
+        return reduce(lambda a, b: a + b, amount)
 
     def week_epf(self):
         today = datetime.now().astimezone(pytz.timezone('Asia/Kuala_Lumpur'))
@@ -30,6 +35,10 @@ class Week(Serializer):
         profiles = map(profile, self.members)
         return list(profiles)
 
+    def week_sum_epf(self):
+        amount = map(lambda val: val['amount'], self.week_epf())
+        return reduce(lambda a, b: a + b, amount)
+
     def week_cash(self):
         today = datetime.now().astimezone(pytz.timezone('Asia/Kuala_Lumpur'))
         day = today.weekday()
@@ -43,6 +52,10 @@ class Week(Serializer):
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
         return list(profiles)
+
+    def week_sum_cash(self):
+        amount = map(lambda val: val['amount'], self.week_cash())
+        return reduce(lambda a, b: a + b, amount)
 
     def week_asb(self):
         today = datetime.now().astimezone(pytz.timezone('Asia/Kuala_Lumpur'))
@@ -58,6 +71,10 @@ class Week(Serializer):
         profiles = map(profile, self.members)
         return list(profiles)
 
+    def week_sum_asb(self):
+        amount = map(lambda val: val['amount'], self.week_asb())
+        return reduce(lambda a, b: a + b, amount)
+
     def week_prs(self):
         today = datetime.now().astimezone(pytz.timezone('Asia/Kuala_Lumpur'))
         day = today.weekday()
@@ -71,3 +88,7 @@ class Week(Serializer):
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
         return list(profiles)
+    
+    def week_sum_prs(self):
+        amount = map(lambda val: val['amount'], self.week_prs())
+        return reduce(lambda a, b: a + b, amount)

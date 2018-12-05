@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from apis._models.profile import Profile
-from apis._models.agency import Agency
+from .. ._models.profile import Profile
+from .. ._models.agency import Agency
 
 class AgencySerializer(serializers.ModelSerializer):
     company = serializers.StringRelatedField(read_only=True)

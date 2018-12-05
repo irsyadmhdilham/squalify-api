@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from drf_queryfields import QueryFieldsMixin
-from apis._models.schedule import Schedule
-from apis._models.contact import Contact
+from .. ._models.schedule import Schedule
+from .. ._models.contact import Contact
 
 class ContactSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     class Meta:

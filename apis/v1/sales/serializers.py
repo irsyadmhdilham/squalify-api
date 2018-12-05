@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apis._models.sales import Sales
+from .. ._models.sales import Sales
 
 class SalesSerializer(serializers.ModelSerializer):
     sales_type = serializers.StringRelatedField(read_only=True)

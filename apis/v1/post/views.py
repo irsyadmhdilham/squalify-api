@@ -1,6 +1,6 @@
 from rest_framework import generics
-from apis._models.post import Post, Comment, Like
-from apis._models.profile import Profile
+from .. ._models.post import Post, Comment, Like
+from .. ._models.profile import Profile
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
