@@ -6,3 +6,9 @@ class GroupSerializer(serializers.Serializer):
     designation = serializers.CharField(read_only=True)
     profile_image = serializers.ImageField(read_only=True)
     amount = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+
+class GroupSummarySerializer(serializers.Serializer):
+    today = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    week = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    month = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    year = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)

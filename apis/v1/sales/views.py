@@ -9,8 +9,8 @@ from apis._models.agency import Agency
 from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, Surcharge
 
-from apis.functions.sales.income import Income
-from apis.functions.sales.personal import Personal
+from .functions.income import Income
+from .functions.personal import Personal
 import json
 import os
 import itertools

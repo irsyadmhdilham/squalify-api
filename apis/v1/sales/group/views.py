@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from apis.functions.sales.group import Group
+# from apis.functions.sales.group import Group
 from apis._models.profile import Profile
 from .serializers import GroupSerializer
 
