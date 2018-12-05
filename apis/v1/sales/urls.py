@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', SalesRemove.as_view(), name='sales-remove'),
     url(r'^summary/personal/$', PersonalSummary.as_view(), name='personal-summary'),
     url(r'^group/', include('apis.v1.sales.group.urls', namespace='group-sales')),
+    url(r'^agency/', include('apis.v1.sales.agency.urls', namespace='agency-sales')),
 ]
