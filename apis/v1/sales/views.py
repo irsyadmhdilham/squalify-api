@@ -17,7 +17,7 @@ import json
 import os
 import itertools
 
-path = os.path.abspath(os.path.dirname(__file__) + "../../../../assets/commissions-struct.json")
+path = os.path.abspath(os.path.dirname(__file__) + "../../../../static/commissions-struct.json")
 file = open(path, 'r')
 comm_struct = json.loads(file.read())
 file.close()
