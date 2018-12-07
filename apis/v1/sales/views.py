@@ -10,7 +10,9 @@ from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, Surcharge
 
 from .functions.personal import Personal
+from .functions.sales_filter import SalesFilter
 from .functions.income import Income
+from datetime import datetime
 import json
 import os
 import itertools
@@ -26,7 +28,22 @@ class SalesList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
-        return Profile.objects.get(pk=user_pk).sales.all().order_by('-timestamp')
+        p = self.request.query_params.get('p')
+        t = self.request.query_params.get('t')
+        sales = Profile.objects.get(pk=user_pk).sales.all()
+        sales_filter = SalesFilter(sales)
+        data = None
+        if t == 'epf':
+            data = sales_filter.epf(p)
+        elif t == 'cash':
+            data = sales_filter.cash(p)
+        elif t == 'asb':
+            data = sales_filter.asb(p)
+        elif t == 'prs':
+            data = sales_filter.prs(p)
+        else:
+            data = sales_filter.total(p)
+        return data
     
     def perform_create(self, serializer):
         """request data"""
