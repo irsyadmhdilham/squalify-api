@@ -10,13 +10,18 @@ class Year(Serializer):
 
     def __init__(self, members):
         self.members = members
+    
+    def sort(self, val):
+        return val['amount']
 
     def year_total(self):
         def profile(val):
             filter_sales = val.sales.filter(timestamp__year=self.current_year)
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
     
     def year_sum_total(self):
         amount = map(lambda val: val['amount'], self.year_total())
@@ -30,7 +35,9 @@ class Year(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def year_sum_epf(self):
         amount = map(lambda val: val['amount'], self.year_epf())
@@ -44,7 +51,9 @@ class Year(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def year_sum_cash(self):
         amount = map(lambda val: val['amount'], self.year_cash())
@@ -58,7 +67,9 @@ class Year(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def year_sum_asb(self):
         amount = map(lambda val: val['amount'], self.year_asb())
@@ -72,7 +83,9 @@ class Year(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def year_sum_prs(self):
         amount = map(lambda val: val['amount'], self.year_prs())

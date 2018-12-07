@@ -5,6 +5,14 @@ from functools import reduce
 
 class Month(Serializer):
 
+    members = None
+
+    def __init__(self, members):
+        self.members = members
+
+    def sort(self, val):
+        return val['amount']
+
     def month_total(self):
         def profile(val):
             current_year = date.today().year
@@ -15,7 +23,9 @@ class Month(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def month_sum_total(self):
         amount = map(lambda val: val['amount'], self.month_total())
@@ -32,7 +42,9 @@ class Month(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def month_sum_epf(self):
         amount = map(lambda val: val['amount'], self.month_epf())
@@ -49,7 +61,9 @@ class Month(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def month_sum_cash(self):
         amount = map(lambda val: val['amount'], self.month_cash())
@@ -66,7 +80,9 @@ class Month(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def month_sum_asb(self):
         amount = map(lambda val: val['amount'], self.month_asb())
@@ -83,7 +99,9 @@ class Month(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def month_sum_prs(self):
         amount = map(lambda val: val['amount'], self.month_prs())

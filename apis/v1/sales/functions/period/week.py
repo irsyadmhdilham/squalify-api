@@ -6,6 +6,14 @@ from functools import reduce
 
 class Week(Serializer):
 
+    members = None
+
+    def __init__(self, members):
+        self.members = members
+
+    def sort(self, val):
+        return val['amount']
+
     def week_total(self):
         today = datetime.now().astimezone(pytz.timezone('Asia/Kuala_Lumpur'))
         day = today.weekday()
@@ -15,7 +23,9 @@ class Week(Serializer):
             filter_sales = val.sales.filter(timestamp__range=(start, end))
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def week_sum_total(self):
         amount = map(lambda val: val['amount'], self.week_total())
@@ -33,7 +43,9 @@ class Week(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def week_sum_epf(self):
         amount = map(lambda val: val['amount'], self.week_epf())
@@ -51,7 +63,9 @@ class Week(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def week_sum_cash(self):
         amount = map(lambda val: val['amount'], self.week_cash())
@@ -69,7 +83,9 @@ class Week(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def week_sum_asb(self):
         amount = map(lambda val: val['amount'], self.week_asb())
@@ -87,7 +103,9 @@ class Week(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
     
     def week_sum_prs(self):
         amount = map(lambda val: val['amount'], self.week_prs())

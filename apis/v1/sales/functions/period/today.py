@@ -5,12 +5,22 @@ from functools import reduce
 
 class Today(Serializer):
 
+    members = None
+
+    def __init__(self, members):
+        self.members = members
+
+    def sort(self, val):
+        return val['amount']
+
     def today_total(self):
         def profile(val):
             filter_sales = val.sales.filter(timestamp__date=date.today())
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def today_sum_total(self):
         amount = map(lambda val: val['amount'], self.today_total())
@@ -24,7 +34,9 @@ class Today(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def today_sum_epf(self):
         amount = map(lambda val: val['amount'], self.today_epf())
@@ -38,7 +50,9 @@ class Today(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def today_sum_cash(self):
         amount = map(lambda val: val['amount'], self.today_cash())
@@ -52,7 +66,9 @@ class Today(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def today_sum_asb(self):
         amount = map(lambda val: val['amount'], self.today_asb())
@@ -66,7 +82,9 @@ class Today(Serializer):
             )
             return self.profile_serializer(val, filter_sales)
         profiles = map(profile, self.members)
-        return list(profiles)
+        result = list(profiles)
+        result.sort(key=self.sort, reverse=True)
+        return result
 
     def today_sum_prs(self):
         amount = map(lambda val: val['amount'], self.today_prs())

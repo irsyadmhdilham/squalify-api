@@ -175,12 +175,12 @@ class ScoreboardPoints(APIView):
         scoreboard = Scoreboard(members)
         data = None
         if q == 'month':
-            data = scoreboard.month()
+            data = scoreboard.month(True)
         elif q == 'today':
-            data = scoreboard.today()
+            data = scoreboard.today(True)
         elif q == 'week':
-            data = scoreboard.week()
+            data = scoreboard.week(True)
         else:
-            data = scoreboard.year()
+            data = scoreboard.year(True)
         serializer = ScoreboardSerializer(data, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)

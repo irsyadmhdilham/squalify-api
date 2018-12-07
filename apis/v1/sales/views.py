@@ -2,15 +2,15 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import SalesSerializer
+from .serializers import SalesSerializer, SummarySerializer
 
 from apis._models.profile import Profile
 from apis._models.agency import Agency
 from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, Surcharge
 
-from .functions.income import Income
 from .functions.personal import Personal
+from .functions.income import Income
 import json
 import os
 import itertools
@@ -70,10 +70,34 @@ class SalesRemove(generics.DestroyAPIView):
 class PersonalSummary(APIView):
 
     def get(self, request, user_pk):
-        personal = Personal(user_pk, comm_struct)
-        result = {
-            'year': personal.year(),
-            'month': personal.month(),
-            'today': personal.today()
-        }
-        return Response(result, status=status.HTTP_200_OK)
+        profile = Profile.objects.get(pk=user_pk)
+        q = request.query_params.get('q')
+        sales = profile.sales.all()
+        designation = profile.designation.name
+        company = profile.agency.company.name
+        personal = Personal(sales, comm_struct, designation, company)
+        year = personal.year()
+        month = personal.month()
+        week = personal.week()
+        today = personal.today()
+        def sales_compiler(type):
+            return {
+                'year': { 'sales': year[type], 'income': year['income'] },
+                'month': { 'sales': month[type], 'income': month['income'] },
+                'week': { 'sales': week[type], 'income': week['income'] },
+                'today': { 'sales': today[type], 'income': today['income'] }
+            }
+        data = None
+        if q == 'epf':
+            data = sales_compiler('epf')
+        elif q == 'cash':
+            data = sales_compiler('cash')
+        elif q == 'asb':
+            data = sales_compiler('asb')
+        elif q == 'prs':
+            data = sales_compiler('prs')
+        else:
+            data = sales_compiler('total')
+        serializer = SummarySerializer(data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
