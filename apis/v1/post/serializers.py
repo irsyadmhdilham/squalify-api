@@ -42,12 +42,12 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = (
             'pk',
+            'timestamp',
             'posted_by',
             'post_type',
             'sales_rel',
             'users_tagged',
             'contact_rel',
-            'timestamp',
             'likes',
             'comments',
         )

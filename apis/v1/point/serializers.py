@@ -15,11 +15,6 @@ class PointSerializer(serializers.ModelSerializer):
         model = Point
         fields = ('pk', 'attributes', 'logs', 'date',)
 
-class AllPointSerializer(serializers.Serializer):
-    personal = serializers.IntegerField(read_only=True)
-    group = serializers.IntegerField(read_only=True)
-    agency = serializers.IntegerField(read_only=True)
-
 class ScoreboardSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
     designation = serializers.CharField(read_only=True)

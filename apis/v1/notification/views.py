@@ -8,4 +8,4 @@ class NotificationList(generics.ListCreateAPIView):
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
         profile = Profile.objects.get(pk=user_pk)
-        return profile.notifications
+        return profile.notifications.all()

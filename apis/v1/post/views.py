@@ -1,7 +1,16 @@
 from rest_framework import generics
 from .. ._models.post import Post, Comment, Like
 from .. ._models.profile import Profile
+from .. ._models.agency import Agency
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer
+
+class PostList(generics.ListAPIView):
+    serializer_class = PostSerializer
+    
+    def get_queryset(self):
+        agency_pk = self.kwargs.get('agency_pk')
+        agency = Agency.objects.get(pk=agency_pk)
+        return agency.posts.order_by('-timestamp')
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
