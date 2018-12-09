@@ -1,0 +1,8 @@
+.vscode
+./makemigrations
+./migrate
+./runserver
+.gitignore
+README.md
+Pipfile
+Pipfile.lock
