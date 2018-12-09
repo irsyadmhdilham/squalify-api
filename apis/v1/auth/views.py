@@ -11,6 +11,7 @@ class AuthenticationView(APIView):
     def get(self, request):
         email = request.query_params.get('email')
         password = request.query_params.get('password')
+        print('email', email)
         auth = authenticate(email=email, password=password)
         if auth is not None:
             user = Profile.objects.get(user__email__exact=auth.email)

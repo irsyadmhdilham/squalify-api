@@ -32,7 +32,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     posted_by = ProfileSerializer(read_only=True)
     post_type = serializers.StringRelatedField(read_only=True)
-    sales_rel = SalesSerializer(read_only=True)
+    sales_rel = SalesSerializer(read_only=True, many=True)
     users_tagged = ProfileSerializer(read_only=True)
     contact_rel = ContactSerializer(read_only=True)
     likes = serializers.SerializerMethodField()

@@ -26,7 +26,7 @@ class Like(models.Model):
 class Post(models.Model):
     posted_by = models.ForeignKey('Profile', on_delete=models.CASCADE)
     post_type = models.ForeignKey(PostType, on_delete=models.CASCADE)
-    sales_rel = models.ForeignKey(Sales, on_delete=models.CASCADE, blank=True, null=True)
+    sales_rel = models.ManyToManyField(Sales, blank=True)
     users_tagged = models.ManyToManyField('Profile', blank=True, related_name='users')
     contact_rel = models.ForeignKey(Contact, on_delete=models.CASCADE, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)

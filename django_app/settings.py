@@ -26,7 +26,7 @@ SECRET_KEY = '-)(q&issoq+odi7rl@h@bv+gtej9q9r@*g@l6i*5__&r6@0l@5'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',
+    '*'
 ]
 
 
@@ -74,10 +74,7 @@ TEMPLATES = [
     },
 ]
 
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8100',
-    '127.0.0.1:8100',
-)
+CORS_ORIGIN_ALLOW_ALL = True
 
 WSGI_APPLICATION = 'django_app.wsgi.application'
 

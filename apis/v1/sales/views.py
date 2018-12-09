@@ -1,6 +1,8 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db.models import Q
+from datetime import date
 
 from .serializers import SalesSerializer, SummarySerializer
 
@@ -69,10 +71,19 @@ class SalesList(generics.ListCreateAPIView):
             instance = serializer.save(sales_type=sales_type_instance, commission=income)
         profile.sales.add(instance)
 
-        """create post"""
-        post_type = PostType.objects.get(name='sales closed')
-        create_post = Post.objects.create(posted_by=profile, post_type=post_type, sales_rel=instance)
-        profile.agency.posts.add(create_post)
+        """create/update post"""
+        today_post = Post.objects.filter(
+            Q(timestamp__date=date.today()) &
+            Q(posted_by__pk=user_pk)
+        )
+        if today_post.count() > 0:
+            post = today_post[0].sales_rel.add(instance)
+        else:
+            post_type = PostType.objects.get(name='sales closed')
+            create_post = Post.objects.create(posted_by=profile, post_type=post_type)
+            create_post.save()
+            create_post.sales_rel.add(instance)
+            profile.agency.posts.add(create_post)
 
 class SalesRemove(generics.DestroyAPIView):
     serializer_class = SalesSerializer

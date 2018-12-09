@@ -33,27 +33,30 @@ class AgencySerializer(QueryFieldsMixin, serializers.ModelSerializer):
     
     def get_points(self, obj):
         user_pk = self.context.get('request').query_params.get('u')
+        if user_pk is None:
+            return 0
+
         profile = Profile.objects.get(pk=user_pk)
 
         """sum agency today point"""
         agency = obj.members.filter(points__date=date.today()).aggregate(point=Sum('points__attributes__point'))
         if agency['point'] is None:
-            agency = 0
+            agency = {'point': 0}
 
         """sum group today point"""
         group = 0
         if profile.group is not None:
             group = profile.group.members.filter(points__date=date.today()).aggregate(point=Sum('points__attributes__point'))
             if group['point'] is None:
-                group = 0
+                group = {'point': 0}
         
         """sum user today point"""
         personal = profile.points.filter(date=date.today()).aggregate(point=Sum('attributes__point'))
         if personal['point'] is None:
-            personal = 0
-        
+            personal = {'point': 0}
+
         return {
-            'agency': agency,
-            'group': group,
-            'personal': personal
+            'agency': agency['point'],
+            'group': group['point'],
+            'personal': personal['point']
         }
