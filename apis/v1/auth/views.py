@@ -11,10 +11,12 @@ class AuthenticationView(APIView):
     def get(self, request):
         email = request.query_params.get('email')
         password = request.query_params.get('password')
-        print('email', email)
+        fcm_token = request.query_params.get('fcmToken')
         auth = authenticate(email=email, password=password)
         if auth is not None:
             user = Profile.objects.get(user__email__exact=auth.email)
+            user.fcm_token = fcm_token
+            user.save()
             data = {
                 'user_id': user.pk,
                 'agency_id': user.agency.pk

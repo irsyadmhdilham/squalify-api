@@ -61,6 +61,7 @@ class Profile(models.Model):
     upline = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     inbox = models.ManyToManyField(Inbox, blank=True)
     settings = JSONField(default=default_settings)
+    fcm_token = models.TextField(blank=True, null=True)
 
     def __str__(self):
         agency = self.agency.name
