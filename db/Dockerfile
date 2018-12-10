@@ -1,12 +1,10 @@
-FROM python:3.6
+FROM postgres:10
 
 COPY . .
-
-RUN pip install -r requirements.txt
 
 ENV TZ=Asia/Kuala_Lumpur
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-EXPOSE 8030
-
-CMD gunicorn --workers=4 -b :8030 django_app.wsgi
+ENV POSTGRES_USER irsyadmhdilham
+ENV POSTGRES_PASSWORD Irsyad89
+ENV POSTGRES_DB squalify

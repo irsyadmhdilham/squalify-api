@@ -1,5 +1,17 @@
 version: '3'
 services:
+  django_api:
+    build: .
+    image: lakau/django_api
+    container_name: django_api
+    ports:
+      - '8030:8030'
+    links:
+      - db
   db:
-    image: postgres
-    
+    build: db/.
+    image: lakau/psql
+    container_name: db
+    ports:
+      - '5432:5432'
+
