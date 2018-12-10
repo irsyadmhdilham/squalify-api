@@ -1,9 +1,12 @@
 from rest_framework import serializers
 from .. ._models.post import Post, Comment, Like
 from .. ._models.profile import Profile
+from django.db.models import Sum
 
 from ..sales.serializers import SalesSerializer
 from ..contact.serializers import ContactSerializer
+
+from datetime import date
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,6 +40,7 @@ class PostSerializer(serializers.ModelSerializer):
     contact_rel = ContactSerializer(read_only=True)
     likes = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
+    monthly_sales = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -50,6 +54,7 @@ class PostSerializer(serializers.ModelSerializer):
             'contact_rel',
             'likes',
             'comments',
+            'monthly_sales',
         )
     
     def get_likes(self, obj):
@@ -59,3 +64,13 @@ class PostSerializer(serializers.ModelSerializer):
     def get_comments(self, obj):
         comments = obj.comments.all()
         return comments.count()
+    
+    def get_monthly_sales(self, obj):
+        user_pk = obj.posted_by.pk
+        profile = Profile.objects.get(pk=user_pk)
+        sales = profile.sales.filter(timestamp__month=date.today().month)
+        sum_up = sales.aggregate(total=Sum('amount'))
+        total = 0
+        if sum_up['total'] is not None:
+            total = sum_up['total']
+        return str(round(total, 2))

@@ -8,7 +8,7 @@ class ScheduleList(generics.ListCreateAPIView):
     
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
-        return Profile.objects.get(pk=user_pk).schedules.all().order_by('-created_on')
+        return Profile.objects.get(pk=user_pk).schedules.order_by('-date')
     
     def perform_create(self, serializer):
         user_pk = self.kwargs.get('user_pk')
