@@ -3,7 +3,7 @@ from drf_queryfields import QueryFieldsMixin
 from .. ._models.agency import Agency
 from .. ._models.profile import Profile
 from ..post.serializers import PostSerializer
-from datetime import date
+from django.utils import timezone
 from django.db.models import Q, Sum
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -39,19 +39,19 @@ class AgencySerializer(QueryFieldsMixin, serializers.ModelSerializer):
         profile = Profile.objects.get(pk=user_pk)
 
         """sum agency today point"""
-        agency = obj.members.filter(points__date=date.today()).aggregate(point=Sum('points__attributes__point'))
+        agency = obj.members.filter(points__date=timezone.now().date()).aggregate(point=Sum('points__attributes__point'))
         if agency['point'] is None:
             agency = {'point': 0}
 
         """sum group today point"""
         group = 0
         if profile.group is not None:
-            group = profile.group.members.filter(points__date=date.today()).aggregate(point=Sum('points__attributes__point'))
+            group = profile.group.members.filter(points__date=timezone.now().date()).aggregate(point=Sum('points__attributes__point'))
             if group['point'] is None:
                 group = {'point': 0}
         
         """sum user today point"""
-        personal = profile.points.filter(date=date.today()).aggregate(point=Sum('attributes__point'))
+        personal = profile.points.filter(date=timezone.now().date()).aggregate(point=Sum('attributes__point'))
         if personal['point'] is None:
             personal = {'point': 0}
 

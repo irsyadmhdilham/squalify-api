@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
-from datetime import date
+from django.utils import timezone
 
 from .serializers import SalesSerializer, SummarySerializer
 
@@ -14,7 +14,6 @@ from apis._models.sales import Sales, SalesType, Surcharge
 from .functions.personal import Personal
 from .functions.sales_filter import SalesFilter
 from .functions.income import Income
-from datetime import datetime
 import json
 import os
 import itertools
@@ -73,7 +72,7 @@ class SalesList(generics.ListCreateAPIView):
 
         """create/update post"""
         today_post = Post.objects.filter(
-            Q(timestamp__date=date.today()) &
+            Q(timestamp__date=timezone.now().date()) &
             Q(posted_by__pk=user_pk)
         )
         if today_post.count() > 0:

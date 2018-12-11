@@ -1,5 +1,6 @@
 from django.db.models import Q, Sum
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.utils import timezone
 from .income import Income
 import pytz
 
@@ -58,7 +59,7 @@ class SalesType:
 class Personal(SalesType):
 
     sales = None
-    now = datetime.now()
+    now = timezone.now()
 
     def __init__(self, sales, comm_struct, designation, company):
         self.sales = sales

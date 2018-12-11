@@ -1,10 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.utils import timezone
 import pytz
 
 class SalesFilter:
 
     sales = None
-    now = datetime.now()
+    now = timezone.now()
 
     def __init__(self, sales):
         self.sales = sales.order_by('-timestamp')

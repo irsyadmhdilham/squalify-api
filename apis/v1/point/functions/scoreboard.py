@@ -1,4 +1,5 @@
-from datetime import date, timedelta
+from datetime import timedelta
+from django.utils import timezone
 from django.db.models import Sum, Q
 
 class Scoreboard:
@@ -20,7 +21,7 @@ class Scoreboard:
     
     def year(self, sort):
         def profile(val):
-            filter_points = val.points.filter(date__year=date.today().year)
+            filter_points = val.points.filter(date__year=timezone.now().date().year)
             return {
                 'name': val.name,
                 'designation': val.designation.name,
@@ -35,7 +36,8 @@ class Scoreboard:
     
     def month(self, sort):
         def profile(val):
-            filter_points = val.points.filter(Q(date__month=date.today().month) & Q(date__year=date.today().year))
+            date = timezone.now().date()
+            filter_points = val.points.filter(Q(date__month=date.month) & Q(date__year=date.year))
             return {
                 'name': val.name,
                 'designation': val.designation.name,
@@ -50,7 +52,7 @@ class Scoreboard:
 
     def today(self, sort):
         def profile(val):
-            filter_points = val.points.filter(date=date.today())
+            filter_points = val.points.filter(date=timezone.now().date())
             return {
                 'name': val.name,
                 'designation': val.designation.name,
@@ -65,7 +67,7 @@ class Scoreboard:
 
     def week(self, sort):
         def profile(val):
-            today = date.today()
+            today = timezone.now().today()
             day = today.weekday()
             start = today - timedelta(days=day)
             end = today + timedelta(days=6 - day)

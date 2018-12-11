@@ -1,5 +1,5 @@
 from django.db.models import Q
-from datetime import date
+from django.utils import timezone
 from .serializer import Serializer
 from functools import reduce
 
@@ -15,8 +15,9 @@ class Month(Serializer):
 
     def month_total(self):
         def profile(val):
-            current_year = date.today().year
-            current_month = date.today().month
+            today = timezone.now().date()
+            current_year = today.year
+            current_month = today.month
             filter_sales = val.sales.filter(
                 Q(timestamp__year=current_year) &
                 Q(timestamp__month=current_month)
@@ -33,8 +34,9 @@ class Month(Serializer):
     
     def month_epf(self):
         def profile(val):
-            current_year = date.today().year
-            current_month = date.today().month
+            today = timezone.now().date()
+            current_year = today.year
+            current_month = today.month
             filter_sales = val.sales.filter(
                 Q(timestamp__year=current_year) &
                 Q(timestamp__month=current_month) &
@@ -52,8 +54,9 @@ class Month(Serializer):
 
     def month_cash(self):
         def profile(val):
-            current_year = date.today().year
-            current_month = date.today().month
+            today = timezone.now().date()
+            current_year = today.year
+            current_month = today.month
             filter_sales = val.sales.filter(
                 Q(timestamp__year=current_year) &
                 Q(timestamp__month=current_month) &
@@ -71,8 +74,9 @@ class Month(Serializer):
 
     def month_asb(self):
         def profile(val):
-            current_year = date.today().year
-            current_month = date.today().month
+            today = timezone.now().date()
+            current_year = today.year
+            current_month = today.month
             filter_sales = val.sales.filter(
                 Q(timestamp__year=current_year) &
                 Q(timestamp__month=current_month) &
@@ -90,8 +94,9 @@ class Month(Serializer):
 
     def month_prs(self):
         def profile(val):
-            current_year = date.today().year
-            current_month = date.today().month
+            today = timezone.now().date()
+            current_year = today.year
+            current_month = today.month
             filter_sales = val.sales.filter(
                 Q(timestamp__year=current_year) &
                 Q(timestamp__month=current_month) &

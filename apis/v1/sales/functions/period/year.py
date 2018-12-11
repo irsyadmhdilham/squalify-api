@@ -1,11 +1,11 @@
 from django.db.models import Q
-from datetime import date
+from django.utils import timezone
 from .serializer import Serializer
 from functools import reduce
 
 class Year(Serializer):
 
-    current_year = date.today().year
+    current_year = timezone.now().date().year
     members = None
 
     def __init__(self, members):

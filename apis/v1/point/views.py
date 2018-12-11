@@ -6,7 +6,7 @@ from .. ._models.point import Point, PointField, PointAttribute
 
 from .functions.point_calculator import PointCalculator
 from .functions.scoreboard import Scoreboard
-from datetime import datetime
+from django.utils import timezone
 from functools import reduce
 import itertools
 
@@ -20,7 +20,7 @@ class PointList(generics.ListCreateAPIView):
         mode = self.request.query_params.get('mode')
         profile = Profile.objects.get(pk=user_pk)
         if mode == 'today':
-            return profile.points.filter(date__exact=datetime.now().date())
+            return profile.points.filter(date__exact=timezone.now().date())
         return profile.points.all().order_by('-date')
     
     def perform_create(self, serializer):
@@ -30,7 +30,7 @@ class PointList(generics.ListCreateAPIView):
         add = self.request.data.get('add')
         profile = Profile.objects.get(pk=user_pk)
         point_field = PointField.objects.get(name=attr_val)
-        get_point = profile.points.filter(date__exact=datetime.now().date())
+        get_point = profile.points.filter(date__exact=timezone.now().date())
 
         point_type = 'add'
         if add == False:
@@ -40,7 +40,7 @@ class PointList(generics.ListCreateAPIView):
             'logs': [
                 { 
                     'type': point_type,
-                    'time': datetime.now().isoformat(),
+                    'time': timezone.now().isoformat(),
                     'attribute': point_field.name,
                     'point': total_point 
                 }
@@ -79,7 +79,7 @@ class PointDetail(generics.RetrieveUpdateAPIView):
 
         log = {
             'type': point_type,
-            'time': datetime.now().isoformat(),
+            'time': timezone.now().isoformat(),
             'attribute': attr_val,
             'point': total_point 
         }

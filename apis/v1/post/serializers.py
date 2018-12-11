@@ -5,8 +5,7 @@ from django.db.models import Sum
 
 from ..sales.serializers import SalesSerializer
 from ..contact.serializers import ContactSerializer
-
-from datetime import date
+from django.utils import timezone
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,7 +67,7 @@ class PostSerializer(serializers.ModelSerializer):
     def get_monthly_sales(self, obj):
         user_pk = obj.posted_by.pk
         profile = Profile.objects.get(pk=user_pk)
-        sales = profile.sales.filter(timestamp__month=date.today().month)
+        sales = profile.sales.filter(timestamp__month=timezone.now().date().month)
         sum_up = sales.aggregate(total=Sum('amount'))
         total = 0
         if sum_up['total'] is not None:

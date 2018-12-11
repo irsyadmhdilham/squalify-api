@@ -1,5 +1,5 @@
 from apis._models.profile import Profile
-from datetime import datetime
+from django.utils import timezone
 from functools import reduce
 
 class PointCalculator:
@@ -10,7 +10,7 @@ class PointCalculator:
     def __init__(self, user_pk, attribute):
         self.attribute = attribute
         self.user_pk = user_pk
-        points = Profile.objects.get(pk=user_pk).points.filter(date=datetime.now().date())
+        points = Profile.objects.get(pk=user_pk).points.filter(date=timezone.now().date())
         if points.count() > 0:
             self.today_points = points[0]
 
