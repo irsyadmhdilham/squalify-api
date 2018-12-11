@@ -2,16 +2,16 @@ version: '3'
 services:
   django_api:
     build: .
-    image: lakau/django_api
+    image: django_api
     container_name: django_api
+    command: gunicorn --workers=4 -b :8030 django_app.wsgi
     ports:
       - '8030:8030'
-    links:
+    depends_on:
       - db
   db:
     build: db/.
-    image: lakau/psql
+    image: psql
     container_name: db
     ports:
       - '5432:5432'
-

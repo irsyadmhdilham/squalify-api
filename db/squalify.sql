@@ -2191,10 +2191,10 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 --
 
 COPY public.account_user (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) FROM stdin;
-12	pbkdf2_sha256$120000$IBfppgaoKUig$oCHs4DevcvIR2BFQGFnCQ4lf9dGwvO3+C7GG0VtB7mE=	\N	f	Irsyad Mhd Ilham		f	t	2018-11-14 23:05:42+08	irsyadmhdilham@squalify.com
-13	pbkdf2_sha256$120000$MC2l9wD3PLuC$HGU9CxEbB8c4X9f7ESPFD43rfpLbYC2gYc6KZR/pc8s=	\N	f			f	t	2018-12-03 15:55:11+08	irfan@vve.com
 14	pbkdf2_sha256$120000$A1mbJrDtOAod$Uc4yCHFRRVjXzIhRbm/K6520PubaOosjNkd4RX5h1mA=	\N	f			f	t	2018-12-04 17:15:07.346692+08	afif@vve.com
 1	pbkdf2_sha256$120000$sDv3OkbSidfX$Prh72xTlnqoRJQW5SEr9//xXUdQybMGys9JCkrVQtbk=	2018-12-07 01:19:08.582429+08	t			t	t	2018-11-13 23:50:54.377288+08	irsyadmhdilham@gmail.com
+12	pbkdf2_sha256$120000$x7tBWjPIFeak$QRiW43CBICAMFrnPWn0dHQSWxUDgBcJNxDzlpPMVhdY=	\N	f	Irsyad Mhd Ilham		f	t	2018-11-14 23:05:42+08	cwa@cwa.com
+13	pbkdf2_sha256$120000$iT0Oe8uucPUt$HhiNavnlIu2WoA9y7/qkMAh7VLcxYvrKulsRQq/8y4U=	\N	f			f	t	2018-12-03 15:55:11+08	irfan@vve.com
 \.
 
 
@@ -2219,7 +2219,7 @@ COPY public.account_user_user_permissions (id, user_id, permission_id) FROM stdi
 --
 
 COPY public.apis_agency (id, name, agency_image, company_id, industry_id, owner_id) FROM stdin;
-1	Vision Victory Empire	agencies/1/bg.jpg	1	1	15
+1	Squalify Agency	agencies/1/bg.jpg	2	1	15
 \.
 
 
@@ -2241,6 +2241,7 @@ COPY public.apis_agency_members (id, agency_id, profile_id) FROM stdin;
 COPY public.apis_agency_posts (id, agency_id, post_id) FROM stdin;
 8	1	8
 9	1	9
+10	1	10
 \.
 
 
@@ -2250,6 +2251,10 @@ COPY public.apis_agency_posts (id, agency_id, post_id) FROM stdin;
 
 COPY public.apis_comment (id, "timestamp", text, commented_by_id) FROM stdin;
 6	2018-12-09 22:56:40.0452+08	Mantap syad	16
+7	2018-12-10 12:54:21.322895+08	Congrats 	16
+8	2018-12-10 12:55:58.037508+08	Cool bro	15
+9	2018-12-10 12:56:12.48882+08	Cool lah bro	15
+10	2018-12-10 12:57:30.908218+08	Boleh qualify cpt ni	16
 \.
 
 
@@ -2279,6 +2284,8 @@ COPY public.apis_contact (id, name, remark, contact_no, created_on, last_modifie
 47	Yunos Alwi	\N	019 2323	2018-12-02 12:43:01.283276+08	2018-12-09 13:51:11.690463+08		1	Appointment secured	\N
 56	Karen	\N	016555789	2018-12-09 22:50:53.446867+08	2018-12-09 22:50:53.486227+08		1	None	52
 57	Jamal	Maybank kl	0182334577	2018-12-09 23:13:54.055187+08	2018-12-09 23:15:37.763934+08		2	Appointment secured	\N
+58	Ahmad	\N	0185782689	2018-12-10 14:43:23.751064+08	2018-12-10 14:43:23.751108+08		2	None	\N
+59	Mary	\N	085468	2018-12-10 17:06:07.180745+08	2018-12-10 17:06:07.181497+08		2	None	\N
 \.
 
 
@@ -2368,6 +2375,7 @@ COPY public.apis_group (id, owner_id) FROM stdin;
 COPY public.apis_group_members (id, group_id, profile_id) FROM stdin;
 2	1	16
 3	2	17
+7	1	17
 \.
 
 
@@ -2436,6 +2444,8 @@ COPY public.apis_point (id, date, logs) FROM stdin;
 19	2018-12-08	{"logs": [{"time": "2018-12-08T09:18:40.727505", "type": "add", "point": 3, "attribute": "Career presentation"}, {"time": "2018-12-08T09:18:46.831028", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-08T09:19:16.972535", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-12-08T09:19:20.563906", "type": "add", "point": 5, "attribute": "Agency program"}]}
 20	2018-12-09	{"logs": [{"time": "2018-12-09T05:50:23.555789", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T05:51:08.940944", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-12-09T07:58:10.925222", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T07:58:29.690283", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T08:00:02.314561", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T08:01:21.612187", "type": "add", "point": 2, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T08:02:38.232268", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-12-09T08:02:40.357506", "type": "add", "point": 2, "attribute": "Update upline"}]}
 21	2018-12-09	{"logs": [{"time": "2018-12-09T14:48:08.279388", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T14:49:05.068727", "type": "add", "point": 1, "attribute": "Joining field work"}, {"time": "2018-12-09T14:49:36.909624", "type": "add", "point": 3, "attribute": "Sales presentation"}, {"time": "2018-12-09T14:49:38.751673", "type": "add", "point": 3, "attribute": "Sign up contract"}, {"time": "2018-12-09T14:50:53.631313", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-12-09T14:51:19.928779", "type": "add", "point": 2, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T14:51:47.575476", "type": "add", "point": 3, "attribute": "Career presentation"}, {"time": "2018-12-09T14:52:11.539800", "type": "add", "point": 1, "attribute": "Servicing/Follow up"}, {"time": "2018-12-09T14:52:12.870843", "type": "add", "point": 2, "attribute": "Update upline"}, {"time": "2018-12-09T14:52:14.100659", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-12-09T14:52:18.513466", "type": "add", "point": 3, "attribute": "Be early training"}, {"time": "2018-12-09T14:58:17.799146", "type": "add", "point": 6, "attribute": "Sales presentation"}, {"time": "2018-12-09T14:59:57.242457", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-12-09T15:13:54.295578", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-09T15:14:39.351878", "type": "add", "point": 3, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T15:15:34.849238", "type": "add", "point": 4, "attribute": "Appointment secured"}, {"time": "2018-12-09T15:22:02.191373", "type": "add", "point": 4, "attribute": "Update upline"}, {"time": "2018-12-09T15:22:04.445652", "type": "add", "point": 6, "attribute": "Be early training"}, {"time": "2018-12-09T15:22:53.596538", "type": "add", "point": 2, "attribute": "Joining field work"}, {"time": "2018-12-09T15:29:59.836986", "type": "add", "point": 6, "attribute": "Sign up contract"}, {"time": "2018-12-09T15:37:35.332852", "type": "add", "point": 1, "attribute": "Personal coaching"}, {"time": "2018-12-09T15:37:37.345106", "type": "add", "point": 6, "attribute": "Update upline"}, {"time": "2018-12-09T15:46:17.301186", "type": "add", "point": 5, "attribute": "Agency program"}, {"time": "2018-12-09T15:46:34.553199", "type": "add", "point": 10, "attribute": "Agency program"}]}
+22	2018-12-10	{"logs": [{"time": "2018-12-10T06:43:24.616882", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-10T06:44:21.193517", "type": "add", "point": 2, "attribute": "Appointment secured"}]}
+23	2018-12-10	{"logs": [{"time": "2018-12-10T09:06:07.371305", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-10T09:20:41.866641", "type": "add", "point": 2, "attribute": "Update upline"}, {"time": "2018-12-10T09:20:49.779469", "type": "add", "point": 3, "attribute": "Millionnaire suit"}]}
 \.
 
 
@@ -2522,6 +2532,11 @@ COPY public.apis_point_attributes (id, point_id, pointattribute_id) FROM stdin;
 104	21	108
 105	21	109
 106	21	110
+107	22	111
+108	22	112
+109	23	114
+110	23	115
+111	23	116
 \.
 
 
@@ -2608,6 +2623,12 @@ COPY public.apis_pointattribute (id, point, last_modified, attribute_id) FROM st
 109	1	2018-12-09 23:37:35.352682+08	13
 104	6	2018-12-09 23:37:37.356039+08	11
 110	10	2018-12-09 23:46:34.564829+08	15
+111	2	2018-12-10 14:43:24.65636+08	1
+112	2	2018-12-10 14:44:21.204527+08	5
+113	1	2018-12-10 14:57:11.357167+08	2
+114	2	2018-12-10 17:06:07.377815+08	1
+115	2	2018-12-10 17:20:41.877216+08	11
+116	3	2018-12-10 17:20:49.792584+08	10
 \.
 
 
@@ -2641,6 +2662,7 @@ COPY public.apis_pointfield (id, name) FROM stdin;
 COPY public.apis_post (id, "timestamp", contact_rel_id, post_type_id, posted_by_id) FROM stdin;
 8	2018-12-08 21:39:51.325369+08	\N	1	15
 9	2018-12-09 22:48:51.058992+08	\N	1	16
+10	2018-12-10 13:58:31.873943+08	\N	1	15
 \.
 
 
@@ -2650,6 +2672,10 @@ COPY public.apis_post (id, "timestamp", contact_rel_id, post_type_id, posted_by_
 
 COPY public.apis_post_comments (id, post_id, comment_id) FROM stdin;
 5	8	6
+6	9	7
+7	9	8
+8	8	9
+9	8	10
 \.
 
 
@@ -2673,6 +2699,7 @@ COPY public.apis_post_sales_rel (id, post_id, sales_id) FROM stdin;
 3	9	18
 4	9	19
 5	9	20
+6	10	21
 \.
 
 
@@ -2699,9 +2726,9 @@ COPY public.apis_posttype (id, name) FROM stdin;
 --
 
 COPY public.apis_profile (id, name, profile_image, settings, agency_id, designation_id, group_id, upline_id, user_id, fcm_token) FROM stdin;
-17	Afif	users/17/baby.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	3	\N	\N	14	\N
-15	Irsyad Mhd Ilham	users/15/baby.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	1	1	\N	12	d91M8fjtgmE:APA91bGFAyn8vLjjLAPRnt0bs1aWtS0t0V0jLVNnrRDfVf3rrtzg_ZOy9Fli_gZuJuYiRo44sesue1uBXAjNknqWM-UEGqwkoOInT419tmKWvDnTfodnNqYSXytEAz1U-P6c3GNKqIAz
 16	Irfan Baktiar	users/16/man.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	2	2	\N	13	eUcV0BRXAvk:APA91bHzo7kLlBXohYpAhRgyMvBu166bkk8uVNrCvnLmuhWcS826lhz7srGZoRkyJdC2zt9atvEFKHYcb_UZ0iLhivSdm9j6_JSpDBR-aj1E9O9DWMO178KE_kyJhF3aTSnKyNHO9Dcx
+15	Aziz Ismail	users/15/man.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	1	1	\N	12	null
+17	Afif	users/17/baby.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	3	\N	\N	14	\N
 \.
 
 
@@ -2721,6 +2748,8 @@ COPY public.apis_profile_contacts (id, profile_id, contact_id) FROM stdin;
 54	16	54
 56	16	56
 57	16	57
+58	16	58
+59	15	59
 \.
 
 
@@ -2757,6 +2786,8 @@ COPY public.apis_profile_points (id, profile_id, point_id) FROM stdin;
 19	15	19
 20	15	20
 21	16	21
+22	16	22
+23	15	23
 \.
 
 
@@ -2780,6 +2811,7 @@ COPY public.apis_profile_sales (id, profile_id, sales_id) FROM stdin;
 18	16	18
 19	16	19
 20	16	20
+21	15	21
 \.
 
 
@@ -2804,6 +2836,8 @@ COPY public.apis_profile_schedules (id, profile_id, schedule_id) FROM stdin;
 47	16	48
 48	16	49
 49	16	50
+50	16	51
+51	16	52
 \.
 
 
@@ -2827,6 +2861,7 @@ COPY public.apis_sales (id, "timestamp", location, amount, commission, document_
 18	2018-12-09 22:48:50.792067+08	KL	17000.00	419.90	\N	\N	Submitted	1	\N	f
 19	2018-12-09 23:04:26.554002+08	Damansara	200000.00	7380.00	\N	\N	Submitted	2	\N	f
 20	2018-12-09 23:10:04.853235+08	Kajang	15000.00	370.50	\N	\N	Submitted	1	\N	t
+21	2018-12-10 13:58:31.640832+08	Kl	12400.00	\N	\N	\N	Submitted	1	\N	f
 \.
 
 
@@ -2877,6 +2912,8 @@ COPY public.apis_schedule (id, date, title, remark, location, created_on, last_m
 48	2018-12-18 01:30:00+08	Karen	None	Kajang	2018-12-09 23:15:35.008755+08	2018-12-09 23:40:52.742148+08	\N	57
 49	2018-12-16 16:04:00+08	Man	\N	Bangi	2018-12-10 00:04:29.298771+08	2018-12-10 00:04:29.298801+08	\N	\N
 50	2018-12-13 16:05:00+08	Mary Ann	Just try out	Kelana Jaya	2018-12-10 00:06:22.185521+08	2018-12-10 00:06:22.185551+08	\N	\N
+51	2018-12-11 14:30:00+08	Mr chu	\N	Kajang	2018-12-10 12:57:10.096989+08	2018-12-10 12:57:10.097019+08	\N	\N
+52	2018-12-12 08:44:00+08	Sabri	White coffee	Damansara	2018-12-10 14:44:21.402221+08	2018-12-10 14:44:21.402251+08	\N	\N
 \.
 
 
@@ -3277,6 +3314,13 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 228	2018-12-08 21:35:05.646401+08	40	2018-12-03 00:28:52.781209+00:00	3		32	1
 229	2018-12-08 21:35:05.648427+08	39	2018-12-03 00:28:49.993359+00:00	3		32	1
 230	2018-12-08 21:35:05.650713+08	38	2018-12-03 00:28:46.776758+00:00	3		32	1
+231	2018-12-10 13:53:25.898254+08	12	cwa@cwa.com	2	[{"changed": {"fields": ["email"]}}]	6	1
+232	2018-12-10 13:53:51.009131+08	12	cwa@cwa.com	2	[{"changed": {"fields": ["password"]}}]	6	1
+233	2018-12-10 13:54:14.565469+08	1	Vision Victory Empire	2	[{"changed": {"fields": ["company"]}}]	7	1
+234	2018-12-10 13:59:55.316825+08	15	15: Vision Victory Empire Aziz Ismail	2	[{"changed": {"fields": ["name", "profile_image"]}}]	24	1
+235	2018-12-10 14:01:19.529313+08	1	Squalify Agency	2	[{"changed": {"fields": ["name"]}}]	7	1
+236	2018-12-10 14:41:48.330172+08	1	Aziz Ismail	2	[{"changed": {"fields": ["members"]}}]	16	1
+237	2018-12-10 14:42:41.651598+08	13	irfan@vve.com	2	[{"changed": {"fields": ["password"]}}]	6	1
 \.
 
 
@@ -3381,7 +3425,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 u04wzebmxik0h3rl1w0psyd1cb2abim8	M2ZhYTI3YWIyYjE2MTExYjg2ZTQwZWMxYmYzN2FkYTk4MTUwZDA1Yjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmOTk0OTYxNWIxZmRkYzQzMTFkZDJjMjU4Nzg2YTllYTk4MzU0ZTZjIn0=	2018-11-27 23:51:32.556776+08
 n3q2p3kkquvfxjjvblj0h196h6acccbn	M2ZhYTI3YWIyYjE2MTExYjg2ZTQwZWMxYmYzN2FkYTk4MTUwZDA1Yjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmOTk0OTYxNWIxZmRkYzQzMTFkZDJjMjU4Nzg2YTllYTk4MzU0ZTZjIn0=	2018-12-12 14:05:52.896691+08
-5nvzyx20mbzm18uwfiqk4r1qtqsset9f	M2ZhYTI3YWIyYjE2MTExYjg2ZTQwZWMxYmYzN2FkYTk4MTUwZDA1Yjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmOTk0OTYxNWIxZmRkYzQzMTFkZDJjMjU4Nzg2YTllYTk4MzU0ZTZjIn0=	2018-12-21 01:19:08.603273+08
+337ifo1vrbmnlr0q3vij9texz03c4az7	M2ZhYTI3YWIyYjE2MTExYjg2ZTQwZWMxYmYzN2FkYTk4MTUwZDA1Yjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmOTk0OTYxNWIxZmRkYzQzMTFkZDJjMjU4Nzg2YTllYTk4MzU0ZTZjIn0=	2018-12-24 14:42:41.664341+08
 \.
 
 
@@ -3424,14 +3468,14 @@ SELECT pg_catalog.setval('public.apis_agency_members_id_seq', 3, true);
 -- Name: apis_agency_posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_agency_posts_id_seq', 9, true);
+SELECT pg_catalog.setval('public.apis_agency_posts_id_seq', 10, true);
 
 
 --
 -- Name: apis_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_comment_id_seq', 6, true);
+SELECT pg_catalog.setval('public.apis_comment_id_seq', 10, true);
 
 
 --
@@ -3445,7 +3489,7 @@ SELECT pg_catalog.setval('public.apis_company_id_seq', 2, true);
 -- Name: apis_contact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_contact_id_seq', 57, true);
+SELECT pg_catalog.setval('public.apis_contact_id_seq', 59, true);
 
 
 --
@@ -3501,7 +3545,7 @@ SELECT pg_catalog.setval('public.apis_group_id_seq', 2, true);
 -- Name: apis_group_members_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_group_members_id_seq', 6, true);
+SELECT pg_catalog.setval('public.apis_group_members_id_seq', 7, true);
 
 
 --
@@ -3543,21 +3587,21 @@ SELECT pg_catalog.setval('public.apis_notificationtype_id_seq', 5, true);
 -- Name: apis_point_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_point_attributes_id_seq', 106, true);
+SELECT pg_catalog.setval('public.apis_point_attributes_id_seq', 111, true);
 
 
 --
 -- Name: apis_point_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_point_id_seq', 21, true);
+SELECT pg_catalog.setval('public.apis_point_id_seq', 23, true);
 
 
 --
 -- Name: apis_pointattribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_pointattribute_id_seq', 110, true);
+SELECT pg_catalog.setval('public.apis_pointattribute_id_seq', 116, true);
 
 
 --
@@ -3571,14 +3615,14 @@ SELECT pg_catalog.setval('public.apis_pointfield_id_seq', 15, true);
 -- Name: apis_post_comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_post_comments_id_seq', 5, true);
+SELECT pg_catalog.setval('public.apis_post_comments_id_seq', 9, true);
 
 
 --
 -- Name: apis_post_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_post_id_seq', 9, true);
+SELECT pg_catalog.setval('public.apis_post_id_seq', 10, true);
 
 
 --
@@ -3592,7 +3636,7 @@ SELECT pg_catalog.setval('public.apis_post_likes_id_seq', 44, true);
 -- Name: apis_post_sales_rel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_post_sales_rel_id_seq', 5, true);
+SELECT pg_catalog.setval('public.apis_post_sales_rel_id_seq', 6, true);
 
 
 --
@@ -3613,7 +3657,7 @@ SELECT pg_catalog.setval('public.apis_posttype_id_seq', 2, true);
 -- Name: apis_profile_contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_contacts_id_seq', 57, true);
+SELECT pg_catalog.setval('public.apis_profile_contacts_id_seq', 59, true);
 
 
 --
@@ -3641,28 +3685,28 @@ SELECT pg_catalog.setval('public.apis_profile_notifications_id_seq', 1, false);
 -- Name: apis_profile_points_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_points_id_seq', 21, true);
+SELECT pg_catalog.setval('public.apis_profile_points_id_seq', 23, true);
 
 
 --
 -- Name: apis_profile_sales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_sales_id_seq', 20, true);
+SELECT pg_catalog.setval('public.apis_profile_sales_id_seq', 21, true);
 
 
 --
 -- Name: apis_profile_schedules_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_schedules_id_seq', 49, true);
+SELECT pg_catalog.setval('public.apis_profile_schedules_id_seq', 51, true);
 
 
 --
 -- Name: apis_sales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_sales_id_seq', 20, true);
+SELECT pg_catalog.setval('public.apis_sales_id_seq', 21, true);
 
 
 --
@@ -3683,7 +3727,7 @@ SELECT pg_catalog.setval('public.apis_salestype_id_seq', 6, true);
 -- Name: apis_schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_schedule_id_seq', 50, true);
+SELECT pg_catalog.setval('public.apis_schedule_id_seq', 52, true);
 
 
 --
@@ -3718,7 +3762,7 @@ SELECT pg_catalog.setval('public.auth_permission_id_seq', 128, true);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 230, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 237, true);
 
 
 --
