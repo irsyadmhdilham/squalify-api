@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import include
 from .views import (
     PointList,
     PointDetail,
@@ -13,4 +14,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', PointDetail.as_view(), name='point-detail'),
     url(r'^contact/$', ContactPointView.as_view(), name='contact-points'),
     url(r'^scoreboard/$', ScoreboardPoints.as_view(), name='scoreboard'),
+    url(r'^group/', include('apis.v1.point.group.urls', namespace='group')),
 ]

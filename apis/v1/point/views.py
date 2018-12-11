@@ -7,8 +7,6 @@ from .. ._models.point import Point, PointField, PointAttribute
 from .functions.point_calculator import PointCalculator
 from .functions.scoreboard import Scoreboard
 from django.utils import timezone
-from functools import reduce
-import itertools
 
 from .serializers import PointSerializer, ScoreboardSerializer
 
