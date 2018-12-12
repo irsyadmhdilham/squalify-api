@@ -9,5 +9,6 @@ class MemberSerializer(serializers.Serializer):
     downline = serializers.IntegerField(read_only=True)
 
 class MemberPointSerializer(serializers.Serializer):
+    pk = serializers.IntegerField(read_only=True)
     date = serializers.DateField(read_only=True)
     point = serializers.IntegerField(read_only=True)
