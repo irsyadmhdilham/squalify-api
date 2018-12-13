@@ -32,7 +32,8 @@ class SalesList(generics.ListCreateAPIView):
         user_pk = self.kwargs.get('user_pk')
         p = self.request.query_params.get('p')
         t = self.request.query_params.get('t')
-        sales = Profile.objects.get(pk=user_pk).sales.all()
+        profile = Profile.objects.get(pk=user_pk)
+        sales = profile.sales.all()
         sales_filter = SalesFilter(sales)
         data = None
         if t == 'epf':
@@ -76,18 +77,17 @@ class SalesList(generics.ListCreateAPIView):
             Q(timestamp__date=timezone.now().date()) &
             Q(posted_by__pk=user_pk)
         )
+
         if today_post.count() > 0:
-            post = today_post[0].sales_rel.add(instance)
+            post = today_post[0]
+            post.sales_rel.add(instance)
+            post.save()
         else:
             post_type = PostType.objects.get(name='sales closed')
             create_post = Post.objects.create(posted_by=profile, post_type=post_type)
             create_post.save()
             create_post.sales_rel.add(instance)
             profile.agency.posts.add(create_post)
-
-        url = 'http://localhost:8040/post'
-        ws_data = { 'from': '{}:{}'.format(company, profile.agency.pk) }
-        requests.post(url, data=ws_data)
 
 class SalesRemove(generics.DestroyAPIView):
     serializer_class = SalesSerializer

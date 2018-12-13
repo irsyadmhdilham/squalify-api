@@ -29,7 +29,7 @@ class Post(models.Model):
     sales_rel = models.ManyToManyField(Sales, blank=True)
     users_tagged = models.ManyToManyField('Profile', blank=True, related_name='users')
     contact_rel = models.ForeignKey(Contact, on_delete=models.CASCADE, blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now=True)
     comments = models.ManyToManyField(Comment, blank=True)
     likes = models.ManyToManyField(Like, blank=True)
 
