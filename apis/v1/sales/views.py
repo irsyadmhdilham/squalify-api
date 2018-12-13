@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
@@ -16,7 +17,7 @@ from .functions.sales_filter import SalesFilter
 from .functions.income import Income
 import json
 import os
-import itertools
+import requests
 
 path = os.path.abspath(os.path.dirname(__file__) + "../../../../static/commissions-struct.json")
 file = open(path, 'r')
@@ -56,8 +57,8 @@ class SalesList(generics.ListCreateAPIView):
         """instances"""
         profile = Profile.objects.get(pk=user_pk)
         sales_type_instance = SalesType.objects.get(name=sales_type)
-        designation = str(profile.designation)
-        company = str(profile.agency.company)
+        designation = profile.designation.name
+        company = profile.agency.company.name
 
         """income calculations"""
         income_ins = Income(comm_struct, amount, designation, company, sales_type)
@@ -83,6 +84,10 @@ class SalesList(generics.ListCreateAPIView):
             create_post.save()
             create_post.sales_rel.add(instance)
             profile.agency.posts.add(create_post)
+
+        url = 'http://localhost:8040/post'
+        ws_data = { 'from': '{}:{}'.format(company, profile.agency.pk) }
+        requests.post(url, data=ws_data)
 
 class SalesRemove(generics.DestroyAPIView):
     serializer_class = SalesSerializer
