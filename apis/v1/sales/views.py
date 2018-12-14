@@ -17,7 +17,6 @@ from .functions.sales_filter import SalesFilter
 from .functions.income import Income
 import json
 import os
-import requests
 
 path = os.path.abspath(os.path.dirname(__file__) + "../../../../static/commissions-struct.json")
 file = open(path, 'r')
