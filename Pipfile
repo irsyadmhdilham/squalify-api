@@ -29,6 +29,7 @@ wrapt = "==1.10.11"
 django-cors-headers = "*"
 djangorestframework-queryfields = "*"
 gunicorn = "*"
+"oauth2client" = "*"
 
 [dev-packages]
 
