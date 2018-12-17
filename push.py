@@ -1,12 +1,9 @@
 import requests
+from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 
-PROJECT_ID = 'squalify-119ee'
-BASE_URL = 'https://fcm.googleapis.com'
-SCOPE = 'https://www.googleapis.com/auth/firebase.messaging'
-
-
 def get_access_token():
+    SCOPE = 'https://www.googleapis.com/auth/firebase.messaging'
     credentials = ServiceAccountCredentials.from_json_keyfile_name('service-account.json', SCOPE)
     access_token_info = credentials.get_access_token()
     return access_token_info.access_token
@@ -17,17 +14,29 @@ headers = {
     'Content-Type': 'application/json; UTF-8'
 }
 body = {
-    "message": {
-        "token": "fY1JR86nGe4:APA91bHCHWTmO2j_D_YJ_UA6EPyMO8ODRlC0MBkWQBenIJir54_WkXLZo16LVHFLv44ZMWYlrCeW8f_awLQAAVjc7ei7vv_md1l2bKCMfZ8sSa79aP2WUmWEYzhq2G2-vQdAboh8x0AW",
-        "notification": {
-            "title": "Squalify",
-            "body": "This is a test notification"
+    'message': {
+        'token': 'dcjNL6n5gEo:APA91bFT8gCtQEKQee8tUtFNTsUfxS7X-7qPZ1ZVFiezVgWpb4A2wDalMr87igWGDLU6SDhd3AbQIw5fIps0SYOSVQ6WO4k2lIv3JsRYfjH_pKRVMqvQN_KeCLxa_K-5fsvJe-OLh3Es',
+        'notification': {
+            'title': 'Squalify',
+            'body': 'This is a test notification'
         },
-        "data": {
-            "story_id": "story_12345"
+        'android': {
+            'notification': {
+                'sound': 'default'
+            }
+        },
+        'apns': {
+            'payload': {
+                'aps': {
+                    'sound': 'default'
+                }
+            }
+        },
+        'data': {
+            'story_id': 'story_12345'
         }
     }
 }
 
-send = requests.post(url, json=body, headers=headers)
-print(send.json())
+# send = requests.post(url, json=body, headers=headers)
+# print(send.json())
