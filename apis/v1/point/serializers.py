@@ -3,6 +3,7 @@ from .. ._models.point import Point, PointAttribute
 from django.db.models import Sum
 from django.utils import timezone
 from drf_queryfields import QueryFieldsMixin
+from .. ._models.profile import Profile
 
 class PointAttributeSerializer(serializers.ModelSerializer):
     attribute = serializers.StringRelatedField(read_only=True)
@@ -45,7 +46,9 @@ class PointSerializer(QueryFieldsMixin, serializers.ModelSerializer):
         return point['total']
     
     def get_point_logs(self, obj):
-        return obj.logs['logs']
+        if 'logs' in obj.logs:
+            return obj.logs['logs']
+        return []
 
 class ScoreboardSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
