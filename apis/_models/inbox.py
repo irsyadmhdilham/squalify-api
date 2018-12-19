@@ -1,15 +1,40 @@
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 
-class Conversation(models.Model):
-    subscriber = models.ManyToManyField('Profile')
-    conversation = JSONField()
+class ChatType(models.Model):
+    name = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.name
+
+class ChatMessage(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    person = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    text = models.TextField()
+
+    def __str__(self):
+        person = self.person.name
+        timestamp = str(self.timestamp)
+        return f'{timestamp} > {person}'
+
+class Chat(models.Model):
+    messages = models.ManyToManyField(ChatMessage)
+    composed_by = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
+    participants = models.ManyToManyField('Profile', related_name='members', blank=True)
+    group_name = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        person = self.composed_by.name
+        return '{}'.format(person)
 
 class Inbox(models.Model):
-    sender = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='senders')
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+    chat_type = models.ForeignKey(ChatType, on_delete=models.CASCADE)
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.sender.name)
+        name = self.chat.composed_by.name
+        return name
+    
+    class Meta:
+        verbose_name_plural = 'Inboxes'

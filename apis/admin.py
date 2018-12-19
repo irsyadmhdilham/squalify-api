@@ -4,7 +4,7 @@ from ._models.agency import Agency
 from ._models.company import Company
 from ._models.industry import Industry
 from ._models.group import Group
-from ._models.inbox import Inbox, Conversation
+from ._models.inbox import Inbox, Chat, ChatMessage, ChatType
 from ._models.notification import Notification, NotificationType
 from ._models.point import Point, PointField, PointAttribute
 from ._models.profile import Profile, Designation
@@ -19,8 +19,10 @@ admin.site.register(Agency)
 
 admin.site.register(Group)
 
-admin.site.register(Conversation)
 admin.site.register(Inbox)
+admin.site.register(Chat)
+admin.site.register(ChatMessage)
+admin.site.register(ChatType)
 
 admin.site.register(NotificationType)
 admin.site.register(Notification)
