@@ -32,7 +32,9 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
         )
     
     def get_group(self, obj):
-        return obj.group.members.count()
+        if obj.group is not None:
+            return obj.group.members.count()
+        return obj.group
     
     def get_upline(self, obj):
         if obj.upline is not None:

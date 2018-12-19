@@ -47,3 +47,15 @@ class EmailNotification(APIView):
         except ValueError:
             return Response({'Succeed': False}, status=status.HTTP_400_BAD_REQUEST)
 
+class SignOut(APIView):
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        profile = Profile.objects.get(pk=pk)
+        try:
+            profile.fcm_token = None
+            profile.save()
+            return Response({'status': 'user signed out'}, status=status.HTTP_200_OK)
+        except Exception as err:
+            return Response({'status': 'Failed to signed out'}, status=status.HTTP_400_BAD_REQUEST)
+
