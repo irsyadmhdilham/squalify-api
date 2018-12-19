@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .. ._models.point import Point, PointAttribute
+from .. ._models.point import Point, PointAttribute, PointLog
 from django.db.models import Sum
 from django.utils import timezone
 from drf_queryfields import QueryFieldsMixin

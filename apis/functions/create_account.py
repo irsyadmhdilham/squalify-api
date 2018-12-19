@@ -1,9 +1,7 @@
 from django.db.models import Q
 from apis._models.profile import Profile, Designation
 from apis._models.group import Group
-from apis._models.agency import Agency
-from apis._models.industry import Industry
-from apis._models.company import Company
+from apis._models.agency import Agency, Industry, Company
 
 def get_agency(agency_name, industry, company, agency_id):
     if agency_id is not None:

@@ -1,7 +1,23 @@
 from django.db import models
 from .post import Post
-from .company import Company
-from .industry import Industry
+
+class Industry(models.Model):
+    name = models.CharField(max_length=30)
+
+    class Meta:
+        verbose_name_plural = 'Industries'
+
+    def __str__(self):
+        return self.name
+
+class Company(models.Model):
+    name = models.CharField(max_length=30)
+
+    class Meta:
+        verbose_name_plural = 'Companies'
+
+    def __str__(self):
+        return self.name
 
 def agency_directory_path(instance, filename):
     return 'agencies/{}/{}'.format(instance.pk, filename)

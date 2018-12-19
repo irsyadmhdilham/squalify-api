@@ -1,51 +1,10 @@
-from django.contrib import admin
-
-from ._models.agency import Agency
-from ._models.company import Company
-from ._models.industry import Industry
-from ._models.group import Group
-from ._models.inbox import Inbox, Chat, ChatMessage, ChatType
-from ._models.notification import Notification, NotificationType
-from ._models.point import Point, PointField, PointAttribute
-from ._models.profile import Profile, Designation
-from ._models.contact import Contact, ContactStatus, ContactType
-from ._models.schedule import Schedule
-from ._models.sales import Sales, SalesType, Surcharge, SalesStatus
-from ._models.post import Post, PostType, Comment, Like
-
-admin.site.register(Industry)
-admin.site.register(Company)
-admin.site.register(Agency)
-
-admin.site.register(Group)
-
-admin.site.register(Inbox)
-admin.site.register(Chat)
-admin.site.register(ChatMessage)
-admin.site.register(ChatType)
-
-admin.site.register(NotificationType)
-admin.site.register(Notification)
-
-admin.site.register(PointAttribute)
-admin.site.register(PointField)
-admin.site.register(Point)
-
-admin.site.register(Designation)
-admin.site.register(Profile)
-
-admin.site.register(ContactStatus)
-admin.site.register(Contact)
-admin.site.register(ContactType)
-
-admin.site.register(Schedule)
-
-admin.site.register(SalesType)
-admin.site.register(Sales)
-admin.site.register(Surcharge)
-admin.site.register(SalesStatus)
-
-admin.site.register(Comment)
-admin.site.register(PostType)
-admin.site.register(Like)
-admin.site.register(Post)
+from ._admin import agency
+from ._admin import contact
+from ._admin import group
+from ._admin import inbox
+from ._admin import notification
+from ._admin import point
+from ._admin import post
+from ._admin import profile
+from ._admin import sales
+from ._admin import schedule
