@@ -12,7 +12,7 @@ class Surcharge(models.Model):
     name = models.FloatField(default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class SalesStatus(models.Model):
     name = models.CharField(max_length=30, unique=True)

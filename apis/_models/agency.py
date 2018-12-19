@@ -10,7 +10,7 @@ default_image = 'no_image.jpeg'
 
 class Agency(models.Model):
     name = models.CharField(max_length=200)
-    owner = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='agency_owner')
+    owner = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='agency_owner', null=True, blank=True)
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     agency_image = models.ImageField(upload_to=agency_directory_path, default=default_image)

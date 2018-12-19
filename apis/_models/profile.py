@@ -56,7 +56,7 @@ class Profile(models.Model):
     sales = models.ManyToManyField(Sales, blank=True)
     points = models.ManyToManyField(Point, blank=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
-    agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True)
     notifications = models.ManyToManyField(Notification, blank=True)
     upline = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     inbox = models.ManyToManyField(Inbox, blank=True)
@@ -64,5 +64,4 @@ class Profile(models.Model):
     fcm_token = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        agency = self.agency.name
-        return '{}: {} {}'.format(self.pk, agency, self.name)
+        return f'{self.pk}. {self.name}'

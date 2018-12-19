@@ -1,7 +1,7 @@
 from django.db import models
 
 class ChatType(models.Model):
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, unique=True)
 
     def __str__(self):
         return self.name
@@ -19,15 +19,15 @@ class ChatMessage(models.Model):
 class Chat(models.Model):
     messages = models.ManyToManyField(ChatMessage)
     composed_by = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
-    participants = models.ManyToManyField('Profile', related_name='members', blank=True)
+    participants = models.ManyToManyField('Profile', related_name='participants', blank=True)
     group_name = models.CharField(max_length=200, null=True, blank=True)
+    chat_type = models.ForeignKey(ChatType, on_delete=models.CASCADE, to_field='name', default='Personal')
 
     def __str__(self):
         person = self.composed_by.name
         return '{}'.format(person)
 
 class Inbox(models.Model):
-    chat_type = models.ForeignKey(ChatType, on_delete=models.CASCADE)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
