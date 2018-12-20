@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_queryfields import QueryFieldsMixin
 from .. ._models.inbox import Inbox, Chat, ChatMessage
 from .. ._models.profile import Profile
 
@@ -14,7 +15,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         model = ChatMessage
         fields = ('timestamp', 'person', 'text',)
 
-class ChatSerializer(serializers.ModelSerializer):
+class ChatSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     composed_by = ProfileSerializer(read_only=True)
     participants = ProfileSerializer(many=True, read_only=True)
     chat_type = serializers.StringRelatedField(read_only=True)
