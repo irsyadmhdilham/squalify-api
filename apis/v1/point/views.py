@@ -3,7 +3,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .. ._models.profile import Profile
-from .. ._models.point import Point, PointField, PointAttribute
+from .. ._models.point import Point, PointField, PointAttribute, PointLog, PointLogType
 
 from .functions.point_calculator import PointCalculator
 from .functions.scoreboard import Scoreboard
@@ -31,38 +31,37 @@ class PointList(generics.ListCreateAPIView):
         point_field = PointField.objects.get(name=attr_val)
         get_point = profile.points.filter(date__exact=timezone.now().date())
 
-        point_type = 'add'
+        point_type = PointLogType.objects.get(name='Add')
         if add == False:
-            point_type = 'subtract'
-        
-        log_init = {
-            'logs': [
-                { 
-                    'type': point_type,
-                    'time': timezone.now().isoformat(),
-                    'attribute': point_field.name,
-                    'point': total_point 
-                }
-            ] 
-        }
+            point_type = PointLogType.objects.get(name='Subtract')
+
+        log_ins = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total_point)
+        log_ins.save()
 
         """check whether point for today has already created or not"""
         if get_point.count() == 0:
             create_attr = PointAttribute.objects.create(attribute=point_field, point=total_point)
             create_attr.save()
-            instance = serializer.save(logs=log_init)
+            instance = serializer.save()
             instance.attributes.add(create_attr)
+            instance.logs.add(log_ins)
             profile.points.add(instance)
 
 class PointDetail(generics.RetrieveUpdateAPIView):
     serializer_class = PointSerializer
+    queryset = Point.objects.all()
 
-    def get_queryset(self):
+    def get_object(self):
         pk = self.kwargs.get('pk')
         query_type = self.request.query_params.get('type')
+        point = self.get_queryset().filter(pk=pk)[0]
         if query_type == 'logs':
-            return Point.objects.filter(pk=pk).values('date', 'logs')
-        return Point.objects.filter(pk=pk)
+            values = {
+                'date': point.date,
+                'logs': point.logs
+            }
+            return values
+        return point
 
     def perform_update(self, serializer):
         point_pk = self.kwargs.get('pk')
@@ -72,16 +71,12 @@ class PointDetail(generics.RetrieveUpdateAPIView):
         point_field = PointField.objects.get(name=attr_val)
         add = self.request.query_params.get('add')
 
-        point_type = 'add'
+        point_type = PointLogType.objects.get(name='Add')
         if add == 'false':
-            point_type = 'subtract'
+            point_type = PointLogType.objects.get(name='Subtract')
 
-        log = {
-            'type': point_type,
-            'time': timezone.now().isoformat(),
-            'attribute': attr_val,
-            'point': total_point 
-        }
+        log_ins = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total_point)
+        log_ins.save()
         
         """attribute not create yet, then create one"""
         check_attr = Point.objects.get(pk=point_pk).attributes.filter(attribute__name__exact=attr_val)
@@ -89,7 +84,7 @@ class PointDetail(generics.RetrieveUpdateAPIView):
             create_attr = PointAttribute.objects.create(attribute=point_field, point=total_point)
             create_attr.save()
             get_point = Point.objects.get(pk=point_pk)
-            get_point.logs['logs'].append(log)
+            get_point.logs.add(log_ins)
             get_point.attributes.add(create_attr)
             get_point.save()
         else:
@@ -97,7 +92,7 @@ class PointDetail(generics.RetrieveUpdateAPIView):
             get_point = Point.objects.get(pk=point_pk)
             attr = PointAttribute.objects.get(pk=attr_pk)
             attr.point = total_point
-            get_point.logs['logs'].append(log)
+            get_point.logs.add(log_ins)
             get_point.save()
             attr.save()
 

@@ -19,7 +19,7 @@ class PointLog(models.Model):
     point = models.IntegerField(default=0)
 
     def __str__(self):
-        return f'{str(timestamp)}, {attribute.name}'
+        return f'{str(self.timestamp)}, {self.attribute.name}'
 
 class PointAttribute(models.Model):
     attribute = models.ForeignKey(PointField, on_delete=models.CASCADE)
