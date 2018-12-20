@@ -30,7 +30,7 @@ class Agency(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     agency_image = models.ImageField(upload_to=agency_directory_path, default=default_image)
-    members = models.ManyToManyField('Profile', related_name='agency_members')
+    members = models.ManyToManyField('Profile', related_name='agencies')
     posts = models.ManyToManyField(Post, blank=True)
 
     class Meta:

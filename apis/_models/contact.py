@@ -24,7 +24,7 @@ class Contact(models.Model):
     contact_type = models.ForeignKey(ContactType, on_delete=models.CASCADE)
     remark = models.TextField(blank=True, null=True)
     contact_no = models.CharField(max_length=30)
-    schedules = models.ManyToManyField('Schedule', blank=True, related_name='contact_schedules')
+    schedules = models.ManyToManyField('Schedule', blank=True, related_name='contacts')
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to=contact_directory_path, null=True, blank=True)

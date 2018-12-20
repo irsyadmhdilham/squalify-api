@@ -31,7 +31,7 @@ class PointAttribute(models.Model):
         return '{}: {}'.format(str(date), str(self.attribute))
 
 class Point(models.Model):
-    attributes = models.ManyToManyField(PointAttribute, related_name='attributes')
+    attributes = models.ManyToManyField(PointAttribute, related_name='points')
     logs = models.ManyToManyField(PointLog, related_name='logs')
     date = models.DateField(auto_now_add=True)
 

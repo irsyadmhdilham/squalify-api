@@ -19,7 +19,7 @@ class ChatMessage(models.Model):
 class Chat(models.Model):
     messages = models.ManyToManyField(ChatMessage)
     composed_by = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
-    participants = models.ManyToManyField('Profile', related_name='participants', blank=True)
+    participants = models.ManyToManyField('Profile', related_name='chats', blank=True)
     group_name = models.CharField(max_length=200, null=True, blank=True)
     chat_type = models.ForeignKey(ChatType, on_delete=models.CASCADE, to_field='name', default='Personal')
 
