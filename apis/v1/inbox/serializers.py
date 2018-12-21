@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from drf_queryfields import QueryFieldsMixin
-from .. ._models.inbox import Inbox, Chat, ChatMessage
+from .. ._models.inbox import Inbox, GroupChat, ChatMessage
 from .. ._models.profile import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
+    designation = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Profile
         fields = ('pk', 'name', 'profile_image', 'designation',)
@@ -15,19 +16,20 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         model = ChatMessage
         fields = ('timestamp', 'person', 'text',)
 
-class ChatSerializer(QueryFieldsMixin, serializers.ModelSerializer):
-    composed_by = ProfileSerializer(read_only=True)
+class GroupChatSerializer(serializers.ModelSerializer):
+    owner = ProfileSerializer(read_only=True)
     participants = ProfileSerializer(many=True, read_only=True)
-    chat_type = serializers.StringRelatedField(read_only=True)
     messages = ChatMessageSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Chat
-        fields = ('pk', 'messages', 'composed_by', 'participants', 'group_name', 'chat_type',)
+        model = GroupChat
+        fields = ('pk', 'messages', 'owner', 'participants',)
 
 class InboxSerializer(serializers.ModelSerializer):
-    chat = ChatSerializer(read_only=True)
+    chat_with = ProfileSerializer(read_only=True)
+    messages = ChatMessageSerializer(many=True, read_only=True)
+    group_chat = GroupChatSerializer(many=True, read_only=True)
 
     class Meta:
         model = Inbox
-        fields = ('pk', 'chat',)
+        fields = ('pk', 'chat_with', 'group_chat', 'unread', 'messages',)
