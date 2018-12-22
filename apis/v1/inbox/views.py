@@ -10,7 +10,7 @@ class InboxList(generics.ListCreateAPIView):
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
         profile = Profile.objects.get(pk=user_pk)
-        return profile.inbox
+        return profile.inbox.order_by('-last_modified')
     
     def create(self, request, *args, **kwargs):
         user_pk = kwargs.get('user_pk')
@@ -39,6 +39,7 @@ class InboxList(generics.ListCreateAPIView):
         else:
             create_new = Inbox.objects.create(chat_with=profile)
             create_new.messages.add(message)
+            receiver.inbox.add(create_new)
         
         serializer = ChatMessageSerializer(message, context={'request': request})
         return Response({
@@ -51,13 +52,36 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Inbox.objects.all()
 
     def update(self, request, *args, **kwargs):
-        text = request.data.get('text')
-        user_pk = kwargs.get('user_pk')
-        profile = Profile.objects.get(pk=user_pk)
-        chat = self.get_object()
+        cu = request.query_params.get('cu')
+        inbox = self.get_object()
         
+        """clear unread"""
+        if cu == 'true':
+            inbox.unread = 0
+            inbox.save()
+            return Response({'status': True}, status=status.HTTP_200_OK)
+        
+        """send message"""
+        user_pk = kwargs.get('user_pk')
+        receiver_pk = request.data.get('receiverId')
+        text = request.data.get('text')
+        profile = Profile.objects.get(pk=user_pk)
+        receiver = Profile.objects.get(pk=receiver_pk)
+
         message = ChatMessage.objects.create(person=profile, text=text)
-        chat.messages.add(message)
+        inbox.messages.add(message)
+
+        """receiver chat"""
+        find_chat = receiver.inbox.filter(chat_with=profile)
+        if find_chat.count() > 0:
+            chat = find_chat[0]
+            chat.messages.add(message)
+            chat.unread += 1
+            chat.save()
+        else:
+            create_new = Inbox.objects.create(chat_with=profile)
+            create_new.messages.add(message)
+            receiver.inbox.add(create_new)
 
         serializer = ChatMessageSerializer(message, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -26,10 +26,6 @@ class Inbox(models.Model):
     unread = models.IntegerField(default=1)
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        chat_with = self.chat_with.name
-        return f'chat with > {chat_with}'
     
     class Meta:
         verbose_name_plural = 'Inboxes'
