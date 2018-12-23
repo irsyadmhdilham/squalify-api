@@ -23,11 +23,16 @@ class InboxList(generics.ListCreateAPIView):
 
         """create new message"""
         message = ChatMessage.objects.create(person=profile, text=text)
+        serializer = ChatMessageSerializer(message, context={'request': request})
 
         """create inbox"""
         instance = Inbox.objects.create(chat_with=receiver, unread=0)
         instance.messages.add(message)
         profile.inbox.add(instance)
+        data = {
+            'inbox': self.serializer_class(instance, context={'request': request}).data,
+            'message': serializer.data
+        }
 
         """find receiver inbox to avoid double instance"""
         find_chat = receiver.inbox.filter(chat_with=profile)
@@ -36,16 +41,14 @@ class InboxList(generics.ListCreateAPIView):
             chat.messages.add(message)
             chat.unread += 1
             chat.save()
+            data['receiver_update'] = { 'pk': chat.pk, 'message': serializer.data }
         else:
             create_new = Inbox.objects.create(chat_with=profile)
             create_new.messages.add(message)
             receiver.inbox.add(create_new)
-        
-        serializer = ChatMessageSerializer(message, context={'request': request})
-        return Response({
-            'inbox': self.serializer_class(instance, context={'request': request}).data,
-            'message': serializer.data
-        }, status=status.HTTP_200_OK)
+            data['receiver_create'] = self.serializer_class(create_new, context={'request': request}).data
+
+        return Response(data, status=status.HTTP_200_OK)
 
 class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = InboxSerializer
@@ -70,6 +73,8 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
 
         message = ChatMessage.objects.create(person=profile, text=text)
         inbox.messages.add(message)
+        serializer = ChatMessageSerializer(message, context={'request': request})
+        data = { 'message': serializer.data }
 
         """receiver chat"""
         find_chat = receiver.inbox.filter(chat_with=profile)
@@ -78,10 +83,11 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
             chat.messages.add(message)
             chat.unread += 1
             chat.save()
+            data['receiver_update'] = { 'pk': chat.pk, 'message': serializer.data }
         else:
             create_new = Inbox.objects.create(chat_with=profile)
             create_new.messages.add(message)
             receiver.inbox.add(create_new)
+            data['receiver_create'] = self.serializer_class(create_new, context={'request': request}).data
 
-        serializer = ChatMessageSerializer(message, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_200_OK)
