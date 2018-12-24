@@ -20,10 +20,11 @@ class GroupChatSerializer(serializers.ModelSerializer):
     owner = ProfileSerializer(read_only=True)
     participants = ProfileSerializer(many=True, read_only=True)
     messages = ChatMessageSerializer(many=True, read_only=True)
+    role = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = GroupChat
-        fields = ('pk', 'messages', 'owner', 'participants',)
+        fields = ('pk', 'messages', 'owner', 'participants', 'role',)
 
 class InboxSerializer(serializers.ModelSerializer):
     chat_with = ProfileSerializer(read_only=True)
