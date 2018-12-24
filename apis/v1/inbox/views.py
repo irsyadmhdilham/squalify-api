@@ -1,6 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .serializers import InboxSerializer, ChatMessageSerializer
+from .serializers import InboxSerializer, ChatMessageSerializer, GroupChatSerializer
 from .. ._models.profile import Profile
 from .. ._models.inbox import ChatMessage, GroupChat, Inbox
 
@@ -91,3 +91,31 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
             data['receiver_create'] = self.serializer_class(create_new, context={'request': request}).data
 
         return Response(data, status=status.HTTP_200_OK)
+
+class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = GroupChatSerializer
+    queryset = Inbox.objects.all()
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        inbox = self.get_queryset().filter(pk=pk)[0]
+        return inbox.group_chat.all()[0]
+    
+    def update(self, request, *args, **kwargs):
+        cu = request.query_params.get('cu')
+        inbox = self.get_object()
+        
+        """clear unread"""
+        if cu == 'true':
+            inbox.unread = 0
+            inbox.save()
+            return Response({'status': True}, status=status.HTTP_200_OK)
+        
+        """send message"""
+        user_pk = kwargs.get('user_pk')
+        text = request.data.get('text')
+
+        message = ChatMessage.objects.create(person=profile, text=text)
+        inbox.messages.add(message)
+        serializer = ChatMessageSerializer(message, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
