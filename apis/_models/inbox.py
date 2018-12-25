@@ -24,7 +24,8 @@ class GroupChat(models.Model):
 
     def __str__(self):
         person = self.owner.name
-        return '{}'.format(person)
+        role = self.role
+        return f'{person} ({role})'
 
 class Inbox(models.Model):
     group_chat = models.ManyToManyField(GroupChat, blank=True)
@@ -33,6 +34,20 @@ class Inbox(models.Model):
     unread = models.IntegerField(default=1)
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        group_chat = self.group_chat.count()
+
+        """group chat name"""
+        owner = None
+        role = None
+        if group_chat > 0:
+            chat = self.group_chat.all()[0]
+            owner = chat.owner.name
+            role = chat.role
+        group_chat_name = f'Group chat ({owner}, {role})'
+
+        return group_chat_name if group_chat > 0 else 'Personal'
     
     class Meta:
         verbose_name_plural = 'Inboxes'

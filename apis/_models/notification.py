@@ -12,6 +12,7 @@ class Notification(models.Model):
     notification_type = models.ForeignKey(NotificationType, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     post_rel = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
+    read = models.BooleanField(default=False)
 
     def __str__(self):
         return '%s %s %s' % (self.notified_by, self.notification_type, self.timestamp)
