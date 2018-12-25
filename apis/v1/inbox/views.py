@@ -114,6 +114,7 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         """send message"""
         user_pk = kwargs.get('user_pk')
         text = request.data.get('text')
+        profile = Profile.objects.get(pk=user_pk)
 
         message = ChatMessage.objects.create(person=profile, text=text)
         inbox.messages.add(message)
