@@ -102,8 +102,10 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         return inbox.group_chat.all()[0]
     
     def update(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
         cu = request.query_params.get('cu')
-        inbox = self.get_object()
+        group_chat = self.get_object()
+        inbox = Inbox.objects.get(pk=pk)
         
         """clear unread"""
         if cu == 'true':
@@ -115,8 +117,13 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         user_pk = kwargs.get('user_pk')
         text = request.data.get('text')
         profile = Profile.objects.get(pk=user_pk)
+        participants = group_chat.participants.all()
+        for participant in participants:
+            participant_inbox = participant.inbox.filter(group_chat__pk=group_chat.pk)[0]
+            participant_inbox.unread = participant_inbox.unread + 1
+            participant_inbox.save()
 
         message = ChatMessage.objects.create(person=profile, text=text)
-        inbox.messages.add(message)
+        group_chat.messages.add(message)
         serializer = ChatMessageSerializer(message, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)

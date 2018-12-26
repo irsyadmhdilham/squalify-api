@@ -45,9 +45,8 @@ class Inbox(models.Model):
             chat = self.group_chat.all()[0]
             owner = chat.owner.name
             role = chat.role
-        group_chat_name = f'Group chat ({owner}, {role})'
-
-        return group_chat_name if group_chat > 0 else 'Personal'
+        group_chat_name = f'{self.pk}.Group chat ({role})'
+        return group_chat_name if group_chat > 0 else f'{self.pk}.Personal'
     
     class Meta:
         verbose_name_plural = 'Inboxes'

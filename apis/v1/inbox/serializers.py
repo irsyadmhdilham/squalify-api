@@ -34,11 +34,23 @@ class GroupChatSerializer(serializers.ModelSerializer):
     owner = OwnerSerializer(read_only=True)
     participants = ProfileSerializer(many=True, read_only=True)
     messages = ChatMessageSerializer(many=True, read_only=True)
-    role = serializers.StringRelatedField(read_only=True)
+    role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = GroupChat
         fields = ('pk', 'messages', 'owner', 'participants', 'role',)
+    
+    def get_role(self, obj):
+        kwargs = self.context.get('request').parser_context.get('kwargs')
+        user_pk = kwargs.get('user_pk')
+        profile = Profile.objects.get(pk=user_pk)
+        upline = profile.upline
+        if obj.role.name == 'group' and upline == obj.owner:
+            return 'upline group'
+        elif obj.role.name == 'group' and profile == obj.owner:
+            return 'group'
+        else:
+            return 'agency'
 
 class InboxSerializer(serializers.ModelSerializer):
     chat_with = ProfileSerializer(read_only=True)
