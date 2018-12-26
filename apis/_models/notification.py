@@ -1,5 +1,6 @@
 from django.db import models
 from .post import Post
+from .inbox import Inbox
 
 class NotificationType(models.Model):
     name = models.CharField(max_length=30)
@@ -13,6 +14,7 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     post_rel = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
     read = models.BooleanField(default=False)
+    inbox_rel = models.ForeignKey(Inbox, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return '%s %s %s' % (self.notified_by, self.notification_type, self.timestamp)
