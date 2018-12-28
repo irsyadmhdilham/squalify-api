@@ -17,4 +17,5 @@ class Notification(models.Model):
     inbox_rel = models.ForeignKey(Inbox, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return '%s %s %s' % (self.notified_by, self.notification_type, self.timestamp)
+
+        return f'{self.pk}. {self.notification_type}'

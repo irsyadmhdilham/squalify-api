@@ -8,19 +8,32 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('pk', 'name', 'profile_image',)
 
+class GroupChatSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = GroupChat
+        fields = ('pk', 'role',)
+    
+    def get_role(self, obj):
+        kwargs = self.context.get('request').parser_context.get('kwargs')
+        pk = kwargs.get('user_pk')
+        profile = Profile.objects.get(pk=pk)
+        upline = profile.upline
+        role = obj.role.name
+        if upline and role == 'group':
+            return 'upline group'
+        elif role == 'group':
+            return 'group'
+        else:
+            return 'agency'
+
 class InboxSerializer(serializers.ModelSerializer):
-    group_chat = serializers.SerializerMethodField(read_only=True)
+    group_chat = GroupChatSerializer(read_only=True)
 
     class Meta:
         model = Inbox
         fields = ('pk', 'unread', 'group_chat',)
-
-    def get_group_chat(self, obj):
-        group_chat = obj.group_chat.all()
-        if group_chat.count() > 0:
-            chat = group_chat[0]
-            return chat.role.name
-        return None
 
 class NotificationSerializer(serializers.ModelSerializer):
     notified_by = ProfileSerializer(read_only=True)

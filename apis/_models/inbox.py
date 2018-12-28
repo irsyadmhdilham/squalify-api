@@ -28,7 +28,7 @@ class GroupChat(models.Model):
         return f'{person} ({role})'
 
 class Inbox(models.Model):
-    group_chat = models.ManyToManyField(GroupChat, blank=True)
+    group_chat = models.ForeignKey(GroupChat, blank=True, null=True, on_delete=models.CASCADE)
     messages = models.ManyToManyField(ChatMessage, blank=True)
     chat_with = models.ForeignKey('Profile', on_delete=models.CASCADE, null=True, blank=True, related_name='chat_with')
     unread = models.IntegerField(default=1)
@@ -36,17 +36,14 @@ class Inbox(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        group_chat = self.group_chat.count()
+        group_chat = self.group_chat
 
         """group chat name"""
-        owner = None
         role = None
-        if group_chat > 0:
-            chat = self.group_chat.all()[0]
-            owner = chat.owner.name
-            role = chat.role
+        if group_chat is not None:
+            role = self.group_chat.role
         group_chat_name = f'{self.pk}.Group chat ({role})'
-        return group_chat_name if group_chat > 0 else f'{self.pk}.Personal'
+        return group_chat_name if group_chat is not None else f'{self.pk}.Personal'
     
     class Meta:
         verbose_name_plural = 'Inboxes'

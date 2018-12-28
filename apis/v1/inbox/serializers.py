@@ -55,7 +55,7 @@ class GroupChatSerializer(serializers.ModelSerializer):
 class InboxSerializer(serializers.ModelSerializer):
     chat_with = ProfileSerializer(read_only=True)
     messages = ChatMessageSerializer(many=True, read_only=True)
-    group_chat = GroupChatSerializer(many=True, read_only=True)
+    group_chat = GroupChatSerializer(read_only=True)
 
     class Meta:
         model = Inbox
