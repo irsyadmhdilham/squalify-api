@@ -6,3 +6,4 @@ from ._models.point import Point
 from ._models.contact import Contact
 from ._models.schedule import Schedule
 from ._models.profile import Profile
+from ._models.google import GoogleApi

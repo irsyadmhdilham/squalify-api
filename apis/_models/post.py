@@ -34,4 +34,4 @@ class Post(models.Model):
     likes = models.ManyToManyField(Like, blank=True)
 
     def __str__(self):
-        return '{}, posted on {}'.format(self.posted_by.name, self.timestamp)
+        return f'{self.pk}.{self.posted_by.name}, posted on {self.timestamp}'

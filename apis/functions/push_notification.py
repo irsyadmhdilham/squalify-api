@@ -4,6 +4,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 class SendNotification:
 
     url = 'https://fcm.googleapis.com/v1/projects/squalify-119ee/messages:send'
+    scope = 'https://www.googleapis.com/auth/firebase.messaging'
+    service_account = 'service-account.json'
     token = None
     message = None
     sound = False
@@ -16,10 +18,10 @@ class SendNotification:
         self.data = data
 
     def get_access_token(self):
-        SCOPE = 'https://www.googleapis.com/auth/firebase.messaging'
-        credentials = ServiceAccountCredentials.from_json_keyfile_name('service-account.json', SCOPE)
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(self.service_account, self.scope)
         access_token_info = credentials.get_access_token()
-        return access_token_info.access_token
+        access_token = access_token_info.access_token
+        return access_token
 
     def headers(self):
         return {

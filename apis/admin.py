@@ -8,3 +8,4 @@ from ._admin import post
 from ._admin import profile
 from ._admin import sales
 from ._admin import schedule
+from ._admin import google

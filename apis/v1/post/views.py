@@ -50,7 +50,8 @@ class CommentList(generics.ListCreateAPIView):
                 message = f'{profile.name} commented your post'
                 data = {
                     'title': 'comment post',
-                    'post_rel': post
+                    'post_id': post.pk,
+                    'notif_id': notif.pk
                 }
                 send_notif = SendNotification(fcm_token, message, data, True)
                 send_notif.send()
@@ -80,7 +81,8 @@ class LikeList(generics.ListCreateAPIView):
                 message = f'{profile.name} liked your post'
                 data = {
                     'title': 'like post',
-                    'post_rel': post
+                    'post_id': post.pk,
+                    'notif_id': notif.pk
                 }
                 send_notif = SendNotification(fcm_token, message, data)
                 send = send_notif.send()
