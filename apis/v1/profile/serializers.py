@@ -5,10 +5,11 @@ from .. ._models.agency import Agency
 
 class AgencySerializer(serializers.ModelSerializer):
     company = serializers.StringRelatedField(read_only=True)
+    members = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
     class Meta:
         model = Agency
-        fields = ('pk', 'name', 'agency_image', 'company',)
+        fields = ('pk', 'name', 'agency_image', 'company', 'members',)
 
 class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     designation = serializers.StringRelatedField(read_only=True)
@@ -29,6 +30,7 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'agency',
             'upline',
             'upline_group',
+            'fcm_token',
         )
     
     def get_group(self, obj):

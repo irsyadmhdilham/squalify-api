@@ -15,7 +15,7 @@ class AuthenticationView(APIView):
         auth = authenticate(email=email, password=password)
         if auth is not None:
             user = Profile.objects.get(user__email__exact=auth.email)
-            if fcm_token is not None:
+            if fcm_token != 'null':
                 user.fcm_token = fcm_token
                 user.save()
             data = {

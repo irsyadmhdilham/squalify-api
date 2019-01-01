@@ -38,7 +38,7 @@ class PostSerializer(serializers.ModelSerializer):
     users_tagged = ProfileSerializer(read_only=True)
     contact_rel = ContactSerializer(read_only=True)
     likes = serializers.SerializerMethodField()
-    comments = serializers.SerializerMethodField()
+    comments = CommentSerializer(read_only=True, many=True)
     monthly_sales = serializers.SerializerMethodField()
 
     class Meta:
@@ -59,10 +59,6 @@ class PostSerializer(serializers.ModelSerializer):
     def get_likes(self, obj):
         likes = obj.likes.values('pk', 'liker')
         return likes
-
-    def get_comments(self, obj):
-        comments = obj.comments.all()
-        return comments.count()
     
     def get_monthly_sales(self, obj):
         user_pk = obj.posted_by.pk
