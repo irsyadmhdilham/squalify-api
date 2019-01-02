@@ -85,8 +85,7 @@ class LikeList(generics.ListCreateAPIView):
                     'notif_id': notif.pk
                 }
                 send_notif = SendNotification(fcm_token, message, data)
-                send = send_notif.send()
-                print(send)
+                send_notif.send()
 
 class Unlike(generics.DestroyAPIView):
     serializer_class = LikeSerializer

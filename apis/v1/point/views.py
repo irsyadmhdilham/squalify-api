@@ -8,8 +8,9 @@ from .. ._models.point import Point, PointField, PointAttribute, PointLog, Point
 from .functions.point_calculator import PointCalculator
 from .functions.scoreboard import Scoreboard
 from django.utils import timezone
+from django.db.models import Sum
 
-from .serializers import PointSerializer, ScoreboardSerializer
+from .serializers import PointSerializer, ScoreboardSerializer, AllPointsSerializer
 
 class PointList(generics.ListCreateAPIView):
     serializer_class = PointSerializer
@@ -98,7 +99,8 @@ class PointDetail(generics.RetrieveUpdateAPIView):
 
 class ContactPointView(APIView):
 
-    def get(self, request, user_pk):
+    def get(self, request, *args, **kwargs):
+        user_pk = kwargs.get('user_pk')
         referrals = PointCalculator(user_pk, 'Referrals')
         ftf = PointCalculator(user_pk, 'FTF/Nesting/Booth')
         calls = PointCalculator(user_pk, 'Calls/Email/Socmed')
@@ -114,7 +116,8 @@ class ContactPointView(APIView):
 
 class ScoreboardPoints(APIView):
     
-    def get(self, request, user_pk):
+    def get(self, request, *args, **kwargs):
+        user_pk = kwargs.get('user_pk')
         profile = Profile.objects.get(pk=user_pk)
         members = profile.agency.members.all()
         q = request.query_params.get('q')
@@ -129,4 +132,33 @@ class ScoreboardPoints(APIView):
         else:
             data = scoreboard.year(True)
         serializer = ScoreboardSerializer(data, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AllPoints(APIView):
+
+    def get(self, request, *args, **kwargs):
+        user_pk = kwargs.get('user_pk')
+        profile = Profile.objects.get(pk=user_pk)
+        personal = profile.points.filter(date=timezone.now().date()).aggregate(total=Sum('attributes__point'))['total']
+        agency = profile.agency.members.filter(
+            points__date=timezone.now().date()
+        ).aggregate(total=Sum('points__attributes__point'))['total']
+        if personal is None:
+            personal = 0
+        if agency is None:
+            agency = 0
+
+        group = None
+        if profile.group is not None:
+            group = profile.group.members.filter(
+                points__date=timezone.now().date()
+            ).aggregate(total=Sum('points__attributes__point'))['total']
+            if group is None:
+                group = 0
+        data = {
+            'personal': personal,
+            'agency': agency,
+            'group': group
+        }
+        serializer = AllPointsSerializer(data)
         return Response(serializer.data, status=status.HTTP_200_OK)

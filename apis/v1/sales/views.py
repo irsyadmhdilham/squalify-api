@@ -15,8 +15,10 @@ from apis._models.sales import Sales, SalesType, Surcharge
 from .functions.personal import Personal
 from .functions.sales_filter import SalesFilter
 from .functions.income import Income
+from .. .functions.push_notification import SendNotification
 import json
 import os
+import asyncio
 
 path = os.path.abspath(os.path.dirname(__file__) + "../../../../static/commissions-struct.json")
 file = open(path, 'r')
@@ -87,6 +89,9 @@ class SalesList(generics.ListCreateAPIView):
             create_post.save()
             create_post.sales_rel.add(instance)
             profile.agency.posts.add(create_post)
+        
+        """send push notification"""
+        agency_members = profile.agency.members.filter(fcm_token__isnull=False)
 
 class SalesRemove(generics.DestroyAPIView):
     serializer_class = SalesSerializer

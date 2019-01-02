@@ -66,3 +66,8 @@ class ScoreboardSerializer(serializers.Serializer):
     designation = serializers.CharField(read_only=True)
     point = serializers.IntegerField(read_only=True)
     profile_image = serializers.ImageField(read_only=True)
+
+class AllPointsSerializer(serializers.Serializer):
+    personal = serializers.IntegerField(read_only=True)
+    group = serializers.IntegerField(read_only=True)
+    agency = serializers.IntegerField(read_only=True)
