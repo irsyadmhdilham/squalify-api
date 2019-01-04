@@ -23,6 +23,7 @@ class Scoreboard:
         def profile(val):
             filter_points = val.points.filter(date__year=timezone.now().date().year)
             return {
+                'pk': val.pk,
                 'name': val.name,
                 'designation': val.designation.name,
                 'profile_image': val.profile_image,
@@ -39,6 +40,7 @@ class Scoreboard:
             date = timezone.now().date()
             filter_points = val.points.filter(Q(date__month=date.month) & Q(date__year=date.year))
             return {
+                'pk': val.pk,
                 'name': val.name,
                 'designation': val.designation.name,
                 'profile_image': val.profile_image,
@@ -54,6 +56,7 @@ class Scoreboard:
         def profile(val):
             filter_points = val.points.filter(date=timezone.now().date())
             return {
+                'pk': val.pk,
                 'name': val.name,
                 'designation': val.designation.name,
                 'profile_image': val.profile_image,
@@ -73,6 +76,7 @@ class Scoreboard:
             end = today + timedelta(days=6 - day)
             filter_points = val.points.filter(date__range=(start, end))
             return {
+                'pk': val.pk,
                 'name': val.name,
                 'designation': val.designation.name,
                 'profile_image': val.profile_image,

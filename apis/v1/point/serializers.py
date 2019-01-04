@@ -62,6 +62,7 @@ class PointSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             return total
 
 class ScoreboardSerializer(serializers.Serializer):
+    pk = serializers.IntegerField(read_only=True)
     name = serializers.CharField(read_only=True)
     designation = serializers.CharField(read_only=True)
     point = serializers.IntegerField(read_only=True)
