@@ -1,5 +1,8 @@
-import requests
+from django.utils import timezone
 from oauth2client.service_account import ServiceAccountCredentials
+from .._models.google import GoogleApi
+from datetime import timedelta
+import requests
 
 class SendNotification:
 
@@ -18,9 +21,24 @@ class SendNotification:
         self.data = data
 
     def get_access_token(self):
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(self.service_account, self.scope)
-        access_token_info = credentials.get_access_token()
-        access_token = access_token_info.access_token
+        def request_token():
+            credentials = ServiceAccountCredentials.from_json_keyfile_name(self.service_account, self.scope)
+            access_token_info = credentials.get_access_token()
+            return access_token_info.access_token
+
+        """check whether access token had been saved or not"""
+        if GoogleApi.objects.count() == 1:
+            instance = GoogleApi.objects.get(pk=1)
+            access_token = None
+            if instance.token_expiry <= timezone.now():
+                access_token = instance.access_token
+            else:
+                access_token = request_token()
+            return access_token
+        
+        access_token = request_token()
+        expire_on = timezone.now() + timedelta(hours=1)
+        GoogleApi.objects.create(access_token=access_token, token_expiry=expire_on)
         return access_token
 
     def headers(self):
