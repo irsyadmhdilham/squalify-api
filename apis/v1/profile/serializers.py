@@ -54,3 +54,6 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
         }
         serializer = UplineSerializer(data)
         return serializer.data
+
+class ProfileImageSerializer(serializers.Serializer):
+    profile_image = serializers.ImageField()

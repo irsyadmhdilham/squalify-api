@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from django.urls import include
-from .views import ProfileDetail, PushNotification, EmailNotification, SignOut
+from .views import ProfileDetail, PushNotification, EmailNotification, SignOut, ProfileImage
 
 app_name = 'profile'
 
 urlpatterns = [
     url(r'^(?P<pk>\d+)/$', ProfileDetail.as_view(), name='profile-detail'),
+    url(r'^(?P<pk>\d+)/profile-image/$', ProfileImage.as_view(), name='profile-image'),
     url(r'^(?P<user_pk>\d+)/contact/', include('apis.v1.contact.urls', namespace='contact')),
     url(r'^(?P<user_pk>\d+)/schedule/', include('apis.v1.schedule.urls', namespace='schedule')),
     url(r'^(?P<user_pk>\d+)/point/', include('apis.v1.point.urls', namespace='point')),

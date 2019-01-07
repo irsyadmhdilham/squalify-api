@@ -33,7 +33,11 @@ class SendNotification:
             if instance.token_expiry <= timezone.now():
                 access_token = instance.access_token
             else:
-                access_token = request_token()
+                expire_on = timezone.now() + timedelta(hours=1)
+                instance.access_token = request_token()
+                instance.token_expiry = expire_on
+                instance.save()
+                access_token = instance.access_token
             return access_token
         
         access_token = request_token()

@@ -2,11 +2,35 @@ from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from apis._models.profile import Profile
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, ProfileImageSerializer
+from .. .functions.image import ImageMutation
+from django.conf import settings
+from django.utils import timezone
+
+base_dir = settings.BASE_DIR
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+class ProfileImage(generics.RetrieveUpdateAPIView):
+    serializer_class = ProfileImageSerializer
+    queryset = Profile.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        profile = self.get_object()
+        data = request.data.get('profile_image')
+        date = timezone.now().isoformat()
+        data._set_name(f'profile_image_{date}.jpg')
+        old_path = base_dir + self.serializer_class(profile).data['profile_image']
+        image = ImageMutation()
+        image.remove_image(old_path)
+        profile.profile_image = data
+        profile.save()
+        new_path = base_dir + self.serializer_class(profile).data['profile_image']
+        image.resize_image(100, new_path)
+        serializer = self.serializer_class(profile, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class PushNotification(APIView):
 

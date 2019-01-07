@@ -12,7 +12,6 @@ from .inbox import Inbox
 from .notification import Notification
 from .sales import Sales
 
-from apis.functions.image import resize_image
 import re
 
 User = get_user_model()
