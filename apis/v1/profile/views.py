@@ -28,7 +28,7 @@ class ProfileImage(generics.RetrieveUpdateAPIView):
         profile.profile_image = data
         profile.save()
         new_path = base_dir + self.serializer_class(profile).data['profile_image']
-        image.resize_image(100, new_path)
+        image.resize_image(150, new_path)
         serializer = self.serializer_class(profile, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
