@@ -60,3 +60,6 @@ class AgencySerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'group': group['point'],
             'personal': personal['point']
         }
+
+class AgencyImageSerializer(serializers.Serializer):
+    agency_image = serializers.ImageField()
