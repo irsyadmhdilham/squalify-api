@@ -1,0 +1,15 @@
+#! /bin/bash
+
+echo 'Fake migration execute...'
+python manage.py migrate --fake apis zero
+echo 'Fake migration complete'
+
+echo 'Removing all migration files...'
+find .migrations/ -type f ! -name '__init__.py' -exec rm {} +
+echo 'Migration files removed'
+
+echo 'Make migration...'
+python manage.py makemigrations
+
+echo 'Migrate initial...'
+python manage.py migrate --fake-initial
