@@ -14,6 +14,7 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     post_rel = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
     read = models.BooleanField(default=False)
+    seen = models.BooleanField(default=False)
     inbox_rel = models.ForeignKey(Inbox, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):

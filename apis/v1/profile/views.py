@@ -6,6 +6,7 @@ from .serializers import ProfileSerializer, ProfileImageSerializer
 from .. .functions.image import ImageMutation
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth.password_validation import validate_password, ValidationError
 
 base_dir = settings.BASE_DIR
 
@@ -34,11 +35,13 @@ class ProfileImage(generics.RetrieveUpdateAPIView):
 
 class PushNotification(APIView):
 
-    def get(self, request, pk):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         settings = Profile.objects.get(pk=pk).settings['notifications']['push_notification']
         return Response(settings, status=status.HTTP_200_OK)
     
-    def put(self, request, pk):
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         profile = Profile.objects.get(pk=pk)
         settings = profile.settings
         subject = request.data.get('subject')
@@ -55,11 +58,13 @@ class PushNotification(APIView):
 
 class EmailNotification(APIView):
 
-    def get(self, request, pk):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         settings = Profile.objects.get(pk=pk).settings['notifications']
         return Response(settings, status=status.HTTP_200_OK)
     
-    def put(self, request, pk):
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         profile = Profile.objects.get(pk=pk)
         settings = profile.settings
         value = request.data.get('value')
@@ -83,3 +88,35 @@ class SignOut(APIView):
         except Exception as err:
             return Response({'status': 'Failed to signed out'}, status=status.HTTP_400_BAD_REQUEST)
 
+class ChangeEmail(APIView):
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        email = request.data.get('email')
+        new_email = request.data.get('newEmail')
+        profile = Profile.objects.get(pk=pk)
+        user = profile.user
+        if user.email != email:
+            return Response({'status': 'Email was same'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        user.email = new_email
+        user.save()
+        return Response(True, status=status.HTTP_200_OK)
+
+class ChangePassword(APIView):
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        password = request.data.get('password')
+        new_password = request.data.get('newPassword')
+        profile = Profile.objects.get(pk=pk)
+        user = profile.user
+        check_password = user.check_password(password)
+        if not check_password:
+            return Response({'status': 'Incorrect password'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        try:
+            validate_password(new_password)
+        except ValidationError as err:
+            return Response({'status': 'Validation failed', 'error_data': err.error_list}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        user.set_password(new_password)
+        user.save()
+        return Response(True, status=status.HTTP_200_OK)
