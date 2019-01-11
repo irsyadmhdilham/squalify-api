@@ -2,8 +2,8 @@
 ./makemigrations
 ./migrate
 ./runserver
+./clearmigrations
 .gitignore
+.venv
 README.md
-Pipfile
-Pipfile.lock
 db

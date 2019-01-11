@@ -13,13 +13,13 @@ class NotificationList(generics.ListCreateAPIView):
         profile = Profile.objects.get(pk=user_pk)
         return profile.notifications.order_by('-timestamp')
 
-class NotificationRead(APIView):
+class SeenNotification(APIView):
 
     def get(self, request, *args, **kwargs):
         user_pk = kwargs.get('user_pk')
         profile = Profile.objects.get(pk=user_pk)
-        read = profile.notifications.filter(read=False)
-        return Response(read.count(), status=status.HTTP_200_OK)
+        seen = profile.notifications.filter(seen=False)
+        return Response(seen.count(), status=status.HTTP_200_OK)
 
 class NotificationDetail(generics.RetrieveUpdateAPIView):
     queryset = Notification.objects.all()
@@ -29,4 +29,12 @@ class NotificationDetail(generics.RetrieveUpdateAPIView):
         notif = self.get_object()
         notif.read = True
         notif.save()
+        return Response(True, status=status.HTTP_200_OK)
+
+class ClearSeenNotifs(APIView):
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('user_pk')
+        profile = Profile.objects.get(pk=pk)
+        profile.notifications.filter(seen=False).update(seen=True)
         return Response(True, status=status.HTTP_200_OK)

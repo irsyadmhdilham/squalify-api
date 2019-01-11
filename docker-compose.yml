@@ -1,12 +1,12 @@
 version: '3'
 services:
-  django_api:
+  api:
     build: .
-    image: django_api
-    container_name: django_api
-    command: gunicorn --workers=4 -b :8030 django_app.wsgi
+    image: api
+    container_name: api
+    command: pipenv run uwsgi --ini uwsgi.ini
     ports:
-      - '8030:8030'
+      - '80:80'
     depends_on:
       - db
   db:
