@@ -1,12 +1,24 @@
 version: '3'
 services:
+  web:
+    image: nginx
+    container_name: nginx
+    volumes:
+      - /static:/static
+      - ./config/nginx:/etc/nginx/conf.d
+    depends_on:
+      - api
+    ports:
+      - '80:80'
   api:
     build: .
     image: api
     container_name: api
     command: pipenv run uwsgi --ini uwsgi.ini
+    volumes:
+      - /static:/static
     ports:
-      - '80:80'
+      - '80'
     depends_on:
       - db
   db:
