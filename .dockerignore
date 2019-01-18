@@ -7,3 +7,5 @@
 .venv
 README.md
 db
+nginx
+postgres

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-)(q&issoq+odi7rl@h@bv+gtej9q9r@*g@l6i*5__&r6@0l@5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '*'
@@ -86,14 +86,15 @@ AUTHENTICATION_BACKENDS = [
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+host = '127.0.0.1' if DEBUG == True else 'psql'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'squalify',
         'USER': 'irsyadmhdilham',
         'PASSWORD': 'Irsyad89',
-        'HOST': '127.0.0.1',
-        # 'HOST': 'db',
+        'HOST': host,
         'PORT': '5432'
     }
 }

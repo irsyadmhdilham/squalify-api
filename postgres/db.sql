@@ -155,7 +155,7 @@ CREATE TABLE public.apis_agency (
     agency_image character varying(100) NOT NULL,
     company_id integer NOT NULL,
     industry_id integer NOT NULL,
-    owner_id integer NOT NULL
+    owner_id integer
 );
 
 
@@ -254,6 +254,42 @@ ALTER SEQUENCE public.apis_agency_posts_id_seq OWNED BY public.apis_agency_posts
 
 
 --
+-- Name: apis_chatmessage; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_chatmessage (
+    id integer NOT NULL,
+    "timestamp" timestamp with time zone NOT NULL,
+    text text NOT NULL,
+    person_id integer NOT NULL
+);
+
+
+ALTER TABLE public.apis_chatmessage OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_chatmessage_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_chatmessage_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_chatmessage_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_chatmessage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_chatmessage_id_seq OWNED BY public.apis_chatmessage.id;
+
+
+--
 -- Name: apis_comment; Type: TABLE; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -336,8 +372,8 @@ CREATE TABLE public.apis_contact (
     last_modified timestamp with time zone NOT NULL,
     image character varying(100),
     contact_type_id integer NOT NULL,
-    status_id character varying(30) NOT NULL,
-    referrer_id integer
+    referrer_id integer,
+    status_id character varying(30) NOT NULL
 );
 
 
@@ -379,10 +415,10 @@ CREATE TABLE public.apis_contact_schedules (
 ALTER TABLE public.apis_contact_schedules OWNER TO irsyadmhdilham;
 
 --
--- Name: apis_contact_schedule_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_contact_schedules_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE SEQUENCE public.apis_contact_schedule_id_seq
+CREATE SEQUENCE public.apis_contact_schedules_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -391,13 +427,13 @@ CREATE SEQUENCE public.apis_contact_schedule_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.apis_contact_schedule_id_seq OWNER TO irsyadmhdilham;
+ALTER TABLE public.apis_contact_schedules_id_seq OWNER TO irsyadmhdilham;
 
 --
--- Name: apis_contact_schedule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_contact_schedules_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
 --
 
-ALTER SEQUENCE public.apis_contact_schedule_id_seq OWNED BY public.apis_contact_schedules.id;
+ALTER SEQUENCE public.apis_contact_schedules_id_seq OWNED BY public.apis_contact_schedules.id;
 
 
 --
@@ -469,75 +505,6 @@ ALTER SEQUENCE public.apis_contacttype_id_seq OWNED BY public.apis_contacttype.i
 
 
 --
--- Name: apis_conversation; Type: TABLE; Schema: public; Owner: irsyadmhdilham
---
-
-CREATE TABLE public.apis_conversation (
-    id integer NOT NULL,
-    conversation jsonb NOT NULL
-);
-
-
-ALTER TABLE public.apis_conversation OWNER TO irsyadmhdilham;
-
---
--- Name: apis_conversation_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
---
-
-CREATE SEQUENCE public.apis_conversation_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.apis_conversation_id_seq OWNER TO irsyadmhdilham;
-
---
--- Name: apis_conversation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER SEQUENCE public.apis_conversation_id_seq OWNED BY public.apis_conversation.id;
-
-
---
--- Name: apis_conversation_subscriber; Type: TABLE; Schema: public; Owner: irsyadmhdilham
---
-
-CREATE TABLE public.apis_conversation_subscriber (
-    id integer NOT NULL,
-    conversation_id integer NOT NULL,
-    profile_id integer NOT NULL
-);
-
-
-ALTER TABLE public.apis_conversation_subscriber OWNER TO irsyadmhdilham;
-
---
--- Name: apis_conversation_subscriber_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
---
-
-CREATE SEQUENCE public.apis_conversation_subscriber_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.apis_conversation_subscriber_id_seq OWNER TO irsyadmhdilham;
-
---
--- Name: apis_conversation_subscriber_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER SEQUENCE public.apis_conversation_subscriber_id_seq OWNED BY public.apis_conversation_subscriber.id;
-
-
---
 -- Name: apis_designation; Type: TABLE; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -569,6 +536,41 @@ ALTER TABLE public.apis_designation_id_seq OWNER TO irsyadmhdilham;
 --
 
 ALTER SEQUENCE public.apis_designation_id_seq OWNED BY public.apis_designation.id;
+
+
+--
+-- Name: apis_googleapi; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_googleapi (
+    id integer NOT NULL,
+    access_token text,
+    token_expiry timestamp with time zone
+);
+
+
+ALTER TABLE public.apis_googleapi OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_googleapi_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_googleapi_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_googleapi_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_googleapi_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_googleapi_id_seq OWNED BY public.apis_googleapi.id;
 
 
 --
@@ -641,6 +643,145 @@ ALTER SEQUENCE public.apis_group_members_id_seq OWNED BY public.apis_group_membe
 
 
 --
+-- Name: apis_groupchat; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_groupchat (
+    id integer NOT NULL,
+    owner_id integer,
+    role_id integer NOT NULL
+);
+
+
+ALTER TABLE public.apis_groupchat OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchat_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_groupchat_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_groupchat_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchat_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_groupchat_id_seq OWNED BY public.apis_groupchat.id;
+
+
+--
+-- Name: apis_groupchat_messages; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_groupchat_messages (
+    id integer NOT NULL,
+    groupchat_id integer NOT NULL,
+    chatmessage_id integer NOT NULL
+);
+
+
+ALTER TABLE public.apis_groupchat_messages OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchat_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_groupchat_messages_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_groupchat_messages_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchat_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_groupchat_messages_id_seq OWNED BY public.apis_groupchat_messages.id;
+
+
+--
+-- Name: apis_groupchat_participants; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_groupchat_participants (
+    id integer NOT NULL,
+    groupchat_id integer NOT NULL,
+    profile_id integer NOT NULL
+);
+
+
+ALTER TABLE public.apis_groupchat_participants OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchat_participants_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_groupchat_participants_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_groupchat_participants_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchat_participants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_groupchat_participants_id_seq OWNED BY public.apis_groupchat_participants.id;
+
+
+--
+-- Name: apis_groupchatrole; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_groupchatrole (
+    id integer NOT NULL,
+    name character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.apis_groupchatrole OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchatrole_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_groupchatrole_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_groupchatrole_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_groupchatrole_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_groupchatrole_id_seq OWNED BY public.apis_groupchatrole.id;
+
+
+--
 -- Name: apis_inbox; Type: TABLE; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -648,8 +789,9 @@ CREATE TABLE public.apis_inbox (
     id integer NOT NULL,
     created_on timestamp with time zone NOT NULL,
     last_modified timestamp with time zone NOT NULL,
-    conversation_id integer NOT NULL,
-    sender_id integer NOT NULL
+    chat_with_id integer,
+    unread integer NOT NULL,
+    group_chat_id integer
 );
 
 
@@ -675,6 +817,41 @@ ALTER TABLE public.apis_inbox_id_seq OWNER TO irsyadmhdilham;
 --
 
 ALTER SEQUENCE public.apis_inbox_id_seq OWNED BY public.apis_inbox.id;
+
+
+--
+-- Name: apis_inbox_messages; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_inbox_messages (
+    id integer NOT NULL,
+    inbox_id integer NOT NULL,
+    chatmessage_id integer NOT NULL
+);
+
+
+ALTER TABLE public.apis_inbox_messages OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_inbox_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_inbox_messages_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_inbox_messages_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_inbox_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_inbox_messages_id_seq OWNED BY public.apis_inbox_messages.id;
 
 
 --
@@ -755,7 +932,10 @@ CREATE TABLE public.apis_notification (
     "timestamp" timestamp with time zone NOT NULL,
     notification_type_id integer NOT NULL,
     notified_by_id integer NOT NULL,
-    post_rel_id integer
+    post_rel_id integer,
+    read boolean NOT NULL,
+    inbox_rel_id integer,
+    seen boolean NOT NULL
 );
 
 
@@ -823,8 +1003,7 @@ ALTER SEQUENCE public.apis_notificationtype_id_seq OWNED BY public.apis_notifica
 
 CREATE TABLE public.apis_point (
     id integer NOT NULL,
-    date date NOT NULL,
-    logs jsonb NOT NULL
+    date date NOT NULL
 );
 
 
@@ -885,6 +1064,41 @@ ALTER TABLE public.apis_point_id_seq OWNER TO irsyadmhdilham;
 --
 
 ALTER SEQUENCE public.apis_point_id_seq OWNED BY public.apis_point.id;
+
+
+--
+-- Name: apis_point_logs; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_point_logs (
+    id integer NOT NULL,
+    point_id integer NOT NULL,
+    pointlog_id integer NOT NULL
+);
+
+
+ALTER TABLE public.apis_point_logs OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_point_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_point_logs_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_point_logs_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_point_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_point_logs_id_seq OWNED BY public.apis_point_logs.id;
 
 
 --
@@ -955,6 +1169,77 @@ ALTER TABLE public.apis_pointfield_id_seq OWNER TO irsyadmhdilham;
 --
 
 ALTER SEQUENCE public.apis_pointfield_id_seq OWNED BY public.apis_pointfield.id;
+
+
+--
+-- Name: apis_pointlog; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_pointlog (
+    id integer NOT NULL,
+    "timestamp" timestamp with time zone NOT NULL,
+    point integer NOT NULL,
+    attribute_id integer NOT NULL,
+    point_type_id integer NOT NULL
+);
+
+
+ALTER TABLE public.apis_pointlog OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_pointlog_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_pointlog_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_pointlog_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_pointlog_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_pointlog_id_seq OWNED BY public.apis_pointlog.id;
+
+
+--
+-- Name: apis_pointlogtype; Type: TABLE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE TABLE public.apis_pointlogtype (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.apis_pointlogtype OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_pointlogtype_id_seq; Type: SEQUENCE; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE SEQUENCE public.apis_pointlogtype_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.apis_pointlogtype_id_seq OWNER TO irsyadmhdilham;
+
+--
+-- Name: apis_pointlogtype_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER SEQUENCE public.apis_pointlogtype_id_seq OWNED BY public.apis_pointlogtype.id;
 
 
 --
@@ -1177,12 +1462,12 @@ CREATE TABLE public.apis_profile (
     name character varying(200) NOT NULL,
     profile_image character varying(100) NOT NULL,
     settings jsonb NOT NULL,
-    agency_id integer NOT NULL,
+    fcm_token text,
+    agency_id integer,
     designation_id integer NOT NULL,
     group_id integer,
     upline_id integer,
-    user_id integer NOT NULL,
-    fcm_token text
+    user_id integer NOT NULL
 );
 
 
@@ -1431,11 +1716,11 @@ CREATE TABLE public.apis_sales (
     amount numeric(10,2) NOT NULL,
     commission numeric(10,2),
     document_id character varying(100),
+    repeat_sales boolean NOT NULL,
     contact_id integer,
     sales_status_id character varying(30) NOT NULL,
     sales_type_id integer NOT NULL,
-    surcharge_id integer,
-    repeat_sales boolean NOT NULL
+    surcharge_id integer
 );
 
 
@@ -1879,6 +2164,13 @@ ALTER TABLE ONLY public.apis_agency_posts ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: apis_chatmessage id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_chatmessage ALTER COLUMN id SET DEFAULT nextval('public.apis_chatmessage_id_seq'::regclass);
+
+
+--
 -- Name: apis_comment id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -1903,7 +2195,7 @@ ALTER TABLE ONLY public.apis_contact ALTER COLUMN id SET DEFAULT nextval('public
 -- Name: apis_contact_schedules id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
 --
 
-ALTER TABLE ONLY public.apis_contact_schedules ALTER COLUMN id SET DEFAULT nextval('public.apis_contact_schedule_id_seq'::regclass);
+ALTER TABLE ONLY public.apis_contact_schedules ALTER COLUMN id SET DEFAULT nextval('public.apis_contact_schedules_id_seq'::regclass);
 
 
 --
@@ -1921,24 +2213,17 @@ ALTER TABLE ONLY public.apis_contacttype ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- Name: apis_conversation id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_conversation ALTER COLUMN id SET DEFAULT nextval('public.apis_conversation_id_seq'::regclass);
-
-
---
--- Name: apis_conversation_subscriber id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_conversation_subscriber ALTER COLUMN id SET DEFAULT nextval('public.apis_conversation_subscriber_id_seq'::regclass);
-
-
---
 -- Name: apis_designation id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_designation ALTER COLUMN id SET DEFAULT nextval('public.apis_designation_id_seq'::regclass);
+
+
+--
+-- Name: apis_googleapi id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_googleapi ALTER COLUMN id SET DEFAULT nextval('public.apis_googleapi_id_seq'::regclass);
 
 
 --
@@ -1956,10 +2241,45 @@ ALTER TABLE ONLY public.apis_group_members ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
+-- Name: apis_groupchat id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat ALTER COLUMN id SET DEFAULT nextval('public.apis_groupchat_id_seq'::regclass);
+
+
+--
+-- Name: apis_groupchat_messages id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_messages ALTER COLUMN id SET DEFAULT nextval('public.apis_groupchat_messages_id_seq'::regclass);
+
+
+--
+-- Name: apis_groupchat_participants id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_participants ALTER COLUMN id SET DEFAULT nextval('public.apis_groupchat_participants_id_seq'::regclass);
+
+
+--
+-- Name: apis_groupchatrole id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchatrole ALTER COLUMN id SET DEFAULT nextval('public.apis_groupchatrole_id_seq'::regclass);
+
+
+--
 -- Name: apis_inbox id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_inbox ALTER COLUMN id SET DEFAULT nextval('public.apis_inbox_id_seq'::regclass);
+
+
+--
+-- Name: apis_inbox_messages id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_inbox_messages ALTER COLUMN id SET DEFAULT nextval('public.apis_inbox_messages_id_seq'::regclass);
 
 
 --
@@ -2005,6 +2325,13 @@ ALTER TABLE ONLY public.apis_point_attributes ALTER COLUMN id SET DEFAULT nextva
 
 
 --
+-- Name: apis_point_logs id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_point_logs ALTER COLUMN id SET DEFAULT nextval('public.apis_point_logs_id_seq'::regclass);
+
+
+--
 -- Name: apis_pointattribute id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -2016,6 +2343,20 @@ ALTER TABLE ONLY public.apis_pointattribute ALTER COLUMN id SET DEFAULT nextval(
 --
 
 ALTER TABLE ONLY public.apis_pointfield ALTER COLUMN id SET DEFAULT nextval('public.apis_pointfield_id_seq'::regclass);
+
+
+--
+-- Name: apis_pointlog id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_pointlog ALTER COLUMN id SET DEFAULT nextval('public.apis_pointlog_id_seq'::regclass);
+
+
+--
+-- Name: apis_pointlogtype id; Type: DEFAULT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_pointlogtype ALTER COLUMN id SET DEFAULT nextval('public.apis_pointlogtype_id_seq'::regclass);
 
 
 --
@@ -2191,10 +2532,10 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 --
 
 COPY public.account_user (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) FROM stdin;
-14	pbkdf2_sha256$120000$A1mbJrDtOAod$Uc4yCHFRRVjXzIhRbm/K6520PubaOosjNkd4RX5h1mA=	\N	f			f	t	2018-12-04 17:15:07.346692+08	afif@vve.com
-1	pbkdf2_sha256$120000$sDv3OkbSidfX$Prh72xTlnqoRJQW5SEr9//xXUdQybMGys9JCkrVQtbk=	2018-12-07 01:19:08.582429+08	t			t	t	2018-11-13 23:50:54.377288+08	irsyadmhdilham@gmail.com
-12	pbkdf2_sha256$120000$x7tBWjPIFeak$QRiW43CBICAMFrnPWn0dHQSWxUDgBcJNxDzlpPMVhdY=	\N	f	Irsyad Mhd Ilham		f	t	2018-11-14 23:05:42+08	cwa@cwa.com
-13	pbkdf2_sha256$120000$iT0Oe8uucPUt$HhiNavnlIu2WoA9y7/qkMAh7VLcxYvrKulsRQq/8y4U=	\N	f			f	t	2018-12-03 15:55:11+08	irfan@vve.com
+3	pbkdf2_sha256$120000$y0pzOaHNxj64$qRnVIBdfgPPvAmvJDQirRrI5/YNyxRM0T2+K+cPvAWI=	\N	f			f	t	2018-12-20 00:52:27.666552+08	azri@cwa.com
+4	pbkdf2_sha256$120000$6ah1pOTIryzt$RhM0bqF+LVhQbCNu1aIDxfzxbf/h+4G9FKYBD9d314U=	\N	f			f	t	2018-12-20 00:53:02.565292+08	badruddin@cwa.com
+1	pbkdf2_sha256$120000$UvAO5yYC89FY$2fRBo02n9Jnz9zVmRdrNAeO+SX/YTXNZkhlOBzqOb3U=	2019-01-04 23:10:37.722869+08	t			t	t	2018-12-20 00:32:03.380181+08	irsyadmhdilham@gmail.com
+2	pbkdf2_sha256$120000$WMqpzQuGRYRx$gOLGwwYYgOZpG4saQ994JyLW8LKhGqYjWIa5zNy4LxM=	\N	f			f	t	2018-12-20 00:51:38.0963+08	ramlan@cwa.com
 \.
 
 
@@ -2219,7 +2560,7 @@ COPY public.account_user_user_permissions (id, user_id, permission_id) FROM stdi
 --
 
 COPY public.apis_agency (id, name, agency_image, company_id, industry_id, owner_id) FROM stdin;
-1	Squalify Agency	agencies/1/bg.jpg	2	1	15
+1	Otye Excellence Consultants	agencies/1/agency_image_2019-01-09T152257.5132640000.jpg	2	1	2
 \.
 
 
@@ -2228,9 +2569,9 @@ COPY public.apis_agency (id, name, agency_image, company_id, industry_id, owner_
 --
 
 COPY public.apis_agency_members (id, agency_id, profile_id) FROM stdin;
-1	1	15
-2	1	16
-3	1	17
+1	1	2
+2	1	3
+3	1	4
 \.
 
 
@@ -2239,9 +2580,123 @@ COPY public.apis_agency_members (id, agency_id, profile_id) FROM stdin;
 --
 
 COPY public.apis_agency_posts (id, agency_id, post_id) FROM stdin;
-8	1	8
-9	1	9
-10	1	10
+1	1	1
+2	1	2
+3	1	3
+4	1	4
+5	1	5
+6	1	6
+\.
+
+
+--
+-- Data for Name: apis_chatmessage; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_chatmessage (id, "timestamp", text, person_id) FROM stdin;
+192	2018-12-28 16:42:55.666937+08	Azri	2
+193	2018-12-28 16:43:04.011026+08	yes bo	3
+194	2018-12-28 16:43:17.736105+08	Gila ke ape	2
+195	2018-12-28 16:43:24.773721+08	mmg gila pon	3
+196	2018-12-28 17:18:49.899171+08	hello	2
+197	2018-12-28 17:19:00.430169+08	yes bro	3
+198	2018-12-28 17:22:38.921281+08	yes bro	2
+199	2018-12-28 17:25:23.120175+08	yes again	2
+200	2018-12-28 17:27:54.367937+08	aku nk  tnye skit	2
+201	2018-12-28 17:29:41.252372+08	Aku nk	2
+202	2018-12-28 17:30:04.072077+08	hoi	3
+203	2018-12-28 17:30:11.714539+08	hello again	2
+204	2018-12-28 17:30:51.456361+08	yes yes	2
+205	2018-12-28 17:31:05.225819+08	mane ilang	3
+206	2018-12-28 17:31:13.116277+08	ade je kat sini	2
+207	2018-12-28 17:32:37.19474+08	Cade kat ne	2
+208	2018-12-28 17:36:24.071622+08	bro bro	2
+209	2018-12-28 17:38:56.228585+08	hello there	2
+210	2018-12-28 17:39:03.624762+08	yes here	3
+211	2018-12-28 17:39:13.624429+08	mane ko ilang bro	2
+212	2018-12-28 17:39:21.038394+08	ade je ni ha	3
+213	2018-12-28 17:39:34.120357+08	mane ko aku cari td xjmpe	2
+214	2018-12-28 17:39:46.947804+08	ade td kt blkg ko	3
+215	2018-12-28 17:40:10.557786+08	jap jap	2
+216	2018-12-28 17:40:18.220402+08	mane ade kejap	3
+217	2018-12-28 17:42:35.937545+08	mane ilang	3
+218	2018-12-28 17:43:57.611723+08	hoi	2
+219	2018-12-28 17:49:38.371949+08	hellooooo	2
+220	2018-12-28 17:50:56.002108+08	hello agarn	2
+221	2018-12-28 17:52:33.388788+08	yo yo	2
+222	2018-12-28 17:52:47.608993+08	mane ko ilang brader	2
+223	2018-12-28 17:54:52.290586+08	hello bro	3
+224	2018-12-28 17:55:04.88301+08	hello back	3
+225	2018-12-28 17:55:16.677669+08	hello og hello	2
+226	2018-12-28 17:55:29.747452+08	heiii	3
+227	2018-12-28 17:57:12.672913+08	hello	3
+228	2018-12-28 17:57:25.748068+08	he'll	2
+229	2018-12-28 17:57:37.144071+08	hoi	3
+230	2018-12-28 17:57:42.415428+08	oi oi	2
+231	2018-12-28 17:57:54.370153+08	lan	3
+232	2018-12-28 17:58:02.924612+08	yes	2
+233	2018-12-28 17:58:09.394444+08	mane ilang brader	3
+234	2018-12-28 17:58:23.669736+08	nah	2
+235	2018-12-28 18:07:58.726397+08	hello	3
+236	2018-12-28 18:08:07.770099+08	hell no	2
+237	2018-12-28 18:08:14.984122+08	mane aku nk tau	3
+238	2018-12-28 18:18:24.954962+08	cikabg	3
+239	2018-12-28 18:18:36.19439+08	hare	2
+240	2018-12-28 18:18:47.243278+08	Bangkok	2
+241	2018-12-28 18:18:57.877737+08	bongok	2
+242	2018-12-28 18:19:13.318922+08	azure	2
+243	2018-12-28 18:19:32.230899+08	heran jgak au	2
+244	2018-12-28 18:23:29.62543+08	lan	3
+245	2018-12-28 18:23:40.740668+08	mane ko lan	3
+246	2018-12-29 07:48:10.200287+08	hello	3
+247	2018-12-29 07:48:57.002946+08	yes bro	2
+248	2018-12-29 07:50:40.136538+08	ye ye	3
+249	2018-12-29 07:50:54.691814+08	mane ko ilang	2
+250	2018-12-29 07:51:01.975039+08	ade je kat sini	3
+251	2018-12-29 07:58:14.54885+08	hello ramlan	3
+252	2018-12-29 21:26:14.156587+08	hello bro	2
+253	2018-12-29 21:44:55.638205+08	lg skali	2
+254	2018-12-29 21:45:44.514998+08	hello	2
+255	2018-12-29 21:51:49.742572+08	bagangn	2
+256	2018-12-29 22:31:33.683644+08	mat	3
+257	2018-12-30 10:13:58.068157+08	hello mat	2
+258	2018-12-30 10:15:22.649749+08	hello again	2
+259	2018-12-30 10:16:56.598349+08	hello	2
+260	2018-12-30 10:17:11.591597+08	mane ko ilang brader	3
+261	2018-12-30 10:17:23.566088+08	ade je kat sini ha x kemana pon	2
+262	2018-12-30 10:17:32.108674+08	yeke xkemana	3
+263	2018-12-30 10:17:46.601397+08	aye x kemana	2
+264	2018-12-30 10:18:54.971692+08	mane ke mana	2
+265	2018-12-30 10:19:10.648524+08	kssdsd	2
+266	2018-12-30 10:25:43.118143+08	hello	2
+267	2018-12-30 10:25:57.977986+08	yes yes	3
+268	2018-12-30 10:26:12.327744+08	mane slang	2
+269	2018-12-30 10:33:52.105585+08	mae ko	3
+270	2018-12-30 10:35:11.487553+08	ade mane	2
+271	2018-12-30 10:39:22.016134+08	yell	2
+272	2018-12-30 10:39:33.219213+08	yello	3
+273	2018-12-30 10:39:42.327265+08	yoyo	2
+274	2018-12-30 10:42:07.039194+08	yo wassup	3
+275	2018-12-30 12:25:00.623782+08	Assalamualaikum	2
+276	2018-12-30 12:25:17.284423+08	Hello world	2
+277	2018-12-30 12:32:52.862435+08	Hello	2
+278	2018-12-30 12:33:02.934468+08	yes bos	3
+279	2018-12-30 12:33:13.964715+08	Ade mane ko	2
+280	2018-12-30 12:33:21.424865+08	ade je kat sini	3
+281	2018-12-30 12:33:45.502306+08	Ade mane	2
+282	2018-12-30 12:43:11.945441+08	Hello	2
+283	2018-12-30 12:43:19.877063+08	Mane ko	2
+284	2018-12-31 08:32:58.460267+08	Azri	2
+285	2018-12-31 08:33:10.859861+08	ye	3
+286	2018-12-31 08:36:44.747981+08	Mane ko	2
+287	2018-12-31 08:36:58.334348+08	ade je ni ha	3
+288	2018-12-31 09:34:13.023149+08	Hello	2
+289	2018-12-31 09:34:33.690878+08	Hello bro	2
+290	2018-12-31 09:36:17.070384+08	Hello	2
+291	2018-12-31 09:36:28.154545+08	Mane ilang	2
+292	2019-01-05 00:11:12.358086+08	hello there 	3
+293	2019-01-08 12:33:41.0634+08	salam abg zai, are u free this afternoon?	4
+294	2019-01-08 18:59:19.337574+08	Hshjss	2
 \.
 
 
@@ -2250,11 +2705,20 @@ COPY public.apis_agency_posts (id, agency_id, post_id) FROM stdin;
 --
 
 COPY public.apis_comment (id, "timestamp", text, commented_by_id) FROM stdin;
-6	2018-12-09 22:56:40.0452+08	Mantap syad	16
-7	2018-12-10 12:54:21.322895+08	Congrats 	16
-8	2018-12-10 12:55:58.037508+08	Cool bro	15
-9	2018-12-10 12:56:12.48882+08	Cool lah bro	15
-10	2018-12-10 12:57:30.908218+08	Boleh qualify cpt ni	16
+41	2018-12-31 14:24:40.348891+08	27	2
+42	2018-12-31 14:26:15.767331+08	sdsdsd	2
+43	2018-12-31 14:26:41.121892+08	sdsdsd	2
+44	2018-12-31 14:27:58.873526+08	suds	2
+45	2018-12-31 14:41:45.923254+08	incurred	2
+46	2018-12-31 14:44:39.181701+08	tang 	2
+47	2018-12-31 14:45:49.971061+08	snoop dog	2
+48	2018-12-31 15:08:21.035363+08	sdsdsdsd	2
+49	2019-01-01 07:44:06.746632+08	good morning	2
+50	2019-01-01 07:49:28.463592+08	good 	2
+51	2019-01-01 07:51:05.902008+08	good morning	2
+52	2019-01-01 07:53:34.457693+08	comment	2
+53	2019-01-05 00:17:32.201509+08	Baik la brother	4
+54	2019-01-05 00:25:03.050716+08	congrats	2
 \.
 
 
@@ -2272,20 +2736,13 @@ COPY public.apis_company (id, name) FROM stdin;
 -- Data for Name: apis_contact; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
-COPY public.apis_contact (id, name, remark, contact_no, created_on, last_modified, image, contact_type_id, status_id, referrer_id) FROM stdin;
-45	Mr Nelson Mandela	Meet on 13 December	019 899 8822	2018-11-29 18:27:42.312798+08	2018-11-30 09:32:12.867547+08		2	Appointment secured	\N
-49	Adib	\N	019 779223	2018-12-02 13:42:42.350794+08	2018-12-02 17:37:15.972838+08		1	Appointment secured	\N
-50	Trevor James	\N	017 8888 283	2018-12-02 17:35:04.139199+08	2018-12-02 17:37:43.34612+08		1	None	47
-48	Micheal Learns to rock	\N	012323	2018-12-02 12:46:21.575463+08	2018-12-02 17:42:15.986675+08		2	Appointment secured	\N
-51	Irfan Bakti Badrul	\N	019 882333	2018-12-04 11:00:24.76398+08	2018-12-04 11:16:46.250055+08		2	Appointment secured	\N
-52	Hello world	\N	01923233	2018-12-04 11:17:36.002545+08	2018-12-04 11:21:14.457737+08		1	Appointment secured	51
-53	Hello sdsdsd	\N	233333	2018-12-04 11:20:14.114466+08	2018-12-04 11:22:02.152627+08		1	Appointment secured	52
-54	Tambah lagi	\N	02832333	2018-12-04 11:26:23.483483+08	2018-12-04 12:51:06.411739+08		1	Appointment secured	52
-47	Yunos Alwi	\N	019 2323	2018-12-02 12:43:01.283276+08	2018-12-09 13:51:11.690463+08		1	Appointment secured	\N
-56	Karen	\N	016555789	2018-12-09 22:50:53.446867+08	2018-12-09 22:50:53.486227+08		1	None	52
-57	Jamal	Maybank kl	0182334577	2018-12-09 23:13:54.055187+08	2018-12-09 23:15:37.763934+08		2	Appointment secured	\N
-58	Ahmad	\N	0185782689	2018-12-10 14:43:23.751064+08	2018-12-10 14:43:23.751108+08		2	None	\N
-59	Mary	\N	085468	2018-12-10 17:06:07.180745+08	2018-12-10 17:06:07.181497+08		2	None	\N
+COPY public.apis_contact (id, name, remark, contact_no, created_on, last_modified, image, contact_type_id, referrer_id, status_id) FROM stdin;
+1	Irsyad	\N	019 797 6640	2018-12-20 01:15:17.748734+08	2018-12-20 01:15:17.748781+08		3	\N	None
+2	kamal	maybank bangsar	0377510976	2019-01-05 00:10:26.198714+08	2019-01-05 00:10:26.19876+08		2	\N	None
+3	zamri	cimb kajang	87387643	2019-01-05 00:18:49.421029+08	2019-01-05 00:18:49.42107+08		2	\N	None
+4	zack	\N	7356879356	2019-01-05 00:20:56.978427+08	2019-01-05 00:20:56.98609+08		1	3	None
+5	Andrew	Mercedes shah alam	0178990786	2019-01-09 23:30:00.906556+08	2019-01-09 23:30:00.9066+08		2	\N	None
+6	Liza	\N	0197765438	2019-01-09 23:31:23.903577+08	2019-01-09 23:31:23.910657+08		1	5	None
 \.
 
 
@@ -2294,11 +2751,6 @@ COPY public.apis_contact (id, name, remark, contact_no, created_on, last_modifie
 --
 
 COPY public.apis_contact_schedules (id, contact_id, schedule_id) FROM stdin;
-1	45	34
-2	49	36
-3	48	37
-8	47	45
-9	57	48
 \.
 
 
@@ -2312,8 +2764,7 @@ COPY public.apis_contactstatus (id, status) FROM stdin;
 3	Appointment secured
 4	Rejected
 5	Client
-6	Customer
-7	Other
+6	Other
 \.
 
 
@@ -2331,22 +2782,6 @@ COPY public.apis_contacttype (id, contact_type) FROM stdin;
 
 
 --
--- Data for Name: apis_conversation; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
---
-
-COPY public.apis_conversation (id, conversation) FROM stdin;
-\.
-
-
---
--- Data for Name: apis_conversation_subscriber; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
---
-
-COPY public.apis_conversation_subscriber (id, conversation_id, profile_id) FROM stdin;
-\.
-
-
---
 -- Data for Name: apis_designation; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -2359,12 +2794,20 @@ COPY public.apis_designation (id, name) FROM stdin;
 
 
 --
+-- Data for Name: apis_googleapi; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_googleapi (id, access_token, token_expiry) FROM stdin;
+\.
+
+
+--
 -- Data for Name: apis_group; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
 COPY public.apis_group (id, owner_id) FROM stdin;
-2	16
-1	15
+1	2
+2	3
 \.
 
 
@@ -2373,9 +2816,99 @@ COPY public.apis_group (id, owner_id) FROM stdin;
 --
 
 COPY public.apis_group_members (id, group_id, profile_id) FROM stdin;
-2	1	16
-3	2	17
-7	1	17
+1	1	3
+2	2	4
+\.
+
+
+--
+-- Data for Name: apis_groupchat; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_groupchat (id, owner_id, role_id) FROM stdin;
+1	2	1
+2	2	2
+\.
+
+
+--
+-- Data for Name: apis_groupchat_messages; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_groupchat_messages (id, groupchat_id, chatmessage_id) FROM stdin;
+37	2	196
+38	2	197
+39	2	198
+40	2	199
+41	2	200
+42	2	201
+43	2	202
+44	2	203
+45	2	204
+46	2	205
+47	2	206
+48	2	207
+49	2	208
+50	2	209
+51	2	210
+52	2	211
+53	2	212
+54	2	213
+55	2	214
+56	2	215
+57	2	216
+58	2	217
+59	2	218
+60	2	219
+61	2	220
+62	2	221
+63	2	222
+64	2	223
+65	2	224
+66	2	225
+67	2	226
+68	2	227
+69	2	228
+70	2	229
+71	2	230
+72	2	238
+73	2	239
+74	2	240
+75	2	241
+76	2	275
+77	2	276
+78	2	277
+79	2	278
+80	2	279
+81	2	280
+82	2	281
+83	2	282
+84	2	283
+85	2	288
+86	2	291
+\.
+
+
+--
+-- Data for Name: apis_groupchat_participants; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_groupchat_participants (id, groupchat_id, profile_id) FROM stdin;
+1	1	2
+2	1	3
+3	1	4
+4	2	3
+5	2	2
+\.
+
+
+--
+-- Data for Name: apis_groupchatrole; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_groupchatrole (id, name) FROM stdin;
+1	agency
+2	group
 \.
 
 
@@ -2383,7 +2916,129 @@ COPY public.apis_group_members (id, group_id, profile_id) FROM stdin;
 -- Data for Name: apis_inbox; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
-COPY public.apis_inbox (id, created_on, last_modified, conversation_id, sender_id) FROM stdin;
+COPY public.apis_inbox (id, created_on, last_modified, chat_with_id, unread, group_chat_id) FROM stdin;
+54	2018-12-28 16:42:55.703856+08	2018-12-31 09:36:34.201419+08	2	0	\N
+50	2018-12-27 00:15:22.287582+08	2018-12-31 09:36:36.766364+08	\N	0	2
+48	2018-12-24 12:04:41.77943+08	2019-01-05 00:31:48.415086+08	\N	0	1
+53	2018-12-28 16:42:55.671083+08	2019-01-06 14:24:31.737565+08	3	0	\N
+55	2019-01-06 17:30:48.501449+08	2019-01-06 17:30:48.501488+08	\N	0	1
+57	2019-01-08 12:33:41.405124+08	2019-01-08 18:59:10.55441+08	4	0	\N
+56	2019-01-08 12:33:41.147175+08	2019-01-08 18:59:19.361584+08	2	1	\N
+49	2018-12-25 11:54:03.324931+08	2018-12-30 12:33:22.724689+08	\N	0	2
+\.
+
+
+--
+-- Data for Name: apis_inbox_messages; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_inbox_messages (id, inbox_id, chatmessage_id) FROM stdin;
+275	53	192
+276	54	192
+277	54	193
+278	53	193
+279	53	194
+280	54	194
+281	54	195
+282	53	195
+283	54	231
+284	53	231
+285	53	232
+286	54	232
+287	54	233
+288	53	233
+289	53	234
+290	54	234
+291	54	235
+292	53	235
+293	53	236
+294	54	236
+295	54	237
+296	53	237
+297	53	242
+298	54	242
+299	53	243
+300	54	243
+301	54	244
+302	53	244
+303	54	245
+304	53	245
+305	54	246
+306	53	246
+307	53	247
+308	54	247
+309	54	248
+310	53	248
+311	53	249
+312	54	249
+313	54	250
+314	53	250
+315	54	251
+316	53	251
+317	53	252
+318	54	252
+319	53	253
+320	54	253
+321	53	254
+322	54	254
+323	53	255
+324	54	255
+325	54	256
+326	53	256
+327	53	257
+328	54	257
+329	53	258
+330	54	258
+331	53	259
+332	54	259
+333	54	260
+334	53	260
+335	53	261
+336	54	261
+337	54	262
+338	53	262
+339	53	263
+340	54	263
+341	53	264
+342	54	264
+343	53	265
+344	54	265
+345	53	266
+346	54	266
+347	54	267
+348	53	267
+349	53	268
+350	54	268
+351	54	269
+352	53	269
+353	53	270
+354	54	270
+355	53	271
+356	54	271
+357	54	272
+358	53	272
+359	53	273
+360	54	273
+361	54	274
+362	53	274
+363	53	284
+364	54	284
+365	54	285
+366	53	285
+367	53	286
+368	54	286
+369	54	287
+370	53	287
+371	53	289
+372	54	289
+373	53	290
+374	54	290
+375	54	292
+376	53	292
+377	56	293
+378	57	293
+379	57	294
+380	56	294
 \.
 
 
@@ -2392,7 +3047,7 @@ COPY public.apis_inbox (id, created_on, last_modified, conversation_id, sender_i
 --
 
 COPY public.apis_industry (id, name) FROM stdin;
-1	Unit trust investment
+1	Mutual fund investment
 \.
 
 
@@ -2401,8 +3056,13 @@ COPY public.apis_industry (id, name) FROM stdin;
 --
 
 COPY public.apis_like (id, "timestamp", liker_id) FROM stdin;
-43	2018-12-09 22:56:20.737825+08	16
-44	2018-12-09 23:07:11.370272+08	16
+60	2018-12-31 09:25:01.233878+08	2
+79	2018-12-31 11:14:03.759453+08	2
+83	2019-01-01 12:09:16.56849+08	3
+86	2019-01-05 00:24:46.56956+08	2
+87	2019-01-05 00:32:25.175798+08	3
+88	2019-01-05 15:14:15.828266+08	3
+45	2018-12-31 09:05:47.30905+08	3
 \.
 
 
@@ -2410,7 +3070,30 @@ COPY public.apis_like (id, "timestamp", liker_id) FROM stdin;
 -- Data for Name: apis_notification; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
-COPY public.apis_notification (id, "timestamp", notification_type_id, notified_by_id, post_rel_id) FROM stdin;
+COPY public.apis_notification (id, "timestamp", notification_type_id, notified_by_id, post_rel_id, read, inbox_rel_id, seen) FROM stdin;
+117	2019-01-01 07:53:34.477273+08	6	2	1	t	\N	f
+116	2018-12-31 09:36:28.146145+08	4	2	\N	t	49	f
+115	2018-12-31 09:36:17.098844+08	3	2	\N	t	54	f
+114	2018-12-31 09:34:33.718303+08	3	2	\N	t	54	f
+118	2019-01-01 12:10:52.686612+08	5	2	3	t	\N	f
+113	2018-12-31 09:34:13.013215+08	4	2	\N	t	49	f
+119	2019-01-01 12:11:27.649184+08	5	2	3	t	\N	f
+122	2019-01-05 00:24:46.761951+08	5	2	3	t	\N	f
+124	2019-01-05 00:30:10.775837+08	4	2	\N	t	48	f
+123	2019-01-05 00:25:03.068478+08	6	2	3	t	\N	f
+121	2019-01-05 00:17:32.301141+08	6	4	3	t	\N	f
+125	2019-01-05 15:14:16.09286+08	5	3	5	f	\N	f
+127	2019-01-08 18:59:19.366634+08	3	2	\N	f	56	f
+111	2018-12-31 08:36:44.774142+08	3	2	\N	t	54	f
+109	2018-12-31 08:32:58.619938+08	3	2	\N	t	54	f
+108	2018-12-30 12:43:11.93554+08	4	2	\N	t	49	f
+106	2018-12-30 12:32:52.854011+08	4	2	\N	t	49	f
+105	2018-12-30 12:25:00.314124+08	4	2	\N	t	49	f
+110	2018-12-31 08:33:11.312908+08	3	3	\N	f	53	t
+107	2018-12-30 12:33:02.488625+08	4	3	\N	f	50	t
+126	2019-01-08 12:33:41.428425+08	3	4	\N	f	57	t
+112	2018-12-31 08:36:58.366707+08	3	3	\N	f	53	t
+120	2019-01-05 00:11:12.497742+08	3	3	\N	f	53	t
 \.
 
 
@@ -2419,11 +3102,12 @@ COPY public.apis_notification (id, "timestamp", notification_type_id, notified_b
 --
 
 COPY public.apis_notificationtype (id, name) FROM stdin;
-1	Joining field work
-2	Sales closed
-3	Comment
-4	Direct message
-5	Like
+1	closed sales
+2	joining field work
+3	inbox
+4	group inbox
+5	like
+6	comment
 \.
 
 
@@ -2431,21 +3115,17 @@ COPY public.apis_notificationtype (id, name) FROM stdin;
 -- Data for Name: apis_point; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
-COPY public.apis_point (id, date, logs) FROM stdin;
-6	2018-11-24	{"logs": [{"time": "2018-11-24T07:15:20.154509", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-11-24T07:31:28.928938", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-11-24T07:33:56.287311", "type": "add", "point": 2, "attribute": "Referrals"}, {"time": "2018-11-24T07:35:05.722509", "type": "add", "point": 4, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-11-24T08:26:05.538905", "type": "add", "point": 2, "attribute": "Update upline"}, {"time": "2018-11-24T09:16:51.508681", "type": "add", "point": 3, "attribute": "Be early training"}, {"time": "2018-11-24T09:16:59.606514", "type": "add", "point": 1, "attribute": "Personal coaching"}, {"time": "2018-11-24T09:17:10.027041", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-11-24T09:18:00.139674", "type": "add", "point": 1, "attribute": "Joining field work"}, {"time": "2018-11-24T09:18:04.675414", "type": "add", "point": 3, "attribute": "Referrals"}]}
-1	2018-11-23	{}
-8	2018-11-25	{"logs": [{"time": "2018-11-25T03:34:59.261093", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-11-25T03:37:06.261872", "type": "add", "point": 1, "attribute": "Joining field work"}, {"time": "2018-11-25T03:37:56.311838", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}]}
-9	2018-11-26	{"logs": [{"time": "2018-11-26T10:56:05.148052", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-11-26T10:56:28.332658", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-11-26T10:56:30.025953", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-11-26T10:56:32.423051", "type": "add", "point": 3, "attribute": "Sales presentation"}, {"time": "2018-11-26T10:56:34.225338", "type": "add", "point": 3, "attribute": "Sign up contract"}, {"time": "2018-11-26T10:56:35.496948", "type": "add", "point": 4, "attribute": "Case closed"}, {"time": "2018-11-26T10:56:36.428986", "type": "add", "point": 3, "attribute": "Career presentation"}, {"time": "2018-11-26T10:56:37.737372", "type": "add", "point": 6, "attribute": "Sales presentation"}, {"time": "2018-11-26T10:56:39.629881", "type": "add", "point": 1, "attribute": "Joining field work"}, {"time": "2018-11-26T10:56:40.721729", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}]}
-14	2018-11-27	{"logs": [{"time": "2018-11-27T02:07:35.758250", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-11-27T02:07:36.928367", "type": "add", "point": 1, "attribute": "Joining field work"}, {"time": "2018-11-27T02:07:38.936586", "type": "add", "point": 2, "attribute": "Joining field work"}, {"time": "2018-11-27T02:07:47.384919", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-11-27T02:07:48.403837", "type": "add", "point": 4, "attribute": "Case closed"}, {"time": "2018-11-27T02:07:49.489056", "type": "add", "point": 3, "attribute": "Sales presentation"}, {"time": "2018-11-27T02:07:50.359979", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-11-27T02:07:51.547584", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-11-27T02:07:52.341769", "type": "add", "point": 2, "attribute": "Calls/Email/Socmed"}, {"time": "2018-11-27T02:07:53.131472", "type": "add", "point": 3, "attribute": "Calls/Email/Socmed"}, {"time": "2018-11-27T02:07:53.948452", "type": "add", "point": 4, "attribute": "Calls/Email/Socmed"}, {"time": "2018-11-27T02:07:56.817148", "type": "add", "point": 2, "attribute": "Update upline"}, {"time": "2018-11-27T02:07:57.607545", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-11-27T02:07:59.504366", "type": "add", "point": 3, "attribute": "Be early training"}, {"time": "2018-11-27T02:08:00.696692", "type": "add", "point": 1, "attribute": "Personal coaching"}, {"time": "2018-11-27T02:08:01.749197", "type": "add", "point": 5, "attribute": "Agency program"}, {"time": "2018-11-27T02:08:02.691056", "type": "add", "point": 1, "attribute": "Servicing/Follow up"}]}
-15	2018-11-29	{"logs": [{"time": "2018-11-29T10:05:04.906063", "type": "add", "point": 4, "attribute": "Case closed"}, {"time": "2018-11-29T10:27:43.037223", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}]}
-16	2018-11-30	{"logs": [{"time": "2018-11-30T06:15:34.787444", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-11-30T06:15:45.172811", "type": "add", "point": 2, "attribute": "Referrals"}]}
-17	2018-12-02	{"logs": [{"time": "2018-12-02T05:42:42.464621", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-02T07:03:55.786363", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-12-02T07:11:02.363740", "type": "add", "point": 4, "attribute": "Appointment secured"}, {"time": "2018-12-02T09:35:04.241580", "type": "add", "point": 4, "attribute": "FTF/Nesting/Booth"}]}
-18	2018-12-04	{"logs": [{"time": "2018-12-04T02:55:24.807374", "type": "add", "point": 3, "attribute": "Career presentation"}, {"time": "2018-12-04T02:58:43.391001", "type": "add", "point": 3, "attribute": "Sign up contract"}, {"time": "2018-12-04T03:00:25.024822", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-04T03:13:27.191669", "type": "add", "point": 2, "attribute": "Update upline"}, {"time": "2018-12-04T03:17:36.085005", "type": "add", "point": 4, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-04T03:20:14.223903", "type": "add", "point": 6, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-04T03:20:16.488706", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-12-04T03:22:02.021759", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-12-04T03:26:23.581321", "type": "add", "point": 8, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-04T03:27:45.585753", "type": "add", "point": 2, "attribute": "Referrals"}, {"time": "2018-12-04T03:41:12.574534", "type": "add", "point": 4, "attribute": "Appointment secured"}, {"time": "2018-12-04T04:48:49.273728", "type": "add", "point": 6, "attribute": "Appointment secured"}, {"time": "2018-12-04T04:51:03.663009", "type": "add", "point": 8, "attribute": "Appointment secured"}, {"time": "2018-12-04T05:58:16.292214", "type": "add", "point": 10, "attribute": "Appointment secured"}, {"time": "2018-12-04T05:58:18.674526", "type": "add", "point": 10, "attribute": "Appointment secured"}, {"time": "2018-12-04T06:00:30.565566", "type": "add", "point": 12, "attribute": "Appointment secured"}, {"time": "2018-12-04T06:03:32.193376", "type": "add", "point": 14, "attribute": "Appointment secured"}]}
-19	2018-12-08	{"logs": [{"time": "2018-12-08T09:18:40.727505", "type": "add", "point": 3, "attribute": "Career presentation"}, {"time": "2018-12-08T09:18:46.831028", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-08T09:19:16.972535", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-12-08T09:19:20.563906", "type": "add", "point": 5, "attribute": "Agency program"}]}
-20	2018-12-09	{"logs": [{"time": "2018-12-09T05:50:23.555789", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T05:51:08.940944", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-12-09T07:58:10.925222", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T07:58:29.690283", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T08:00:02.314561", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T08:01:21.612187", "type": "add", "point": 2, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T08:02:38.232268", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-12-09T08:02:40.357506", "type": "add", "point": 2, "attribute": "Update upline"}]}
-21	2018-12-09	{"logs": [{"time": "2018-12-09T14:48:08.279388", "type": "add", "point": 1, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T14:49:05.068727", "type": "add", "point": 1, "attribute": "Joining field work"}, {"time": "2018-12-09T14:49:36.909624", "type": "add", "point": 3, "attribute": "Sales presentation"}, {"time": "2018-12-09T14:49:38.751673", "type": "add", "point": 3, "attribute": "Sign up contract"}, {"time": "2018-12-09T14:50:53.631313", "type": "add", "point": 1, "attribute": "Referrals"}, {"time": "2018-12-09T14:51:19.928779", "type": "add", "point": 2, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T14:51:47.575476", "type": "add", "point": 3, "attribute": "Career presentation"}, {"time": "2018-12-09T14:52:11.539800", "type": "add", "point": 1, "attribute": "Servicing/Follow up"}, {"time": "2018-12-09T14:52:12.870843", "type": "add", "point": 2, "attribute": "Update upline"}, {"time": "2018-12-09T14:52:14.100659", "type": "add", "point": 3, "attribute": "Millionnaire suit"}, {"time": "2018-12-09T14:52:18.513466", "type": "add", "point": 3, "attribute": "Be early training"}, {"time": "2018-12-09T14:58:17.799146", "type": "add", "point": 6, "attribute": "Sales presentation"}, {"time": "2018-12-09T14:59:57.242457", "type": "add", "point": 2, "attribute": "Appointment secured"}, {"time": "2018-12-09T15:13:54.295578", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-09T15:14:39.351878", "type": "add", "point": 3, "attribute": "Calls/Email/Socmed"}, {"time": "2018-12-09T15:15:34.849238", "type": "add", "point": 4, "attribute": "Appointment secured"}, {"time": "2018-12-09T15:22:02.191373", "type": "add", "point": 4, "attribute": "Update upline"}, {"time": "2018-12-09T15:22:04.445652", "type": "add", "point": 6, "attribute": "Be early training"}, {"time": "2018-12-09T15:22:53.596538", "type": "add", "point": 2, "attribute": "Joining field work"}, {"time": "2018-12-09T15:29:59.836986", "type": "add", "point": 6, "attribute": "Sign up contract"}, {"time": "2018-12-09T15:37:35.332852", "type": "add", "point": 1, "attribute": "Personal coaching"}, {"time": "2018-12-09T15:37:37.345106", "type": "add", "point": 6, "attribute": "Update upline"}, {"time": "2018-12-09T15:46:17.301186", "type": "add", "point": 5, "attribute": "Agency program"}, {"time": "2018-12-09T15:46:34.553199", "type": "add", "point": 10, "attribute": "Agency program"}]}
-22	2018-12-10	{"logs": [{"time": "2018-12-10T06:43:24.616882", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-10T06:44:21.193517", "type": "add", "point": 2, "attribute": "Appointment secured"}]}
-23	2018-12-10	{"logs": [{"time": "2018-12-10T09:06:07.371305", "type": "add", "point": 2, "attribute": "FTF/Nesting/Booth"}, {"time": "2018-12-10T09:20:41.866641", "type": "add", "point": 2, "attribute": "Update upline"}, {"time": "2018-12-10T09:20:49.779469", "type": "add", "point": 3, "attribute": "Millionnaire suit"}]}
+COPY public.apis_point (id, date) FROM stdin;
+1	2018-12-19
+2	2018-12-23
+3	2019-01-02
+4	2019-01-03
+5	2019-01-04
+6	2019-01-04
+7	2019-01-04
+8	2019-01-05
+9	2019-01-08
+10	2019-01-09
 \.
 
 
@@ -2455,88 +3135,63 @@ COPY public.apis_point (id, date, logs) FROM stdin;
 
 COPY public.apis_point_attributes (id, point_id, pointattribute_id) FROM stdin;
 1	1	1
-2	1	4
-3	1	5
-4	1	6
-6	1	8
-7	1	9
-9	1	11
-11	1	13
-12	1	14
-13	1	15
-20	1	22
-21	1	23
-22	1	24
-36	6	39
-37	6	40
-38	6	41
-39	6	42
-40	6	43
-41	6	44
-42	6	45
-45	8	48
-46	8	49
-47	8	50
-48	9	51
-49	9	52
-50	9	53
-51	9	54
-52	9	55
-53	9	56
-54	9	57
-55	9	58
-56	9	59
-61	14	64
-62	14	65
-63	14	66
-64	14	67
-65	14	68
-66	14	69
-67	14	70
-68	14	71
-69	14	72
-70	14	73
-71	14	74
-72	14	75
-73	14	76
-74	15	77
-75	15	78
-76	16	79
-77	17	81
-78	17	82
-79	18	83
-80	18	84
-81	18	85
-82	18	86
-83	18	87
-84	18	88
-85	19	89
-86	19	90
-87	19	91
-88	19	92
-89	20	93
-90	20	94
-91	20	95
-92	20	96
-93	21	97
-94	21	98
-95	21	99
-96	21	100
-97	21	101
-98	21	102
-99	21	103
-100	21	104
-101	21	105
-102	21	106
-103	21	107
-104	21	108
-105	21	109
-106	21	110
-107	22	111
-108	22	112
-109	23	114
-110	23	115
-111	23	116
+2	1	2
+3	2	3
+4	2	4
+5	2	5
+6	2	6
+7	2	7
+8	3	8
+9	4	9
+10	5	10
+11	5	11
+12	5	12
+13	5	13
+14	5	14
+15	5	15
+16	6	16
+17	6	17
+18	7	18
+19	8	19
+20	9	20
+21	10	21
+22	10	22
+\.
+
+
+--
+-- Data for Name: apis_point_logs; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_point_logs (id, point_id, pointlog_id) FROM stdin;
+1	1	2
+2	1	3
+3	2	4
+4	2	5
+5	2	6
+6	2	7
+7	2	8
+8	3	9
+9	4	10
+10	4	11
+11	5	12
+12	5	13
+13	5	14
+14	5	15
+15	5	16
+16	5	17
+17	5	18
+18	5	19
+19	5	20
+20	5	21
+21	5	23
+22	6	24
+23	6	26
+24	7	37
+25	8	38
+26	9	39
+27	10	40
+28	10	41
 \.
 
 
@@ -2545,90 +3200,28 @@ COPY public.apis_point_attributes (id, point_id, pointattribute_id) FROM stdin;
 --
 
 COPY public.apis_pointattribute (id, point, last_modified, attribute_id) FROM stdin;
-95	3	2018-12-09 16:02:38.240633+08	10
-96	2	2018-12-09 16:02:40.365967+08	11
-5	4	2018-11-23 18:26:09.643161+08	8
-64	2	2018-11-27 10:07:35.769069+08	1
-8	3	2018-11-23 18:44:34.213108+08	7
-65	2	2018-11-27 10:07:38.952623+08	2
-66	2	2018-11-27 10:07:47.397635+08	5
-6	3	2018-11-23 18:48:06.154649+08	2
-9	4	2018-11-23 18:48:16.905265+08	5
-1	4	2018-11-23 18:48:39.690132+08	3
-67	4	2018-11-27 10:07:48.416018+08	8
-68	3	2018-11-27 10:07:49.502732+08	6
-11	6	2018-11-23 18:50:11.520258+08	9
-69	1	2018-11-27 10:07:50.374163+08	3
-13	4	2018-11-23 18:53:38.000884+08	11
-14	2	2018-11-23 18:56:25.336798+08	12
-15	3	2018-11-23 22:53:53.234705+08	14
-70	4	2018-11-27 10:07:53.989506+08	4
-71	2	2018-11-27 10:07:56.834942+08	11
-72	3	2018-11-27 10:07:57.636583+08	10
-73	3	2018-11-27 10:07:59.515001+08	14
-74	1	2018-11-27 10:08:00.7795+08	13
-22	3	2018-11-23 23:19:15.173448+08	10
-4	6	2018-11-23 23:20:25.701599+08	1
-75	5	2018-11-27 10:08:01.763277+08	15
-24	10	2018-11-23 23:31:44.223179+08	15
-23	2	2018-11-23 23:31:53.454745+08	4
-76	1	2018-11-27 10:08:02.700897+08	12
-77	4	2018-11-29 18:05:04.940307+08	8
-40	4	2018-11-24 15:35:05.742278+08	1
-41	2	2018-11-24 16:26:05.575168+08	11
-42	3	2018-11-24 17:16:51.539874+08	14
-43	1	2018-11-24 17:16:59.621018+08	13
-44	3	2018-11-24 17:17:10.040401+08	10
-45	1	2018-11-24 17:18:00.15724+08	2
-39	3	2018-11-24 17:18:04.691534+08	3
-78	2	2018-11-29 18:27:43.04928+08	1
-101	1	2018-12-09 22:50:53.639756+08	3
-48	1	2018-11-25 11:34:59.323171+08	3
-49	1	2018-11-25 11:37:06.272042+08	2
-50	1	2018-11-25 11:37:56.323839+08	4
-51	1	2018-11-26 18:56:05.21445+08	3
-52	2	2018-11-26 18:56:28.343775+08	5
-53	1	2018-11-26 18:56:30.03574+08	4
-79	2	2018-11-30 14:15:45.18562+08	3
-55	3	2018-11-26 18:56:34.244232+08	9
-56	4	2018-11-26 18:56:35.511703+08	8
-57	3	2018-11-26 18:56:36.445239+08	7
-54	6	2018-11-26 18:56:37.835988+08	6
-58	1	2018-11-26 18:56:39.644702+08	2
-59	2	2018-11-26 18:56:40.733686+08	1
-82	4	2018-12-02 15:11:02.386313+08	5
-81	4	2018-12-02 17:35:04.256379+08	1
-83	3	2018-12-04 10:55:25.076457+08	7
-84	3	2018-12-04 10:58:43.400815+08	9
-102	3	2018-12-09 22:51:47.583669+08	7
-86	2	2018-12-04 11:13:27.238316+08	11
-103	1	2018-12-09 22:52:11.548039+08	12
-85	8	2018-12-04 11:26:23.597333+08	1
-87	2	2018-12-04 11:27:45.604633+08	3
-105	3	2018-12-09 22:52:14.108702+08	10
-99	6	2018-12-09 22:58:17.810268+08	6
-88	14	2018-12-04 14:03:32.207057+08	5
-89	3	2018-12-08 17:18:41.185534+08	7
-90	1	2018-12-08 17:18:46.842529+08	4
-91	3	2018-12-08 17:19:16.980816+08	10
-92	5	2018-12-08 17:19:20.571967+08	15
-94	2	2018-12-09 13:51:08.949331+08	5
-108	2	2018-12-09 23:13:54.303951+08	1
-97	3	2018-12-09 23:14:39.381366+08	4
-93	2	2018-12-09 16:01:21.62271+08	4
-107	4	2018-12-09 23:15:34.859859+08	5
-106	6	2018-12-09 23:22:04.457053+08	14
-98	2	2018-12-09 23:22:53.608101+08	2
-100	6	2018-12-09 23:29:59.848119+08	9
-109	1	2018-12-09 23:37:35.352682+08	13
-104	6	2018-12-09 23:37:37.356039+08	11
-110	10	2018-12-09 23:46:34.564829+08	15
-111	2	2018-12-10 14:43:24.65636+08	1
-112	2	2018-12-10 14:44:21.204527+08	5
-113	1	2018-12-10 14:57:11.357167+08	2
-114	2	2018-12-10 17:06:07.377815+08	1
-115	2	2018-12-10 17:20:41.877216+08	11
-116	3	2018-12-10 17:20:49.792584+08	10
+1	2	2018-12-20 01:13:56.952717+08	12
+2	2	2018-12-20 01:15:17.902041+08	3
+3	1	2018-12-23 23:03:19.598531+08	13
+4	2	2018-12-23 23:03:49.008534+08	12
+5	3	2018-12-23 23:03:51.334118+08	2
+6	5	2018-12-23 23:03:54.295357+08	15
+7	1	2018-12-23 23:03:55.810607+08	14
+8	3	2019-01-02 17:19:04.029947+08	2
+9	6	2019-01-03 12:26:47.372471+08	1
+11	2	2019-01-04 12:25:14.840037+08	12
+13	3	2019-01-04 12:29:44.900003+08	9
+10	6	2019-01-04 12:40:33.807877+08	1
+12	5	2019-01-04 12:52:30.612182+08	13
+14	2	2019-01-05 00:10:26.669047+08	3
+15	1	2019-01-05 00:10:35.099625+08	4
+16	2	2019-01-05 00:18:49.57854+08	3
+17	1	2019-01-05 00:20:57.163891+08	5
+18	2	2019-01-05 00:29:08.095783+08	7
+19	2	2019-01-05 15:15:47.52751+08	7
+20	2	2019-01-08 12:17:45.704573+08	7
+21	2	2019-01-09 23:30:01.860195+08	3
+22	1	2019-01-09 23:31:24.143613+08	5
 \.
 
 
@@ -2637,21 +3230,79 @@ COPY public.apis_pointattribute (id, point, last_modified, attribute_id) FROM st
 --
 
 COPY public.apis_pointfield (id, name) FROM stdin;
-2	Joining field work
-3	Referrals
-5	Appointment secured
-7	Career presentation
-8	Case closed
-9	Sign up contract
-10	Millionnaire suit
-11	Update upline
-13	Personal coaching
+1	Millionnaire suit
+2	Be early on training
+3	FTF/Nesting/Booth
+4	Joining field work
+5	Referrals
+6	Calls/Email/Socmed
+7	Appointment secured
+8	Sales presentation
+9	Career presentation
+10	Case closed
+11	Sign up contract
+12	Update upline
+13	Servicing/Follow up
+14	Personal coaching
 15	Agency program
-12	Servicing/Follow up
-4	Calls/Email/Socmed
-6	Sales presentation
-1	FTF/Nesting/Booth
-14	Be early training
+\.
+
+
+--
+-- Data for Name: apis_pointlog; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_pointlog (id, "timestamp", point, attribute_id, point_type_id) FROM stdin;
+2	2018-12-20 08:09:11.078616+08	2	12	1
+3	2018-12-20 08:09:35.276231+08	1	3	1
+4	2018-12-23 23:03:19.44296+08	1	13	1
+5	2018-12-23 23:03:48.99087+08	2	12	1
+6	2018-12-23 23:03:51.316231+08	3	2	1
+7	2018-12-23 23:03:54.270449+08	5	15	1
+8	2018-12-23 23:03:55.795812+08	1	14	1
+9	2019-01-02 17:19:03.893106+08	3	2	1
+10	2019-01-03 12:24:19.798475+08	3	1	1
+11	2019-01-03 12:26:47.32158+08	6	1	1
+12	2019-01-04 12:24:07.550742+08	3	1	1
+13	2019-01-04 12:25:14.80427+08	2	12	1
+14	2019-01-04 12:27:56.878442+08	1	13	1
+15	2019-01-04 12:29:44.869792+08	3	9	1
+16	2019-01-04 12:30:04.766591+08	2	13	1
+17	2019-01-04 12:30:23.916883+08	3	13	1
+18	2019-01-04 12:40:33.733579+08	6	1	1
+19	2019-01-04 12:44:40.364577+08	4	13	1
+20	2019-01-04 12:52:30.568801+08	5	13	1
+21	2019-01-05 00:10:26.61917+08	2	3	1
+22	2019-01-05 00:10:29.321091+08	2	3	1
+23	2019-01-05 00:10:35.082924+08	1	4	1
+24	2019-01-05 00:18:49.566462+08	2	3	1
+25	2019-01-05 00:18:52.116108+08	1	5	1
+26	2019-01-05 00:20:57.147019+08	1	5	1
+27	2019-01-05 00:20:59.619066+08	2	5	1
+28	2019-01-05 00:21:25.221779+08	5	15	1
+29	2019-01-05 00:21:29.008222+08	3	2	1
+30	2019-01-05 00:21:31.177535+08	1	14	1
+31	2019-01-05 00:21:35.664643+08	1	13	1
+32	2019-01-05 00:21:37.849732+08	2	12	1
+33	2019-01-05 00:21:39.663444+08	3	1	1
+34	2019-01-05 00:21:42.44523+08	3	11	1
+35	2019-01-05 00:21:47.258385+08	3	9	1
+36	2019-01-05 00:22:20.829675+08	4	10	1
+37	2019-01-05 00:29:08.067664+08	2	7	1
+38	2019-01-05 15:15:47.379162+08	2	7	1
+39	2019-01-08 12:17:41.74762+08	2	7	1
+40	2019-01-09 23:30:01.766064+08	2	3	1
+41	2019-01-09 23:31:24.123159+08	1	5	1
+\.
+
+
+--
+-- Data for Name: apis_pointlogtype; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
+--
+
+COPY public.apis_pointlogtype (id, name) FROM stdin;
+2	Subtract
+1	Add
 \.
 
 
@@ -2660,9 +3311,12 @@ COPY public.apis_pointfield (id, name) FROM stdin;
 --
 
 COPY public.apis_post (id, "timestamp", contact_rel_id, post_type_id, posted_by_id) FROM stdin;
-8	2018-12-08 21:39:51.325369+08	\N	1	15
-9	2018-12-09 22:48:51.058992+08	\N	1	16
-10	2018-12-10 13:58:31.873943+08	\N	1	15
+1	2018-12-28 13:10:47.014283+08	\N	1	3
+2	2018-12-30 19:15:50.79947+08	\N	1	3
+3	2019-01-01 12:10:24.229847+08	\N	1	3
+4	2019-01-04 19:19:27.918558+08	\N	1	3
+5	2019-01-05 00:22:48.222332+08	\N	1	4
+6	2019-01-08 12:18:50.781618+08	\N	1	4
 \.
 
 
@@ -2671,11 +3325,20 @@ COPY public.apis_post (id, "timestamp", contact_rel_id, post_type_id, posted_by_
 --
 
 COPY public.apis_post_comments (id, post_id, comment_id) FROM stdin;
-5	8	6
-6	9	7
-7	9	8
-8	8	9
-9	8	10
+41	2	41
+42	2	42
+43	2	43
+44	2	44
+45	2	45
+46	2	46
+47	2	47
+48	1	48
+49	2	49
+50	2	50
+51	1	51
+52	1	52
+53	3	53
+54	3	54
 \.
 
 
@@ -2684,8 +3347,13 @@ COPY public.apis_post_comments (id, post_id, comment_id) FROM stdin;
 --
 
 COPY public.apis_post_likes (id, post_id, like_id) FROM stdin;
-43	8	43
-44	9	44
+60	1	60
+79	2	79
+83	2	83
+86	3	86
+87	4	87
+88	5	88
+45	1	45
 \.
 
 
@@ -2694,12 +3362,22 @@ COPY public.apis_post_likes (id, post_id, like_id) FROM stdin;
 --
 
 COPY public.apis_post_sales_rel (id, post_id, sales_id) FROM stdin;
-1	8	16
-2	8	17
-3	9	18
-4	9	19
-5	9	20
-6	10	21
+1	1	2
+2	2	3
+3	2	4
+4	2	5
+5	3	6
+6	4	7
+7	4	8
+8	4	9
+9	4	10
+10	4	11
+11	4	12
+12	4	13
+13	5	14
+14	5	15
+15	5	16
+16	6	17
 \.
 
 
@@ -2716,8 +3394,8 @@ COPY public.apis_post_users_tagged (id, post_id, profile_id) FROM stdin;
 --
 
 COPY public.apis_posttype (id, name) FROM stdin;
-1	sales closed
 2	joining field work
+1	sales closed
 \.
 
 
@@ -2725,10 +3403,10 @@ COPY public.apis_posttype (id, name) FROM stdin;
 -- Data for Name: apis_profile; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
-COPY public.apis_profile (id, name, profile_image, settings, agency_id, designation_id, group_id, upline_id, user_id, fcm_token) FROM stdin;
-16	Irfan Baktiar	users/16/man.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	2	2	\N	13	eUcV0BRXAvk:APA91bHzo7kLlBXohYpAhRgyMvBu166bkk8uVNrCvnLmuhWcS826lhz7srGZoRkyJdC2zt9atvEFKHYcb_UZ0iLhivSdm9j6_JSpDBR-aj1E9O9DWMO178KE_kyJhF3aTSnKyNHO9Dcx
-15	Aziz Ismail	users/15/man.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	1	1	\N	12	null
-17	Afif	users/17/baby.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	1	3	\N	\N	14	\N
+COPY public.apis_profile (id, name, profile_image, settings, fcm_token, agency_id, designation_id, group_id, upline_id, user_id) FROM stdin;
+4	khairuddin	users/4/baby.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	\N	1	3	\N	3	4
+3	zamri	users/3/baby.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	fJZ6x1j3Pi0:APA91bG6SCoLNoTgsr5JXzignCLE3FiQmS5cYzJfsK_nELg1GehBtRSfqqVaBoZzNWaOf803eGiWdi6b6MdUBf8QUVI_yj7xq-GW1MKmEu6S9LkcwkSE1CdbrwP2LCICQsDVeOeACK4g	1	2	2	2	3
+2	Ramlan	users/2/profile_image_2019-01-09T142402.0489740000.jpg	{"notifications": {"push_notification": {"mentions": true, "reminder": true, "activities": true, "direct_message": true}, "email_notification": true}, "social_net_acc": {"google": null, "dropbox": null, "facebook": null}}	\N	1	1	1	\N	2
 \.
 
 
@@ -2737,19 +3415,12 @@ COPY public.apis_profile (id, name, profile_image, settings, agency_id, designat
 --
 
 COPY public.apis_profile_contacts (id, profile_id, contact_id) FROM stdin;
-45	15	45
-47	15	47
-48	15	48
-49	15	49
-50	15	50
-51	16	51
-52	16	52
-53	16	53
-54	16	54
-56	16	56
-57	16	57
-58	16	58
-59	15	59
+1	2	1
+2	3	2
+3	4	3
+4	4	4
+5	3	5
+6	3	6
 \.
 
 
@@ -2758,6 +3429,15 @@ COPY public.apis_profile_contacts (id, profile_id, contact_id) FROM stdin;
 --
 
 COPY public.apis_profile_inbox (id, profile_id, inbox_id) FROM stdin;
+57	2	53
+58	3	54
+59	4	55
+60	4	56
+61	2	57
+50	2	48
+51	2	49
+52	3	48
+54	3	50
 \.
 
 
@@ -2766,6 +3446,29 @@ COPY public.apis_profile_inbox (id, profile_id, inbox_id) FROM stdin;
 --
 
 COPY public.apis_profile_notifications (id, profile_id, notification_id) FROM stdin;
+105	3	105
+106	3	106
+107	2	107
+108	3	108
+109	3	109
+110	2	110
+111	3	111
+112	2	112
+113	3	113
+114	3	114
+115	3	115
+116	3	116
+117	3	117
+118	3	118
+119	3	119
+120	2	120
+121	3	121
+122	3	122
+123	3	123
+124	3	124
+125	4	125
+126	2	126
+127	4	127
 \.
 
 
@@ -2774,20 +3477,16 @@ COPY public.apis_profile_notifications (id, profile_id, notification_id) FROM st
 --
 
 COPY public.apis_profile_points (id, profile_id, point_id) FROM stdin;
-1	15	1
-6	15	6
-8	15	8
-9	15	9
-14	15	14
-15	15	15
-16	15	16
-17	15	17
-18	16	18
-19	15	19
-20	15	20
-21	16	21
-22	16	22
-23	15	23
+1	2	1
+2	4	2
+3	3	3
+4	3	4
+5	3	5
+6	4	6
+7	2	7
+8	3	8
+9	4	9
+10	3	10
 \.
 
 
@@ -2796,22 +3495,22 @@ COPY public.apis_profile_points (id, profile_id, point_id) FROM stdin;
 --
 
 COPY public.apis_profile_sales (id, profile_id, sales_id) FROM stdin;
-1	15	1
-2	15	2
-3	15	3
-6	15	6
-7	15	7
-8	15	8
-9	15	9
-10	15	10
-11	15	11
-12	15	12
-16	15	16
-17	15	17
-18	16	18
-19	16	19
-20	16	20
-21	15	21
+2	3	2
+3	3	3
+4	3	4
+5	3	5
+6	3	6
+7	3	7
+8	3	8
+9	3	9
+10	3	10
+11	3	11
+12	3	12
+13	3	13
+14	4	14
+15	4	15
+16	4	16
+17	4	17
 \.
 
 
@@ -2820,24 +3519,11 @@ COPY public.apis_profile_sales (id, profile_id, sales_id) FROM stdin;
 --
 
 COPY public.apis_profile_schedules (id, profile_id, schedule_id) FROM stdin;
-20	15	21
-29	15	30
-30	15	31
-31	15	32
-32	15	33
-33	15	34
-35	15	36
-36	15	37
-42	16	43
-43	16	44
-44	15	45
-45	16	46
-46	16	47
-47	16	48
-48	16	49
-49	16	50
-50	16	51
-51	16	52
+1	2	1
+2	4	2
+3	3	3
+4	3	4
+5	4	5
 \.
 
 
@@ -2845,23 +3531,23 @@ COPY public.apis_profile_schedules (id, profile_id, schedule_id) FROM stdin;
 -- Data for Name: apis_sales; Type: TABLE DATA; Schema: public; Owner: irsyadmhdilham
 --
 
-COPY public.apis_sales (id, "timestamp", location, amount, commission, document_id, contact_id, sales_status_id, sales_type_id, surcharge_id, repeat_sales) FROM stdin;
-1	2018-11-26 08:17:59.832301+08	\N	100000.00	\N	\N	\N	Submitted	1	\N	f
-2	2018-11-26 08:20:31.899943+08	Kajang	28999.00	\N	\N	\N	Submitted	1	\N	t
-3	2018-11-26 10:35:32.866267+08	Shah Alam, Plaza Masalam	80000.00	\N	\N	\N	Submitted	2	\N	f
-6	2018-11-26 15:40:19.566789+08	Kajang	78987.00	3119.99	\N	\N	Submitted	2	\N	f
-7	2018-11-26 15:57:02.112928+08	Sepang	14300.00	564.85	\N	\N	Submitted	2	\N	t
-8	2018-11-28 14:12:55.402803+08	Putrajaya	75000.00	1950.00	\N	\N	Submitted	1	\N	f
-9	2018-11-28 14:15:44.240599+08	Kajang	6766.00	267.26	\N	\N	Submitted	2	\N	t
-10	2018-11-28 17:29:07.228802+08	Cyberjaya	19500.00	507.00	\N	\N	Submitted	1	\N	f
-11	2018-11-28 17:30:47.682363+08	Cyberjaya	19320.00	763.14	\N	\N	Submitted	2	\N	f
-12	2018-11-29 18:05:04.022296+08	JB	17666.00	459.32	\N	\N	Submitted	1	\N	f
-16	2018-12-08 21:39:51.199747+08	Pahang	12000.00	312.00	\N	\N	Submitted	1	\N	f
-17	2018-12-08 21:42:46.44175+08	KL	42300.00	1670.85	\N	\N	Submitted	2	\N	f
-18	2018-12-09 22:48:50.792067+08	KL	17000.00	419.90	\N	\N	Submitted	1	\N	f
-19	2018-12-09 23:04:26.554002+08	Damansara	200000.00	7380.00	\N	\N	Submitted	2	\N	f
-20	2018-12-09 23:10:04.853235+08	Kajang	15000.00	370.50	\N	\N	Submitted	1	\N	t
-21	2018-12-10 13:58:31.640832+08	Kl	12400.00	\N	\N	\N	Submitted	1	\N	f
+COPY public.apis_sales (id, "timestamp", location, amount, commission, document_id, repeat_sales, contact_id, sales_status_id, sales_type_id, surcharge_id) FROM stdin;
+2	2018-12-28 13:10:46.968921+08	KL	120000.00	\N	\N	f	\N	Submitted	1	\N
+3	2018-12-30 19:13:11.121102+08	KL	8000.00	\N	\N	f	\N	Submitted	4	\N
+4	2018-12-30 19:15:18.362697+08	KL	1000.00	\N	\N	f	\N	Submitted	1	\N
+5	2018-12-30 19:15:50.762203+08	JB	90.00	\N	\N	f	\N	Submitted	2	\N
+6	2019-01-01 12:10:23.941553+08	KL	1.00	\N	\N	f	\N	Submitted	2	\N
+7	2019-01-04 14:52:46.386619+08	KL	2000.00	\N	\N	f	\N	Submitted	2	\N
+8	2019-01-04 14:53:31.035253+08	KL	200.00	\N	\N	f	\N	Submitted	2	\N
+9	2019-01-04 14:56:55.938974+08	Kajang	100.00	\N	\N	f	\N	Submitted	1	\N
+10	2019-01-04 14:58:32.932885+08	JB	1000.00	\N	\N	f	\N	Submitted	2	\N
+11	2019-01-04 14:58:59.907114+08	Penang	15000.00	\N	\N	f	\N	Submitted	1	\N
+12	2019-01-04 19:18:37.782542+08	KL	10.00	\N	\N	f	\N	Submitted	1	\N
+13	2019-01-04 19:19:27.87916+08	KL	10.00	\N	\N	f	\N	Submitted	5	\N
+14	2019-01-05 00:17:10.894671+08	PJ	12000.00	\N	\N	f	\N	Submitted	1	\N
+15	2019-01-05 00:22:20.330216+08	\N	7500.00	\N	\N	f	\N	Submitted	2	\N
+16	2019-01-05 00:22:48.195767+08	\N	3000.00	\N	\N	f	\N	Submitted	5	\N
+17	2019-01-08 12:18:50.179579+08	bangi	12000.00	\N	\N	f	\N	Submitted	1	\N
 \.
 
 
@@ -2871,9 +3557,6 @@ COPY public.apis_sales (id, "timestamp", location, amount, commission, document_
 
 COPY public.apis_salesstatus (id, name) FROM stdin;
 1	Submitted
-2	Processed
-3	Disbursed
-4	Rejected
 \.
 
 
@@ -2884,10 +3567,10 @@ COPY public.apis_salesstatus (id, name) FROM stdin;
 COPY public.apis_salestype (id, name) FROM stdin;
 1	EPF
 2	Cash
-3	PRS
+3	Wasiat
 4	ASB
-5	Takaful
-6	Wasiat
+5	PRS
+6	Takaful
 \.
 
 
@@ -2896,24 +3579,11 @@ COPY public.apis_salestype (id, name) FROM stdin;
 --
 
 COPY public.apis_schedule (id, date, title, remark, location, created_on, last_modified, reminder, contact_id) FROM stdin;
-30	2018-11-21 14:48:00+08	Kamijo	Call bacn	Japan	2018-11-21 10:48:49.669682+08	2018-11-22 00:05:13.080448+08	\N	\N
-21	2018-12-20 17:08:00+08	Ahmad Albab	Call back sd	Kajang	2018-11-20 23:08:13.066982+08	2018-11-22 07:42:03.366864+08	\N	\N
-31	2018-12-19 14:00:00+08	Meet Dr Hisham	Buy dominos	Kajang	2018-11-30 09:25:06.797477+08	2018-11-30 09:25:06.797512+08	\N	\N
-32	2018-11-30 01:28:00+08	Hello world	\N	Kajang	2018-11-30 09:28:31.359332+08	2018-11-30 09:28:31.359364+08	\N	\N
-33	2018-11-30 13:30:00+08	Yellow brother	Meet	KL	2018-11-30 09:30:31.622613+08	2018-11-30 09:30:31.622643+08	\N	\N
-34	2018-12-22 13:31:00+08	Meeting meeting	Bring dominos	Shah Alam	2018-11-30 09:32:12.472464+08	2018-11-30 09:32:12.992198+08	\N	45
-36	2018-12-02 19:03:00+08	Meeting Hello world	\N	KL	2018-12-02 15:03:55.352195+08	2018-12-02 15:03:55.98089+08	\N	49
-37	2018-12-02 08:10:00+08	Brunch with micheal	Get espresso	Paradigm Mall KJ	2018-12-02 15:11:01.897575+08	2018-12-02 15:11:02.514058+08	\N	48
-43	2018-12-04 06:00:00+08	Asamara	\N	Pontian	2018-12-04 14:00:30.738607+08	2018-12-04 14:00:30.738639+08	\N	\N
-44	2018-12-04 06:03:00+08	Qasta	Meet	KL	2018-12-04 14:03:32.288852+08	2018-12-04 14:03:32.288885+08	\N	\N
-45	2018-12-09 17:50:00+08	Meeting with yunos	Bring dominos	Sg buloh	2018-12-09 13:51:09.049536+08	2018-12-09 13:51:11.828702+08	\N	47
-46	2018-12-12 15:55:00+08	Gym	\N	Damansara	2018-12-09 22:55:48.576817+08	2018-12-09 22:55:48.57685+08	\N	\N
-47	2018-12-14 14:59:00+08	Mr Razi	\N	Ampang	2018-12-09 22:59:57.377627+08	2018-12-09 22:59:57.377657+08	\N	\N
-48	2018-12-18 01:30:00+08	Karen	None	Kajang	2018-12-09 23:15:35.008755+08	2018-12-09 23:40:52.742148+08	\N	57
-49	2018-12-16 16:04:00+08	Man	\N	Bangi	2018-12-10 00:04:29.298771+08	2018-12-10 00:04:29.298801+08	\N	\N
-50	2018-12-13 16:05:00+08	Mary Ann	Just try out	Kelana Jaya	2018-12-10 00:06:22.185521+08	2018-12-10 00:06:22.185551+08	\N	\N
-51	2018-12-11 14:30:00+08	Mr chu	\N	Kajang	2018-12-10 12:57:10.096989+08	2018-12-10 12:57:10.097019+08	\N	\N
-52	2018-12-12 08:44:00+08	Sabri	White coffee	Damansara	2018-12-10 14:44:21.402221+08	2018-12-10 14:44:21.402251+08	\N	\N
+1	2019-01-05 16:28:00+08	mary	\N	DP	2019-01-05 00:29:08.257157+08	2019-01-05 00:29:08.257191+08	\N	\N
+2	2019-01-05 06:27:00+08	Hello world	\N	KL	2019-01-05 14:27:11.963607+08	2019-01-05 14:27:11.963638+08	\N	\N
+3	2019-01-06 20:15:00+08	kamal	\N	shah alam	2019-01-05 15:15:47.940724+08	2019-01-05 15:15:47.940771+08	\N	\N
+4	2019-01-06 10:16:00+08	ann	\N	ampang	2019-01-05 15:16:53.685065+08	2019-01-05 15:16:53.685096+08	\N	\N
+5	2019-01-10 16:17:00+08	arif	\N	kajang kopitiam	2019-01-08 12:17:48.357875+08	2019-01-08 12:17:48.357909+08	\N	\N
 \.
 
 
@@ -2922,8 +3592,8 @@ COPY public.apis_schedule (id, date, title, remark, location, created_on, last_m
 --
 
 COPY public.apis_surcharge (id, name) FROM stdin;
-1	6.5
 2	5
+3	6.5
 \.
 
 
@@ -2976,106 +3646,130 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 26	Can change agency	7	change_agency
 27	Can delete agency	7	delete_agency
 28	Can view agency	7	view_agency
-29	Can add applause	8	add_applause
-30	Can change applause	8	change_applause
-31	Can delete applause	8	delete_applause
-32	Can view applause	8	view_applause
-33	Can add comment	9	add_comment
-34	Can change comment	9	change_comment
-35	Can delete comment	9	delete_comment
-36	Can view comment	9	view_comment
-37	Can add company	10	add_company
-38	Can change company	10	change_company
-39	Can delete company	10	delete_company
-40	Can view company	10	view_company
-41	Can add contact	11	add_contact
-42	Can change contact	11	change_contact
-43	Can delete contact	11	delete_contact
-44	Can view contact	11	view_contact
-45	Can add contact status	12	add_contactstatus
-46	Can change contact status	12	change_contactstatus
-47	Can delete contact status	12	delete_contactstatus
-48	Can view contact status	12	view_contactstatus
-49	Can add contact type	13	add_contacttype
-50	Can change contact type	13	change_contacttype
-51	Can delete contact type	13	delete_contacttype
-52	Can view contact type	13	view_contacttype
-53	Can add conversation	14	add_conversation
-54	Can change conversation	14	change_conversation
-55	Can delete conversation	14	delete_conversation
-56	Can view conversation	14	view_conversation
-57	Can add designation	15	add_designation
-58	Can change designation	15	change_designation
-59	Can delete designation	15	delete_designation
-60	Can view designation	15	view_designation
-61	Can add group	16	add_group
-62	Can change group	16	change_group
-63	Can delete group	16	delete_group
-64	Can view group	16	view_group
-65	Can add inbox	17	add_inbox
-66	Can change inbox	17	change_inbox
-67	Can delete inbox	17	delete_inbox
-68	Can view inbox	17	view_inbox
-69	Can add industry	18	add_industry
-70	Can change industry	18	change_industry
-71	Can delete industry	18	delete_industry
-72	Can view industry	18	view_industry
-73	Can add notification	19	add_notification
-74	Can change notification	19	change_notification
-75	Can delete notification	19	delete_notification
-76	Can view notification	19	view_notification
-77	Can add notification type	20	add_notificationtype
-78	Can change notification type	20	change_notificationtype
-79	Can delete notification type	20	delete_notificationtype
-80	Can view notification type	20	view_notificationtype
-81	Can add point	21	add_point
-82	Can change point	21	change_point
-83	Can delete point	21	delete_point
-84	Can view point	21	view_point
-85	Can add post	22	add_post
-86	Can change post	22	change_post
-87	Can delete post	22	delete_post
-88	Can view post	22	view_post
-89	Can add post type	23	add_posttype
-90	Can change post type	23	change_posttype
-91	Can delete post type	23	delete_posttype
-92	Can view post type	23	view_posttype
-93	Can add profile	24	add_profile
-94	Can change profile	24	change_profile
-95	Can delete profile	24	delete_profile
-96	Can view profile	24	view_profile
-97	Can add sales	25	add_sales
-98	Can change sales	25	change_sales
-99	Can delete sales	25	delete_sales
-100	Can view sales	25	view_sales
-101	Can add sales status	26	add_salesstatus
-102	Can change sales status	26	change_salesstatus
-103	Can delete sales status	26	delete_salesstatus
-104	Can view sales status	26	view_salesstatus
-105	Can add sales type	27	add_salestype
-106	Can change sales type	27	change_salestype
-107	Can delete sales type	27	delete_salestype
-108	Can view sales type	27	view_salestype
-109	Can add schedule	28	add_schedule
-110	Can change schedule	28	change_schedule
-111	Can delete schedule	28	delete_schedule
-112	Can view schedule	28	view_schedule
-113	Can add surcharge	29	add_surcharge
-114	Can change surcharge	29	change_surcharge
-115	Can delete surcharge	29	delete_surcharge
-116	Can view surcharge	29	view_surcharge
-117	Can add point attribute	30	add_pointattribute
-118	Can change point attribute	30	change_pointattribute
-119	Can delete point attribute	30	delete_pointattribute
-120	Can view point attribute	30	view_pointattribute
-121	Can add point field	31	add_pointfield
-122	Can change point field	31	change_pointfield
-123	Can delete point field	31	delete_pointfield
-124	Can view point field	31	view_pointfield
-125	Can add like	32	add_like
-126	Can change like	32	change_like
-127	Can delete like	32	delete_like
-128	Can view like	32	view_like
+29	Can add chat	8	add_chat
+30	Can change chat	8	change_chat
+31	Can delete chat	8	delete_chat
+32	Can view chat	8	view_chat
+33	Can add chat message	9	add_chatmessage
+34	Can change chat message	9	change_chatmessage
+35	Can delete chat message	9	delete_chatmessage
+36	Can view chat message	9	view_chatmessage
+37	Can add chat type	10	add_chattype
+38	Can change chat type	10	change_chattype
+39	Can delete chat type	10	delete_chattype
+40	Can view chat type	10	view_chattype
+41	Can add comment	11	add_comment
+42	Can change comment	11	change_comment
+43	Can delete comment	11	delete_comment
+44	Can view comment	11	view_comment
+45	Can add company	12	add_company
+46	Can change company	12	change_company
+47	Can delete company	12	delete_company
+48	Can view company	12	view_company
+49	Can add contact	13	add_contact
+50	Can change contact	13	change_contact
+51	Can delete contact	13	delete_contact
+52	Can view contact	13	view_contact
+53	Can add contact status	14	add_contactstatus
+54	Can change contact status	14	change_contactstatus
+55	Can delete contact status	14	delete_contactstatus
+56	Can view contact status	14	view_contactstatus
+57	Can add contact type	15	add_contacttype
+58	Can change contact type	15	change_contacttype
+59	Can delete contact type	15	delete_contacttype
+60	Can view contact type	15	view_contacttype
+61	Can add designation	16	add_designation
+62	Can change designation	16	change_designation
+63	Can delete designation	16	delete_designation
+64	Can view designation	16	view_designation
+65	Can add group	17	add_group
+66	Can change group	17	change_group
+67	Can delete group	17	delete_group
+68	Can view group	17	view_group
+69	Can add inbox	18	add_inbox
+70	Can change inbox	18	change_inbox
+71	Can delete inbox	18	delete_inbox
+72	Can view inbox	18	view_inbox
+73	Can add industry	19	add_industry
+74	Can change industry	19	change_industry
+75	Can delete industry	19	delete_industry
+76	Can view industry	19	view_industry
+77	Can add like	20	add_like
+78	Can change like	20	change_like
+79	Can delete like	20	delete_like
+80	Can view like	20	view_like
+81	Can add notification	21	add_notification
+82	Can change notification	21	change_notification
+83	Can delete notification	21	delete_notification
+84	Can view notification	21	view_notification
+85	Can add notification type	22	add_notificationtype
+86	Can change notification type	22	change_notificationtype
+87	Can delete notification type	22	delete_notificationtype
+88	Can view notification type	22	view_notificationtype
+89	Can add point	23	add_point
+90	Can change point	23	change_point
+91	Can delete point	23	delete_point
+92	Can view point	23	view_point
+93	Can add point attribute	24	add_pointattribute
+94	Can change point attribute	24	change_pointattribute
+95	Can delete point attribute	24	delete_pointattribute
+96	Can view point attribute	24	view_pointattribute
+97	Can add point field	25	add_pointfield
+98	Can change point field	25	change_pointfield
+99	Can delete point field	25	delete_pointfield
+100	Can view point field	25	view_pointfield
+101	Can add post	26	add_post
+102	Can change post	26	change_post
+103	Can delete post	26	delete_post
+104	Can view post	26	view_post
+105	Can add post type	27	add_posttype
+106	Can change post type	27	change_posttype
+107	Can delete post type	27	delete_posttype
+108	Can view post type	27	view_posttype
+109	Can add profile	28	add_profile
+110	Can change profile	28	change_profile
+111	Can delete profile	28	delete_profile
+112	Can view profile	28	view_profile
+113	Can add sales	29	add_sales
+114	Can change sales	29	change_sales
+115	Can delete sales	29	delete_sales
+116	Can view sales	29	view_sales
+117	Can add sales status	30	add_salesstatus
+118	Can change sales status	30	change_salesstatus
+119	Can delete sales status	30	delete_salesstatus
+120	Can view sales status	30	view_salesstatus
+121	Can add sales type	31	add_salestype
+122	Can change sales type	31	change_salestype
+123	Can delete sales type	31	delete_salestype
+124	Can view sales type	31	view_salestype
+125	Can add schedule	32	add_schedule
+126	Can change schedule	32	change_schedule
+127	Can delete schedule	32	delete_schedule
+128	Can view schedule	32	view_schedule
+129	Can add surcharge	33	add_surcharge
+130	Can change surcharge	33	change_surcharge
+131	Can delete surcharge	33	delete_surcharge
+132	Can view surcharge	33	view_surcharge
+133	Can add point log	34	add_pointlog
+134	Can change point log	34	change_pointlog
+135	Can delete point log	34	delete_pointlog
+136	Can view point log	34	view_pointlog
+137	Can add point log type	35	add_pointlogtype
+138	Can change point log type	35	change_pointlogtype
+139	Can delete point log type	35	delete_pointlogtype
+140	Can view point log type	35	view_pointlogtype
+141	Can add group chat	36	add_groupchat
+142	Can change group chat	36	change_groupchat
+143	Can delete group chat	36	delete_groupchat
+144	Can view group chat	36	view_groupchat
+145	Can add group chat role	37	add_groupchatrole
+146	Can change group chat role	37	change_groupchatrole
+147	Can delete group chat role	37	delete_groupchatrole
+148	Can view group chat role	37	view_groupchatrole
+149	Can add google api	38	add_googleapi
+150	Can change google api	38	change_googleapi
+151	Can delete google api	38	delete_googleapi
+152	Can view google api	38	view_googleapi
 \.
 
 
@@ -3084,243 +3778,501 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
-1	2018-11-13 23:59:27.271381+08	1	Public Mutual	1	[{"added": {}}]	10	1
-2	2018-11-13 23:59:31.978429+08	2	CWA	1	[{"added": {}}]	10	1
-3	2018-11-13 23:59:46.375683+08	1	None	1	[{"added": {}}]	12	1
-4	2018-11-13 23:59:50.607873+08	2	Called	1	[{"added": {}}]	12	1
-5	2018-11-13 23:59:58.986866+08	3	Appointment secured	1	[{"added": {}}]	12	1
-6	2018-11-14 00:00:02.664827+08	4	Rejected	1	[{"added": {}}]	12	1
-7	2018-11-14 00:00:05.919905+08	5	Client	1	[{"added": {}}]	12	1
-8	2018-11-14 00:00:18.575275+08	6	Customer	1	[{"added": {}}]	12	1
-9	2018-11-14 00:01:02.234046+08	7	Other	1	[{"added": {}}]	12	1
-10	2018-11-14 00:01:18.394015+08	1	Referral	1	[{"added": {}}]	13	1
-11	2018-11-14 00:01:22.081288+08	2	Face to face	1	[{"added": {}}]	13	1
-12	2018-11-14 00:01:25.408429+08	3	Nesting	1	[{"added": {}}]	13	1
-13	2018-11-14 00:01:28.66806+08	4	booth	1	[{"added": {}}]	13	1
-14	2018-11-14 00:01:49.273292+08	1	Group Agency Manager	1	[{"added": {}}]	15	1
-15	2018-11-14 00:01:51.860002+08	2	Agency Manager	1	[{"added": {}}]	15	1
-16	2018-11-14 00:01:54.408685+08	3	Agency Supervisor	1	[{"added": {}}]	15	1
-17	2018-11-14 00:01:57.439713+08	4	Unit Trust Consultant	1	[{"added": {}}]	15	1
-18	2018-11-14 00:02:12.899319+08	1	Unit trust investment	1	[{"added": {}}]	18	1
-19	2018-11-14 00:02:32.823854+08	1	Joining field work	1	[{"added": {}}]	20	1
-20	2018-11-14 00:02:40.694652+08	2	Sales closed	1	[{"added": {}}]	20	1
-21	2018-11-14 00:03:05.174717+08	3	Comment	1	[{"added": {}}]	20	1
-22	2018-11-14 00:03:08.307206+08	4	Direct message	1	[{"added": {}}]	20	1
-23	2018-11-14 00:03:12.352543+08	5	Applause	1	[{"added": {}}]	20	1
-24	2018-11-14 00:03:49.673325+08	1	Sales closed	1	[{"added": {}}]	23	1
-25	2018-11-14 00:03:53.728426+08	2	Joining field work	1	[{"added": {}}]	23	1
-26	2018-11-14 00:04:31.821496+08	1	Submitted	1	[{"added": {}}]	26	1
-27	2018-11-14 00:04:37.218504+08	2	Processed	1	[{"added": {}}]	26	1
-28	2018-11-14 00:04:43.170697+08	3	Disbursed	1	[{"added": {}}]	26	1
-29	2018-11-14 00:04:46.689593+08	4	Rejected	1	[{"added": {}}]	26	1
-30	2018-11-14 00:05:03.075338+08	1	EPF	1	[{"added": {}}]	27	1
-31	2018-11-14 00:05:06.520083+08	2	Cash	1	[{"added": {}}]	27	1
-32	2018-11-14 00:05:10.508154+08	3	PRS	1	[{"added": {}}]	27	1
-33	2018-11-14 00:05:14.480851+08	4	ASB	1	[{"added": {}}]	27	1
-34	2018-11-14 00:05:17.706261+08	5	Takaful	1	[{"added": {}}]	27	1
-35	2018-11-14 00:05:32.825575+08	6	Wasiat	1	[{"added": {}}]	27	1
-36	2018-11-14 00:05:55.462715+08	1	6.5	1	[{"added": {}}]	29	1
-37	2018-11-14 00:05:58.830613+08	2	5.0	1	[{"added": {}}]	29	1
-38	2018-11-14 07:54:00.97494+08	4	hello	3		6	1
-39	2018-11-14 17:19:27.642699+08	5	hello@malaon.com	3		6	1
-40	2018-11-14 17:19:27.699759+08	3	hello@world.com	3		6	1
-41	2018-11-14 17:19:27.702227+08	2	malaon@samdol.com	3		6	1
-42	2018-11-14 18:53:41.863159+08	6	irsyadmhdilham@squalify.com	3		6	1
-43	2018-11-14 18:55:03.14874+08	7	irsyadmhdilham@squalify.com	3		6	1
-44	2018-11-14 18:55:53.030774+08	8	irsyadmhdilham@squalify.com	3		6	1
-45	2018-11-14 18:56:45.918794+08	9	irsyadmhdilham@squalify.com	3		6	1
-46	2018-11-14 19:56:45.966707+08	10	irsyadmhdilham@squalify.com	3		6	1
-47	2018-11-14 19:58:49.401288+08	11	irsyadmhdilham@squalify.com	3		6	1
-48	2018-11-15 12:05:07.537385+08	12	irsyadmhdilham@squalify.com	2	[{"changed": {"fields": ["first_name"]}}]	6	1
-49	2018-11-15 18:51:54.839488+08	1	irsyadmhdilham@squalify.com	2	[{"changed": {"fields": ["members"]}}]	16	1
-50	2018-11-19 17:36:59.786534+08	4	Booth	2	[{"changed": {"fields": ["contact_type"]}}]	13	1
-51	2018-11-20 22:33:31.009873+08	15	pk 15: Irsyad Mhd Ilham	2	[{"changed": {"fields": ["schedules"]}}]	24	1
-52	2018-11-20 22:33:50.922788+08	14	Akram	3		28	1
-53	2018-11-20 22:33:50.92611+08	13	Akram	3		28	1
-54	2018-11-20 22:33:50.928725+08	12	Akram	3		28	1
-55	2018-11-20 22:33:50.932086+08	11	Akram	3		28	1
-56	2018-11-20 22:33:50.934348+08	10	Akram	3		28	1
-57	2018-11-20 22:33:50.93635+08	9	Akram	3		28	1
-58	2018-11-20 22:33:50.938251+08	8	Hello	3		28	1
-59	2018-11-20 22:33:50.939982+08	7	Hello	3		28	1
-60	2018-11-20 22:33:50.941695+08	6	Hello	3		28	1
-61	2018-11-20 22:33:50.943363+08	5	bangang	3		28	1
-62	2018-11-20 22:33:50.945074+08	4	sds	3		28	1
-63	2018-11-20 22:33:50.947808+08	3	Meeting	3		28	1
-64	2018-11-20 22:33:50.950259+08	2	Appointment with Mr Irsyad	3		28	1
-65	2018-11-20 22:51:03.962036+08	15	pk 15: Irsyad Mhd Ilham	2	[{"changed": {"fields": ["schedules"]}}]	24	1
-66	2018-11-20 22:51:20.5801+08	20	sdsd	3		28	1
-67	2018-11-20 22:51:20.583654+08	19	Akram	3		28	1
-68	2018-11-20 22:51:20.585922+08	18	Akram	3		28	1
-69	2018-11-20 22:51:20.589186+08	17	Akram	3		28	1
-70	2018-11-20 22:51:20.591451+08	16	Akram	3		28	1
-71	2018-11-20 22:51:20.593441+08	15	Akram	3		28	1
-72	2018-11-22 12:04:48.210132+08	1	FTF/Booth/Nesting	1	[{"added": {}}]	31	1
-73	2018-11-22 12:05:10.226765+08	2	Joining field work	1	[{"added": {}}]	31	1
-74	2018-11-22 12:05:24.133657+08	3	Referrals	1	[{"added": {}}]	31	1
-75	2018-11-22 12:05:50.340264+08	4	Calls/Email & Socmed	1	[{"added": {}}]	31	1
-76	2018-11-22 12:05:58.429638+08	5	Appointment secured	1	[{"added": {}}]	31	1
-77	2018-11-22 12:06:05.78893+08	6	Sales presentation	1	[{"added": {}}]	31	1
-78	2018-11-22 12:06:13.357543+08	7	Career presentation	1	[{"added": {}}]	31	1
-79	2018-11-22 12:06:20.092723+08	8	Case closed	1	[{"added": {}}]	31	1
-80	2018-11-22 12:06:29.297855+08	9	Sign up contract	1	[{"added": {}}]	31	1
-81	2018-11-22 12:06:46.100837+08	10	Millionnaire suit	1	[{"added": {}}]	31	1
-82	2018-11-22 12:06:51.074146+08	11	Update upline	1	[{"added": {}}]	31	1
-83	2018-11-22 12:07:03.808189+08	12	Servicing/follow up	1	[{"added": {}}]	31	1
-84	2018-11-22 12:07:12.082452+08	13	Personal coaching	1	[{"added": {}}]	31	1
-85	2018-11-22 12:07:22.521701+08	14	Be early on training	1	[{"added": {}}]	31	1
-86	2018-11-22 12:07:30.237566+08	15	Agency program	1	[{"added": {}}]	31	1
-87	2018-11-22 12:07:44.541669+08	12	Servicing/Follow up	2	[{"changed": {"fields": ["name"]}}]	31	1
-88	2018-11-23 11:12:20.532822+08	4	Calls/Email/Socmed	2	[{"changed": {"fields": ["name"]}}]	31	1
-89	2018-11-23 11:12:40.341811+08	6	Sales presentations	2	[{"changed": {"fields": ["name"]}}]	31	1
-90	2018-11-23 11:13:02.77926+08	6	Sales presentation	2	[{"changed": {"fields": ["name"]}}]	31	1
-91	2018-11-23 11:50:52.613649+08	44	Irsyad Mhd Ilham	3		11	1
-92	2018-11-23 11:50:52.617653+08	43	Irsyad	3		11	1
-93	2018-11-23 11:50:52.621549+08	42	Irsyad	3		11	1
-94	2018-11-23 11:50:52.624073+08	41	Irsyad	3		11	1
-95	2018-11-23 11:50:52.626087+08	40	Irsyad	3		11	1
-96	2018-11-23 11:50:52.62814+08	39	Irsyad Mhd Ilham	3		11	1
-97	2018-11-23 11:50:52.678979+08	38	Irsyad	3		11	1
-98	2018-11-23 11:50:52.681391+08	37	Irsyad	3		11	1
-99	2018-11-23 11:50:52.683912+08	36	Irsyad	3		11	1
-100	2018-11-23 11:50:52.685892+08	35	Irsyad	3		11	1
-101	2018-11-23 11:50:52.689443+08	34	Irsyad	3		11	1
-102	2018-11-23 11:50:52.691715+08	33	Irsyad	3		11	1
-103	2018-11-23 11:50:52.693563+08	32	Irsyad	3		11	1
-104	2018-11-23 11:50:52.695494+08	31	Irsyad	3		11	1
-105	2018-11-23 11:50:52.697316+08	30	Irsyad	3		11	1
-106	2018-11-23 11:50:52.699351+08	29	Irsyad	3		11	1
-107	2018-11-23 11:50:52.701976+08	28	sdasdsad	3		11	1
-108	2018-11-23 11:50:52.704145+08	27	Oqasdasd	3		11	1
-109	2018-11-23 11:50:52.705888+08	26	Irsyad	3		11	1
-110	2018-11-23 11:50:52.707956+08	25	Irsyad	3		11	1
-111	2018-11-23 11:50:52.71277+08	24	Irsyad	3		11	1
-112	2018-11-23 11:50:52.714968+08	23	Irsyad	3		11	1
-113	2018-11-23 11:50:52.717875+08	22	Irsyad	3		11	1
-114	2018-11-23 11:50:52.719902+08	21	Irsyad	3		11	1
-115	2018-11-23 11:50:52.722569+08	20	Irsyad	3		11	1
-116	2018-11-23 11:50:52.726022+08	19	Iyaas	3		11	1
-117	2018-11-23 11:50:52.728016+08	18	Irsyad	3		11	1
-118	2018-11-23 11:50:52.729923+08	17	Irsyad	3		11	1
-119	2018-11-23 11:50:52.733171+08	16	Irsyad	3		11	1
-120	2018-11-23 11:50:52.735201+08	15	Irsyad	3		11	1
-121	2018-11-23 11:50:52.737247+08	14	Irsyad	3		11	1
-122	2018-11-23 11:50:52.739016+08	13	Irsyad	3		11	1
-123	2018-11-23 11:50:52.742429+08	12	Irsyad	3		11	1
-124	2018-11-23 11:50:52.744401+08	11	Irsyad	3		11	1
-125	2018-11-23 11:50:52.746182+08	10	Irsyad	3		11	1
-126	2018-11-23 11:50:52.750317+08	9	Irsyad	3		11	1
-127	2018-11-23 11:50:52.752911+08	8	Irsyad	3		11	1
-128	2018-11-23 11:50:52.754847+08	7	sdsd	3		11	1
-129	2018-11-23 11:50:52.757172+08	6	Irsyad	3		11	1
-130	2018-11-23 11:50:52.759717+08	5	Irsyad	3		11	1
-131	2018-11-23 11:50:52.761693+08	4	hello	3		11	1
-132	2018-11-23 11:50:52.764031+08	3	Mhd Ilham Mahujan	3		11	1
-133	2018-11-23 11:50:52.767058+08	2	Ihsan Mhd Ilham	3		11	1
-134	2018-11-23 11:50:52.769031+08	1	Iqbal	3		11	1
-135	2018-11-23 11:52:21.404456+08	29	Irsyad again	3		28	1
-136	2018-11-23 11:52:21.408137+08	28	Akmal Adham	3		28	1
-137	2018-11-23 11:52:21.410343+08	27	Awang	3		28	1
-138	2018-11-23 11:52:21.412453+08	26	Irsy	3		28	1
-139	2018-11-23 11:52:21.414358+08	25	Helllo	3		28	1
-140	2018-11-23 11:52:21.416234+08	24	Irsyad	3		28	1
-141	2018-11-23 11:52:21.418153+08	23	Syafiq	3		28	1
-142	2018-11-23 11:52:21.420399+08	22	Yazed	3		28	1
-143	2018-11-23 16:20:21.462337+08	1	2018-11-23	2	[{"changed": {"fields": ["attributes", "logs"]}}]	21	1
-144	2018-11-23 18:14:40.980162+08	1	FTF/Nesting/Booth	2	[{"changed": {"fields": ["name"]}}]	31	1
-145	2018-11-23 18:16:53.757943+08	3	2018-11-23 10:16:01.623315+00:00: FTF/Nesting/Booth	3		30	1
-146	2018-11-23 18:16:53.765523+08	2	2018-11-23 10:15:03.251359+00:00: FTF/Nesting/Booth	3		30	1
-147	2018-11-23 18:29:16.664628+08	7	2018-11-23 10:28:34.541075+00:00: Joining field work	3		30	1
-148	2018-11-23 18:46:28.656818+08	10	2018-11-23 10:45:59.152981+00:00: Appointment secured	3		30	1
-149	2018-11-23 18:49:57.988148+08	12	2018-11-23 10:49:44.515476+00:00: Sign up contract	3		30	1
-150	2018-11-23 22:53:22.421362+08	14	Be early training	2	[{"changed": {"fields": ["name"]}}]	31	1
-151	2018-11-23 22:55:15.474454+08	16	2018-11-23 14:54:10.116115+00:00: Be early training	3		30	1
-152	2018-11-23 23:02:37.325817+08	18	2018-11-23 15:01:59.828051+00:00: Personal coaching	3		30	1
-153	2018-11-23 23:02:47.753123+08	17	2018-11-23 15:01:29.228355+00:00: Personal coaching	3		30	1
-154	2018-11-23 23:05:19.990204+08	19	2018-11-23 15:04:07.402698+00:00: Personal coaching	3		30	1
-155	2018-11-23 23:05:59.724178+08	21	2018-11-23 15:05:46.382609+00:00: Millionnaire suit	3		30	1
-156	2018-11-23 23:05:59.72834+08	20	2018-11-23 15:05:42.280206+00:00: Millionnaire suit	3		30	1
-157	2018-11-24 10:19:13.955542+08	26	2018-11-24 02:17:05.538928+00:00: Joining field work	3		30	1
-158	2018-11-24 10:19:14.078365+08	25	2018-11-24 02:16:47.900183+00:00: FTF/Nesting/Booth	3		30	1
-159	2018-11-24 10:19:34.078771+08	2	2018-11-24	3		21	1
-160	2018-11-24 10:21:08.312668+08	27	2018-11-24 02:20:27.799380+00:00: FTF/Nesting/Booth	3		30	1
-161	2018-11-24 10:21:20.886415+08	3	2018-11-24	3		21	1
-162	2018-11-24 14:51:57.33519+08	36	2018-11-24 05:55:05.357272+00:00: Update upline	3		30	1
-163	2018-11-24 14:51:57.368319+08	35	2018-11-24 04:28:13.617991+00:00: Millionnaire suit	3		30	1
-164	2018-11-24 14:51:57.370821+08	34	2018-11-24 04:02:21.085658+00:00: Sign up contract	3		30	1
-165	2018-11-24 14:51:57.372985+08	33	2018-11-24 04:02:16.932034+00:00: Career presentation	3		30	1
-166	2018-11-24 14:51:57.375339+08	32	2018-11-24 04:02:18.350848+00:00: Case closed	3		30	1
-167	2018-11-24 14:51:57.377277+08	31	2018-11-24 02:27:21.040466+00:00: Appointment secured	3		30	1
-168	2018-11-24 14:51:57.379171+08	30	2018-11-24 02:27:19.572990+00:00: Referrals	3		30	1
-169	2018-11-24 14:51:57.381018+08	29	2018-11-24 02:27:18.045030+00:00: Joining field work	3		30	1
-170	2018-11-24 14:51:57.382789+08	28	2018-11-24 02:26:30.127530+00:00: FTF/Nesting/Booth	3		30	1
-171	2018-11-24 14:52:15.180017+08	4	2018-11-24	3		21	1
-172	2018-11-24 14:57:03.540835+08	37	2018-11-24 06:56:19.310152+00:00: FTF/Nesting/Booth	3		30	1
-173	2018-11-24 15:14:47.189791+08	38	2018-11-24 07:03:48.687045+00:00: FTF/Nesting/Booth	3		30	1
-174	2018-11-24 15:14:53.000272+08	5	2018-11-24	3		21	1
-175	2018-11-25 11:08:40.176422+08	6	2018-11-24	2	[{"changed": {"fields": ["logs"]}}]	21	1
-176	2018-11-25 11:09:29.423988+08	6	2018-11-24	2	[]	21	1
-177	2018-11-25 11:11:18.471407+08	6	2018-11-24	2	[{"changed": {"fields": ["logs"]}}]	21	1
-178	2018-11-25 11:26:47.496808+08	7	2018-11-25	3		21	1
-179	2018-11-25 11:27:04.44559+08	47	2018-11-25 03:23:18.621195+00:00: Joining field work	3		30	1
-180	2018-11-25 11:27:04.451419+08	46	2018-11-25 03:21:42.558026+00:00: Referrals	3		30	1
-181	2018-11-25 11:38:30.285382+08	8	2018-11-25	2	[{"changed": {"fields": ["logs"]}}]	21	1
-182	2018-11-27 09:40:16.614727+08	10	2018-11-27	3		21	1
-183	2018-11-27 09:40:30.335628+08	60	2018-11-27 01:36:32.585424+00:00: Joining field work	3		30	1
-184	2018-11-27 09:45:41.727638+08	61	2018-11-27 01:44:05.835711+00:00: Joining field work	3		30	1
-185	2018-11-27 09:45:52.041528+08	11	2018-11-27	3		21	1
-186	2018-11-27 09:47:17.255861+08	12	2018-11-27	3		21	1
-187	2018-11-27 09:47:24.99764+08	62	2018-11-27 01:46:05.509732+00:00: Joining field work	3		30	1
-188	2018-11-27 10:06:59.919414+08	63	2018-11-27 01:55:40.263435+00:00: Case closed	3		30	1
-189	2018-11-27 10:07:07.472688+08	13	2018-11-27	3		21	1
-190	2018-11-27 11:22:45.931225+08	1	sales closed	2	[{"changed": {"fields": ["name"]}}]	23	1
-191	2018-11-27 11:22:52.430999+08	2	joining field work	2	[{"changed": {"fields": ["name"]}}]	23	1
-192	2018-11-29 08:50:24.572321+08	1	2018-11-29 00:49:45.992065+00:00	3		9	1
-193	2018-11-30 08:25:00.894422+08	5	Table to table	1	[{"added": {}}]	13	1
-194	2018-12-02 14:21:21.90592+08	35	Appointment secured bro	3		28	1
-195	2018-12-03 15:55:12.297059+08	13	shahboy@vve.com	1	[{"added": {}}]	6	1
-196	2018-12-03 15:56:08.011016+08	13	irfan@vve.com	2	[{"changed": {"fields": ["email"]}}]	6	1
-197	2018-12-03 15:57:14.602532+08	16	pk 16: Irfan Bakti	1	[{"added": {}}]	24	1
-198	2018-12-03 17:03:11.860091+08	2	Irfan Bakti	1	[{"added": {}}]	16	1
-199	2018-12-03 17:03:19.99999+08	1	Irsyad Mhd Ilham	2	[{"changed": {"fields": ["members"]}}]	16	1
-200	2018-12-03 17:03:33.970996+08	1	Vision Victory Empire	2	[{"changed": {"fields": ["members"]}}]	7	1
-201	2018-12-03 17:07:59.023339+08	16	16: Vision Victory Empire Irfan Bakti	2	[{"changed": {"fields": ["group"]}}]	24	1
-202	2018-12-03 17:11:26.359053+08	16	16: Vision Victory Empire Irfan Bakti	2	[{"changed": {"fields": ["group"]}}]	24	1
-203	2018-12-03 17:12:59.914429+08	16	16: Vision Victory Empire Irfan Bakti	2	[{"changed": {"fields": ["group"]}}]	24	1
-204	2018-12-04 17:15:07.692872+08	14	afif@vve.com	1	[{"added": {}}]	6	1
-205	2018-12-04 17:16:08.768932+08	17	17: Vision Victory Empire Afif	1	[{"added": {}}]	24	1
-206	2018-12-04 17:17:05.713399+08	2	Irfan Baktiar	2	[{"changed": {"fields": ["members"]}}]	16	1
-207	2018-12-04 17:17:27.88413+08	1	Vision Victory Empire	2	[{"changed": {"fields": ["members"]}}]	7	1
-208	2018-12-04 17:33:06.960795+08	1	Irsyad Mhd Ilham	2	[{"changed": {"fields": ["members"]}}]	16	1
-209	2018-12-04 17:37:49.648258+08	1	Irsyad Mhd Ilham	2	[{"changed": {"fields": ["members"]}}]	16	1
-210	2018-12-04 23:06:28.077737+08	17	17: Vision Victory Empire Afif	2	[{"changed": {"fields": ["profile_image"]}}]	24	1
-211	2018-12-05 09:04:50.059981+08	1	Irsyad Mhd Ilham	2	[{"changed": {"fields": ["members"]}}]	16	1
-212	2018-12-05 09:05:00.561355+08	1	Irsyad Mhd Ilham	2	[{"changed": {"fields": ["members"]}}]	16	1
-213	2018-12-06 11:34:59.733142+08	1	Irsyad Mhd Ilham	2	[{"changed": {"fields": ["members"]}}]	16	1
-214	2018-12-08 12:12:42.122312+08	5	Like	2	[{"changed": {"fields": ["name"]}}]	20	1
-215	2018-12-08 21:34:42.772525+08	7	Irfan Baktiar, posted on 2018-12-04 06:53:06.195540+00:00	3		22	1
-216	2018-12-08 21:34:42.776938+08	6	Irfan Baktiar, posted on 2018-12-04 06:52:25.028749+00:00	3		22	1
-217	2018-12-08 21:34:42.779534+08	5	Irfan Baktiar, posted on 2018-12-04 06:51:34.708674+00:00	3		22	1
-218	2018-12-08 21:34:42.782609+08	4	Irsyad Mhd Ilham, posted on 2018-11-29 10:05:04.393309+00:00	3		22	1
-219	2018-12-08 21:34:42.786365+08	3	Irsyad Mhd Ilham, posted on 2018-11-28 09:30:47.741748+00:00	3		22	1
-220	2018-12-08 21:34:42.789099+08	2	Irsyad Mhd Ilham, posted on 2018-11-28 06:15:44.292465+00:00	3		22	1
-221	2018-12-08 21:34:42.79214+08	1	Irsyad Mhd Ilham, posted on 2018-11-28 06:12:55.742518+00:00	3		22	1
-222	2018-12-08 21:34:50.632234+08	5	2018-11-29 03:05:38.069872+00:00	3		9	1
-223	2018-12-08 21:34:50.636064+08	4	2018-11-29 03:04:39.727106+00:00	3		9	1
-224	2018-12-08 21:34:50.639016+08	3	2018-11-29 02:59:37.249896+00:00	3		9	1
-225	2018-12-08 21:34:50.641483+08	2	2018-11-29 00:52:21.103628+00:00	3		9	1
-226	2018-12-08 21:35:05.640462+08	42	2018-12-08 10:35:50.035460+00:00	3		32	1
-227	2018-12-08 21:35:05.644175+08	41	2018-12-08 10:24:33.780493+00:00	3		32	1
-228	2018-12-08 21:35:05.646401+08	40	2018-12-03 00:28:52.781209+00:00	3		32	1
-229	2018-12-08 21:35:05.648427+08	39	2018-12-03 00:28:49.993359+00:00	3		32	1
-230	2018-12-08 21:35:05.650713+08	38	2018-12-03 00:28:46.776758+00:00	3		32	1
-231	2018-12-10 13:53:25.898254+08	12	cwa@cwa.com	2	[{"changed": {"fields": ["email"]}}]	6	1
-232	2018-12-10 13:53:51.009131+08	12	cwa@cwa.com	2	[{"changed": {"fields": ["password"]}}]	6	1
-233	2018-12-10 13:54:14.565469+08	1	Vision Victory Empire	2	[{"changed": {"fields": ["company"]}}]	7	1
-234	2018-12-10 13:59:55.316825+08	15	15: Vision Victory Empire Aziz Ismail	2	[{"changed": {"fields": ["name", "profile_image"]}}]	24	1
-235	2018-12-10 14:01:19.529313+08	1	Squalify Agency	2	[{"changed": {"fields": ["name"]}}]	7	1
-236	2018-12-10 14:41:48.330172+08	1	Aziz Ismail	2	[{"changed": {"fields": ["members"]}}]	16	1
-237	2018-12-10 14:42:41.651598+08	13	irfan@vve.com	2	[{"changed": {"fields": ["password"]}}]	6	1
+1	2018-12-20 00:33:02.449108+08	1	personal	1	[{"added": {}}]	10	1
+2	2018-12-20 00:33:05.980026+08	2	group	1	[{"added": {}}]	10	1
+3	2018-12-20 00:33:22.680079+08	1	Public Mutual	1	[{"added": {}}]	12	1
+4	2018-12-20 00:33:26.19494+08	2	CWA	1	[{"added": {}}]	12	1
+5	2018-12-20 00:33:39.622496+08	1	None	1	[{"added": {}}]	14	1
+6	2018-12-20 00:33:45.425859+08	2	Called	1	[{"added": {}}]	14	1
+7	2018-12-20 00:33:49.233797+08	3	Appointment secured	1	[{"added": {}}]	14	1
+8	2018-12-20 00:33:52.124805+08	4	Rejected	1	[{"added": {}}]	14	1
+9	2018-12-20 00:33:57.820554+08	5	Client	1	[{"added": {}}]	14	1
+10	2018-12-20 00:34:01.420104+08	6	Other	1	[{"added": {}}]	14	1
+11	2018-12-20 00:35:22.78914+08	1	Group Agency Manager	1	[{"added": {}}]	16	1
+12	2018-12-20 00:35:27.161273+08	2	Agency Manager	1	[{"added": {}}]	16	1
+13	2018-12-20 00:35:32.419454+08	3	Agency Supervisor	1	[{"added": {}}]	16	1
+14	2018-12-20 00:35:39.162706+08	4	Unit Trust Consultant	1	[{"added": {}}]	16	1
+15	2018-12-20 00:36:33.768118+08	1	Referral	1	[{"added": {}}]	15	1
+16	2018-12-20 00:36:36.298375+08	2	Face to face	1	[{"added": {}}]	15	1
+17	2018-12-20 00:36:39.283732+08	3	Nesting	1	[{"added": {}}]	15	1
+18	2018-12-20 00:36:44.234804+08	4	Booth	1	[{"added": {}}]	15	1
+19	2018-12-20 00:36:57.379259+08	5	Table to table	1	[{"added": {}}]	15	1
+20	2018-12-20 00:38:00.329511+08	1	Unit trust investment	1	[{"added": {}}]	19	1
+21	2018-12-20 00:38:29.751405+08	1	Millionnaire suit	1	[{"added": {}}]	25	1
+22	2018-12-20 00:38:50.846879+08	2	Be early on training	1	[{"added": {}}]	25	1
+23	2018-12-20 00:39:32.676681+08	2	Be early on training	2	[]	25	1
+24	2018-12-20 00:41:21.2215+08	3	FTF/Nesting/Booth	1	[{"added": {}}]	25	1
+25	2018-12-20 00:41:38.281603+08	4	Joining field work	1	[{"added": {}}]	25	1
+26	2018-12-20 00:41:41.456609+08	5	Referrals	1	[{"added": {}}]	25	1
+27	2018-12-20 00:41:51.624446+08	6	Calls/Email/Socmed	1	[{"added": {}}]	25	1
+28	2018-12-20 00:41:59.660359+08	7	Appointment secured	1	[{"added": {}}]	25	1
+29	2018-12-20 00:42:06.904821+08	8	Sales presentation	1	[{"added": {}}]	25	1
+30	2018-12-20 00:42:14.926164+08	9	Career presentation	1	[{"added": {}}]	25	1
+31	2018-12-20 00:42:19.482768+08	10	Case closed	1	[{"added": {}}]	25	1
+32	2018-12-20 00:42:25.211244+08	11	Sign up contract	1	[{"added": {}}]	25	1
+33	2018-12-20 00:42:32.56127+08	12	Update upline	1	[{"added": {}}]	25	1
+34	2018-12-20 00:42:48.657201+08	13	Servicing/Follow up	1	[{"added": {}}]	25	1
+35	2018-12-20 00:42:54.880613+08	14	Personal coaching	1	[{"added": {}}]	25	1
+36	2018-12-20 00:43:04.891357+08	15	Agency program	1	[{"added": {}}]	25	1
+37	2018-12-20 00:44:46.627414+08	1	Sales closed	1	[{"added": {}}]	27	1
+38	2018-12-20 00:44:51.434485+08	2	Joining field work	1	[{"added": {}}]	27	1
+39	2018-12-20 00:46:00.375086+08	1	EPF	1	[{"added": {}}]	31	1
+40	2018-12-20 00:46:04.305785+08	2	Cash	1	[{"added": {}}]	31	1
+41	2018-12-20 00:46:08.543645+08	3	Wasiat	1	[{"added": {}}]	31	1
+42	2018-12-20 00:46:12.03603+08	4	ASB	1	[{"added": {}}]	31	1
+43	2018-12-20 00:46:15.089009+08	5	PRS	1	[{"added": {}}]	31	1
+44	2018-12-20 00:46:31.502218+08	6	Takaful	1	[{"added": {}}]	31	1
+45	2018-12-20 00:47:37.602744+08	2	Surcharge object (2)	1	[{"added": {}}]	33	1
+46	2018-12-20 00:47:45.219767+08	3	Surcharge object (3)	1	[{"added": {}}]	33	1
+47	2018-12-20 00:48:18.961357+08	2	5.0	2	[{"changed": {"fields": ["name"]}}]	33	1
+48	2018-12-20 00:48:23.789393+08	3	6.5	2	[{"changed": {"fields": ["name"]}}]	33	1
+49	2018-12-20 00:48:45.841472+08	1	Submitted	1	[{"added": {}}]	30	1
+50	2018-12-20 00:50:41.402455+08	2	Group	2	[{"changed": {"fields": ["name"]}}]	10	1
+51	2018-12-20 00:50:48.314274+08	1	Personal	2	[{"changed": {"fields": ["name"]}}]	10	1
+52	2018-12-20 00:51:38.395508+08	2	ramlan@cwa.com	1	[{"added": {}}]	6	1
+53	2018-12-20 00:52:27.98325+08	3	azri@cwa.com	1	[{"added": {}}]	6	1
+54	2018-12-20 00:53:02.870802+08	4	badruddin@cwa.com	1	[{"added": {}}]	6	1
+55	2018-12-20 00:58:00.762895+08	2	Profile object (2)	1	[{"added": {}}]	28	1
+56	2018-12-20 00:58:22.348078+08	3	Profile object (3)	1	[{"added": {}}]	28	1
+57	2018-12-20 00:59:09.317215+08	3	Azri	2	[{"changed": {"fields": ["upline"]}}]	28	1
+58	2018-12-20 00:59:35.051721+08	4	Badruddin	1	[{"added": {}}]	28	1
+59	2018-12-20 00:59:55.320519+08	1	Otye Excellence Consultants	1	[{"added": {}}]	7	1
+60	2018-12-20 01:00:22.225173+08	1	Ramlan	1	[{"added": {}}]	17	1
+61	2018-12-20 01:00:32.237285+08	2	Azri	1	[{"added": {}}]	17	1
+62	2018-12-20 01:05:07.025984+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+63	2018-12-20 01:05:15.322332+08	2	2. Ramlan	2	[{"changed": {"fields": ["group"]}}]	28	1
+64	2018-12-20 01:08:47.419639+08	2	ramlan@cwa.com	2	[{"changed": {"fields": ["password"]}}]	6	1
+65	2018-12-20 01:10:40.911683+08	2	2. Ramlan	2	[{"changed": {"fields": ["agency"]}}]	28	1
+66	2018-12-20 01:10:53.036234+08	4	4. Badruddin	2	[{"changed": {"fields": ["agency"]}}]	28	1
+67	2018-12-20 01:11:00.024462+08	3	3. Azri	2	[{"changed": {"fields": ["agency"]}}]	28	1
+68	2018-12-20 01:12:23.302161+08	2	2. Ramlan	2	[{"changed": {"fields": ["profile_image"]}}]	28	1
+69	2018-12-20 01:12:41.945281+08	3	3. Azri	2	[{"changed": {"fields": ["profile_image"]}}]	28	1
+70	2018-12-20 01:13:15.283667+08	1	Otye Excellence Consultants	2	[{"changed": {"fields": ["agency_image"]}}]	7	1
+71	2018-12-20 08:06:51.457136+08	1	add	1	[{"added": {}}]	35	1
+72	2018-12-20 08:06:55.396953+08	2	subtract	1	[{"added": {}}]	35	1
+73	2018-12-20 08:07:14.8418+08	2	Subtract	2	[{"changed": {"fields": ["name"]}}]	35	1
+74	2018-12-20 08:07:21.351182+08	1	Add	2	[{"changed": {"fields": ["name"]}}]	35	1
+75	2018-12-20 08:09:11.08216+08	2	PointLog object (2)	1	[{"added": {}}]	34	1
+76	2018-12-20 08:09:35.277769+08	3	PointLog object (3)	1	[{"added": {}}]	34	1
+77	2018-12-20 08:10:48.496612+08	1	2018-12-19	2	[{"changed": {"fields": ["logs"]}}]	23	1
+78	2018-12-20 11:53:51.750324+08	1	2018-12-19	2	[]	23	1
+79	2018-12-20 11:55:11.654567+08	1	2018-12-19	2	[]	23	1
+80	2018-12-20 18:18:20.938122+08	1	Ramlan	3		8	1
+81	2018-12-20 18:38:16.100084+08	2	Ramlan	3		8	1
+82	2018-12-20 18:38:27.467284+08	2	2018-12-20 10:28:17.808575+00:00 > Ramlan	3		9	1
+83	2018-12-20 18:38:27.47059+08	1	2018-12-20 10:15:14.141336+00:00 > Ramlan	3		9	1
+84	2018-12-20 19:04:32.210834+08	3	Ramlan	3		8	1
+85	2018-12-20 19:04:39.678383+08	3	2018-12-20 10:56:18.063341+00:00 > Ramlan	3		9	1
+86	2018-12-20 23:15:11.076418+08	4	Ramlan	3		8	1
+87	2018-12-20 23:15:25.399022+08	4	2018-12-20 11:05:22.019111+00:00 > Ramlan	3		9	1
+88	2018-12-21 00:49:27.233765+08	5	Ramlan	2	[{"changed": {"fields": ["chat_with"]}}]	18	1
+89	2018-12-21 01:33:16.183015+08	5	Ramlan	2	[{"changed": {"fields": ["unread"]}}]	18	1
+90	2018-12-21 17:20:36.534106+08	5	Ramlan	3		8	1
+91	2018-12-21 17:20:47.285533+08	13	2018-12-21 07:51:58.133023+00:00 > Ramlan	3		9	1
+92	2018-12-21 17:20:47.289022+08	12	2018-12-21 07:51:53.190616+00:00 > Ramlan	3		9	1
+93	2018-12-21 17:20:47.291876+08	11	2018-12-21 07:51:48.955294+00:00 > Ramlan	3		9	1
+94	2018-12-21 17:20:47.295074+08	10	2018-12-21 04:49:23.688728+00:00 > Ramlan	3		9	1
+95	2018-12-21 17:20:47.29827+08	9	2018-12-21 04:49:11.828153+00:00 > Ramlan	3		9	1
+96	2018-12-21 17:20:47.3014+08	8	2018-12-21 04:47:53.995691+00:00 > Ramlan	3		9	1
+97	2018-12-21 17:20:47.30359+08	7	2018-12-21 04:34:58.629683+00:00 > Ramlan	3		9	1
+98	2018-12-21 17:20:47.305572+08	6	2018-12-21 03:42:39.979750+00:00 > Ramlan	3		9	1
+99	2018-12-21 17:20:47.307463+08	5	2018-12-20 15:16:34.010639+00:00 > Ramlan	3		9	1
+100	2018-12-21 17:31:54.913381+08	6	Ramlan	3		8	1
+101	2018-12-21 17:32:04.663033+08	14	2018-12-21 09:24:08.879702+00:00 > Ramlan	3		9	1
+102	2018-12-21 17:45:12.543816+08	7	Ramlan	3		8	1
+103	2018-12-21 17:45:31.513309+08	15	2018-12-21 09:32:47.757276+00:00 > Ramlan	3		9	1
+104	2018-12-21 17:47:50.043957+08	8	Ramlan	3		8	1
+105	2018-12-21 17:47:57.28476+08	16	2018-12-21 09:46:00.515415+00:00 > Ramlan	3		9	1
+106	2018-12-21 17:50:17.458753+08	9	Ramlan	3		8	1
+107	2018-12-21 17:50:27.763853+08	17	2018-12-21 09:48:19.566598+00:00 > Ramlan	3		9	1
+108	2018-12-22 07:48:05.83794+08	18	2018-12-21 09:50:59.960009+00:00 > Ramlan	3		9	1
+109	2018-12-22 07:48:38.471086+08	14	chat with > Ramlan	3		18	1
+110	2018-12-22 07:48:38.474768+08	13	chat with > Azri	3		18	1
+111	2018-12-22 07:53:15.956349+08	16	chat with > Azri	3		18	1
+112	2018-12-22 07:53:15.979464+08	15	chat with > Ramlan	3		18	1
+113	2018-12-22 07:53:31.965629+08	19	2018-12-21 23:51:18.536623+00:00 > Azri	3		9	1
+114	2018-12-22 10:55:04.703137+08	19	chat with > Azri	3		18	1
+115	2018-12-22 10:55:24.618886+08	21	2018-12-22 02:53:23.364782+00:00 > Azri	3		9	1
+116	2018-12-22 11:13:11.962555+08	2	2. Ramlan	2	[{"changed": {"fields": ["inbox"]}}]	28	1
+117	2018-12-22 14:38:11.037324+08	17	chat with > Ramlan	2	[{"changed": {"fields": ["unread"]}}]	18	1
+118	2018-12-22 14:41:48.665492+08	17	chat with > Ramlan	2	[{"changed": {"fields": ["unread"]}}]	18	1
+119	2018-12-22 14:48:05.967174+08	17	chat with > Ramlan	2	[{"changed": {"fields": ["unread"]}}]	18	1
+120	2018-12-22 15:39:54.268875+08	4	4. Badruddin	2	[{"changed": {"fields": ["profile_image"]}}]	28	1
+121	2018-12-22 15:42:55.840731+08	21	chat with > Azri	3		18	1
+122	2018-12-22 15:42:56.023183+08	20	chat with > Badruddin	3		18	1
+123	2018-12-22 15:52:02.343406+08	23	chat with > Azri	3		18	1
+124	2018-12-22 15:52:02.373569+08	22	chat with > Badruddin	3		18	1
+125	2018-12-22 15:55:46.552868+08	28	2018-12-22 07:52:41.366810+00:00 > Azri	3		9	1
+126	2018-12-22 15:55:52.939617+08	27	2018-12-22 07:47:40.009459+00:00 > Azri	3		9	1
+127	2018-12-22 15:55:57.552149+08	26	2018-12-22 07:41:26.712406+00:00 > Azri	3		9	1
+128	2018-12-22 15:56:11.727464+08	25	chat with > Azri	3		18	1
+129	2018-12-22 15:56:11.73135+08	24	chat with > Badruddin	3		18	1
+130	2018-12-22 15:58:08.739936+08	27	chat with > Azri	3		18	1
+131	2018-12-22 15:58:08.75866+08	26	chat with > Badruddin	3		18	1
+132	2018-12-22 15:58:15.522848+08	29	2018-12-22 07:56:56.523256+00:00 > Azri	3		9	1
+133	2018-12-22 16:04:46.386512+08	28	chat with > Badruddin	2	[{"changed": {"fields": ["unread"]}}]	18	1
+134	2018-12-22 16:04:59.654994+08	28	chat with > Badruddin	2	[{"changed": {"fields": ["unread"]}}]	18	1
+135	2018-12-23 19:00:08.223626+08	77	2018-12-23 10:57:11.371700+00:00 > Ramlan	3		9	1
+136	2018-12-23 19:00:08.276405+08	76	2018-12-23 10:56:56.500430+00:00 > Ramlan	3		9	1
+137	2018-12-23 19:00:08.279584+08	75	2018-12-23 10:56:43.923959+00:00 > Ramlan	3		9	1
+138	2018-12-23 19:00:08.281913+08	74	2018-12-23 10:56:24.723746+00:00 > Ramlan	3		9	1
+139	2018-12-23 19:00:08.28398+08	73	2018-12-23 10:56:04.885342+00:00 > Ramlan	3		9	1
+140	2018-12-23 19:00:08.287679+08	72	2018-12-23 10:54:57.119921+00:00 > Ramlan	3		9	1
+141	2018-12-23 19:00:08.289952+08	71	2018-12-23 10:49:49.880268+00:00 > Ramlan	3		9	1
+142	2018-12-23 19:00:08.294313+08	70	2018-12-23 10:49:35.749463+00:00 > Ramlan	3		9	1
+143	2018-12-23 19:00:08.296576+08	69	2018-12-23 10:49:25.810139+00:00 > Ramlan	3		9	1
+144	2018-12-23 19:00:08.298482+08	68	2018-12-23 10:48:37.651265+00:00 > Ramlan	3		9	1
+145	2018-12-23 19:00:08.300248+08	67	2018-12-23 10:47:56.728302+00:00 > Azri	3		9	1
+146	2018-12-23 19:00:08.303084+08	66	2018-12-23 10:47:22.924766+00:00 > Ramlan	3		9	1
+147	2018-12-23 19:00:08.305014+08	65	2018-12-23 10:47:03.062239+00:00 > Ramlan	3		9	1
+148	2018-12-23 19:00:08.307115+08	64	2018-12-23 10:46:45.142132+00:00 > Ramlan	3		9	1
+149	2018-12-23 19:00:08.317944+08	63	2018-12-23 10:46:27.311624+00:00 > Ramlan	3		9	1
+150	2018-12-23 19:00:08.320279+08	62	2018-12-23 10:40:49.945944+00:00 > Ramlan	3		9	1
+151	2018-12-23 19:00:08.322931+08	61	2018-12-23 10:40:21.499399+00:00 > Ramlan	3		9	1
+152	2018-12-23 19:00:08.327165+08	60	2018-12-23 10:39:28.321078+00:00 > Ramlan	3		9	1
+153	2018-12-23 19:00:08.329467+08	59	2018-12-23 10:39:08.409970+00:00 > Ramlan	3		9	1
+154	2018-12-23 19:00:08.331811+08	58	2018-12-23 10:38:18.755478+00:00 > Ramlan	3		9	1
+155	2018-12-23 19:00:08.335394+08	57	2018-12-23 10:30:58.021413+00:00 > Ramlan	3		9	1
+156	2018-12-23 19:00:08.33777+08	56	2018-12-23 10:29:59.021975+00:00 > Ramlan	3		9	1
+157	2018-12-23 19:00:08.339904+08	55	2018-12-23 09:24:41.727830+00:00 > Ramlan	3		9	1
+158	2018-12-23 19:00:08.344186+08	54	2018-12-23 09:24:21.232318+00:00 > Azri	3		9	1
+159	2018-12-23 19:00:08.346751+08	53	2018-12-23 09:24:09.565468+00:00 > Azri	3		9	1
+160	2018-12-23 19:00:08.349541+08	52	2018-12-23 09:23:56.055776+00:00 > Ramlan	3		9	1
+161	2018-12-23 19:00:08.352356+08	51	2018-12-23 09:22:54.400571+00:00 > Ramlan	3		9	1
+162	2018-12-23 19:00:08.354371+08	50	2018-12-23 09:17:03.573251+00:00 > Ramlan	3		9	1
+163	2018-12-23 19:00:08.356847+08	49	2018-12-23 09:14:02.054381+00:00 > Ramlan	3		9	1
+164	2018-12-23 19:00:08.361151+08	48	2018-12-23 08:47:07.918629+00:00 > Ramlan	3		9	1
+165	2018-12-23 19:00:08.36391+08	47	2018-12-23 08:40:50.877395+00:00 > Ramlan	3		9	1
+166	2018-12-23 19:00:08.368888+08	46	2018-12-23 08:40:26.295406+00:00 > Azri	3		9	1
+167	2018-12-23 19:00:08.371043+08	45	2018-12-23 08:39:23.567940+00:00 > Azri	3		9	1
+168	2018-12-23 19:00:08.374362+08	44	2018-12-23 08:38:03.553037+00:00 > Azri	3		9	1
+169	2018-12-23 19:00:08.378931+08	43	2018-12-23 08:33:17.804692+00:00 > Azri	3		9	1
+170	2018-12-23 19:00:08.381431+08	42	2018-12-23 08:30:49.015984+00:00 > Azri	3		9	1
+171	2018-12-23 19:00:08.384996+08	41	2018-12-23 08:29:46.908670+00:00 > Ramlan	3		9	1
+172	2018-12-23 19:00:08.387135+08	40	2018-12-23 08:24:36.030619+00:00 > Ramlan	3		9	1
+173	2018-12-23 19:00:08.389613+08	39	2018-12-23 08:23:17.169817+00:00 > Azri	3		9	1
+174	2018-12-23 19:00:08.395042+08	38	2018-12-23 08:21:47.585122+00:00 > Ramlan	3		9	1
+175	2018-12-23 19:00:08.398675+08	37	2018-12-22 09:18:10.378162+00:00 > Azri	3		9	1
+176	2018-12-23 19:00:08.40128+08	36	2018-12-22 09:15:40.503394+00:00 > Azri	3		9	1
+177	2018-12-23 19:00:08.403676+08	35	2018-12-22 08:11:55.365260+00:00 > Ramlan	3		9	1
+178	2018-12-23 19:00:08.407732+08	34	2018-12-22 08:05:58.350625+00:00 > Azri	3		9	1
+179	2018-12-23 19:00:08.411837+08	33	2018-12-22 08:05:39.227289+00:00 > Azri	3		9	1
+180	2018-12-23 19:00:08.41436+08	32	2018-12-22 08:01:12.110566+00:00 > Azri	3		9	1
+181	2018-12-23 19:00:08.416846+08	31	2018-12-22 07:59:08.130979+00:00 > Azri	3		9	1
+182	2018-12-23 19:00:08.420124+08	30	2018-12-22 07:58:52.214224+00:00 > Azri	3		9	1
+183	2018-12-23 19:00:08.423204+08	25	2018-12-22 07:39:15.395644+00:00 > Azri	3		9	1
+184	2018-12-23 19:00:08.425842+08	24	2018-12-22 03:38:53.618964+00:00 > Ramlan	3		9	1
+185	2018-12-23 19:00:08.429195+08	23	2018-12-22 03:38:31.668863+00:00 > Ramlan	3		9	1
+186	2018-12-23 19:00:08.431832+08	22	2018-12-22 03:16:40.433564+00:00 > Azri	3		9	1
+187	2018-12-23 19:00:08.434602+08	20	2018-12-21 23:53:59.961667+00:00 > Azri	3		9	1
+188	2018-12-23 19:00:19.23153+08	29	Inbox object (29)	3		18	1
+189	2018-12-23 19:00:19.235431+08	28	Inbox object (28)	3		18	1
+190	2018-12-23 19:00:19.238578+08	18	Inbox object (18)	3		18	1
+191	2018-12-23 19:00:19.240899+08	17	Inbox object (17)	3		18	1
+192	2018-12-23 19:09:27.966933+08	31	Inbox object (31)	3		18	1
+193	2018-12-23 19:09:28.00096+08	30	Inbox object (30)	3		18	1
+194	2018-12-23 19:09:35.55172+08	80	2018-12-23 11:02:31.822015+00:00 > Azri	3		9	1
+195	2018-12-23 19:09:35.555856+08	79	2018-12-23 11:01:53.315398+00:00 > Azri	3		9	1
+196	2018-12-23 19:09:35.558314+08	78	2018-12-23 11:01:35.812273+00:00 > Ramlan	3		9	1
+197	2018-12-23 21:05:01.101402+08	91	2018-12-23 11:14:29.717670+00:00 > Azri	3		9	1
+198	2018-12-23 21:05:01.254649+08	90	2018-12-23 11:14:18.567801+00:00 > Ramlan	3		9	1
+199	2018-12-23 21:05:01.498709+08	89	2018-12-23 11:14:08.537330+00:00 > Azri	3		9	1
+200	2018-12-23 21:05:01.762625+08	88	2018-12-23 11:13:57.409201+00:00 > Azri	3		9	1
+201	2018-12-23 21:05:02.003269+08	87	2018-12-23 11:13:47.628401+00:00 > Ramlan	3		9	1
+202	2018-12-23 21:05:02.25079+08	86	2018-12-23 11:13:39.963298+00:00 > Azri	3		9	1
+203	2018-12-23 21:05:02.451783+08	85	2018-12-23 11:12:19.287130+00:00 > Azri	3		9	1
+204	2018-12-23 21:05:02.761309+08	84	2018-12-23 11:12:07.871107+00:00 > Ramlan	3		9	1
+205	2018-12-23 21:05:03.01326+08	83	2018-12-23 11:11:21.710212+00:00 > Azri	3		9	1
+206	2018-12-23 21:05:03.228906+08	82	2018-12-23 11:11:07.239211+00:00 > Ramlan	3		9	1
+207	2018-12-23 21:05:03.452571+08	81	2018-12-23 11:10:45.750732+00:00 > Ramlan	3		9	1
+208	2018-12-23 21:05:20.286146+08	33	Inbox object (33)	3		18	1
+209	2018-12-23 21:05:20.302636+08	32	Inbox object (32)	3		18	1
+210	2018-12-23 21:13:05.355737+08	35	Inbox object (35)	3		18	1
+211	2018-12-23 21:13:05.359615+08	34	Inbox object (34)	3		18	1
+212	2018-12-23 21:13:12.365134+08	92	2018-12-23 13:12:40.840052+00:00 > Ramlan	3		9	1
+213	2018-12-23 21:34:57.446+08	37	Inbox object (37)	3		18	1
+214	2018-12-23 21:34:57.451492+08	36	Inbox object (36)	3		18	1
+215	2018-12-23 21:35:06.3912+08	97	2018-12-23 13:15:20.594753+00:00 > Ramlan	3		9	1
+216	2018-12-23 21:35:06.395234+08	96	2018-12-23 13:15:05.043545+00:00 > Azri	3		9	1
+217	2018-12-23 21:35:06.401708+08	95	2018-12-23 13:14:58.087232+00:00 > Ramlan	3		9	1
+218	2018-12-23 21:35:06.404088+08	94	2018-12-23 13:14:44.651180+00:00 > Azri	3		9	1
+219	2018-12-23 21:35:06.406125+08	93	2018-12-23 13:14:26.568116+00:00 > Ramlan	3		9	1
+220	2018-12-23 21:38:45.554201+08	41	Inbox object (41)	3		18	1
+221	2018-12-23 21:38:45.559328+08	40	Inbox object (40)	3		18	1
+222	2018-12-23 21:38:45.561346+08	39	Inbox object (39)	3		18	1
+223	2018-12-23 21:38:45.563084+08	38	Inbox object (38)	3		18	1
+224	2018-12-23 21:39:30.372632+08	43	Inbox object (43)	3		18	1
+225	2018-12-23 21:39:30.377222+08	42	Inbox object (42)	3		18	1
+226	2018-12-24 12:02:56.762693+08	1	Ramlan	1	[{"added": {}}]	36	1
+227	2018-12-24 12:04:41.836976+08	48	Inbox object (48)	1	[{"added": {}}]	18	1
+228	2018-12-24 12:06:53.265368+08	2	2. Ramlan	2	[{"changed": {"fields": ["inbox"]}}]	28	1
+229	2018-12-24 12:24:08.430951+08	1	agency	1	[{"added": {}}]	37	1
+230	2018-12-24 12:24:18.35102+08	2	group	1	[{"added": {}}]	37	1
+231	2018-12-24 12:24:24.320889+08	3	upline group	1	[{"added": {}}]	37	1
+232	2018-12-24 18:02:03.31779+08	48	Inbox object (48)	2	[{"changed": {"fields": ["unread"]}}]	18	1
+233	2018-12-25 09:55:08.814834+08	1	Mutual fund investment	2	[{"changed": {"fields": ["name"]}}]	19	1
+234	2018-12-25 11:50:03.489774+08	2	Ramlan	1	[{"added": {}}]	36	1
+235	2018-12-25 11:54:03.480499+08	49	Group chat	1	[{"added": {}}]	18	1
+236	2018-12-25 12:13:50.144837+08	2	2. Ramlan	2	[{"changed": {"fields": ["inbox"]}}]	28	1
+237	2018-12-25 12:24:12.65098+08	49	Group chat (Ramlan, group)	2	[{"changed": {"fields": ["unread"]}}]	18	1
+238	2018-12-26 10:21:41.757022+08	1	closed sales	1	[{"added": {}}]	22	1
+239	2018-12-26 10:21:59.199156+08	2	joining field work	1	[{"added": {}}]	22	1
+240	2018-12-26 10:22:13.686842+08	3	inbox	1	[{"added": {}}]	22	1
+241	2018-12-26 10:23:14.463228+08	1	3. Azri inbox 2018-12-26 02:23:14.406568+00:00	1	[{"added": {}}]	21	1
+242	2018-12-26 10:23:49.544626+08	2	4. Badruddin inbox 2018-12-26 02:23:49.542694+00:00	1	[{"added": {}}]	21	1
+243	2018-12-26 10:24:12.821379+08	2	2. Ramlan	2	[{"changed": {"fields": ["notifications"]}}]	28	1
+244	2018-12-26 13:08:32.749562+08	4	group inbox	1	[{"added": {}}]	22	1
+245	2018-12-26 17:48:06.936433+08	3	4. Badruddin group inbox 2018-12-26 09:48:06.921029+00:00	1	[{"added": {}}]	21	1
+246	2018-12-26 17:48:21.670746+08	2	2. Ramlan	2	[{"changed": {"fields": ["notifications"]}}]	28	1
+247	2018-12-26 23:03:56.1576+08	3	3. Azri	2	[{"changed": {"fields": ["inbox"]}}]	28	1
+248	2018-12-26 23:04:22.553821+08	3	3. Azri	2	[{"changed": {"fields": ["inbox"]}}]	28	1
+249	2018-12-26 23:15:05.560347+08	3	upline group	3		37	1
+250	2018-12-27 00:15:22.460951+08	50	50.Group chat (group)	1	[{"added": {}}]	18	1
+251	2018-12-27 00:16:38.967667+08	3	3. Azri	2	[{"changed": {"fields": ["inbox"]}}]	28	1
+252	2018-12-27 00:33:06.031057+08	50	50.Group chat (group)	2	[{"changed": {"fields": ["unread"]}}]	18	1
+253	2018-12-27 00:34:37.529771+08	2	Ramlan (group)	2	[{"changed": {"fields": ["participants"]}}]	36	1
+254	2018-12-27 14:50:16.03628+08	7	3. Azri inbox 2018-12-27 06:44:10.053552+00:00	3		21	1
+255	2018-12-27 14:50:16.139337+08	6	3. Azri inbox 2018-12-27 06:44:10.034168+00:00	3		21	1
+256	2018-12-28 07:18:28.119287+08	50	50.Group chat (group)	2	[{"changed": {"fields": ["group_chat"]}}]	18	1
+257	2018-12-28 07:18:37.555746+08	49	49.Group chat (group)	2	[{"changed": {"fields": ["group_chat"]}}]	18	1
+258	2018-12-28 07:18:47.675312+08	48	48.Group chat (agency)	2	[{"changed": {"fields": ["group_chat"]}}]	18	1
+259	2018-12-28 11:56:04.359102+08	11	2. Ramlan group inbox 2018-12-27 08:22:43.324895+00:00	2	[{"changed": {"fields": ["inbox_rel"]}}]	21	1
+260	2018-12-28 12:04:59.299951+08	10	10. Azri group inbox	2	[{"changed": {"fields": ["inbox_rel"]}}]	21	1
+261	2018-12-28 12:06:49.660802+08	10	10. group inbox	2	[{"changed": {"fields": ["inbox_rel"]}}]	21	1
+262	2018-12-28 12:07:12.56288+08	10	10. group inbox	2	[{"changed": {"fields": ["inbox_rel"]}}]	21	1
+263	2018-12-28 12:17:26.513962+08	11	11. group inbox	3		21	1
+264	2018-12-28 12:17:26.51924+08	10	10. group inbox	3		21	1
+265	2018-12-28 12:17:26.521374+08	9	9. group inbox	3		21	1
+266	2018-12-28 12:17:26.523343+08	8	8. group inbox	3		21	1
+267	2018-12-28 12:17:26.525331+08	5	5. inbox	3		21	1
+268	2018-12-28 12:17:26.527559+08	4	4. inbox	3		21	1
+269	2018-12-28 12:17:26.530404+08	3	3. group inbox	3		21	1
+270	2018-12-28 12:17:26.532699+08	2	2. inbox	3		21	1
+271	2018-12-28 12:17:26.535082+08	1	1. inbox	3		21	1
+272	2018-12-28 13:09:51.651576+08	2	joining field work	2	[{"changed": {"fields": ["name"]}}]	27	1
+273	2018-12-28 13:09:58.66999+08	1	sales closed	2	[{"changed": {"fields": ["name"]}}]	27	1
+274	2018-12-28 13:10:13.209918+08	1	2018-12-28 05:06:52.216979+00:00	3		29	1
+275	2018-12-28 16:22:31.2035+08	177	2018-12-28 08:22:02.531324+00:00 > Ramlan	3		9	1
+276	2018-12-28 16:22:31.208955+08	176	2018-12-28 08:21:31.872741+00:00 > Ramlan	3		9	1
+277	2018-12-28 16:22:31.211443+08	175	2018-12-28 08:20:36.495399+00:00 > Azri	3		9	1
+278	2018-12-28 16:22:31.214319+08	174	2018-12-28 08:20:28.322346+00:00 > Ramlan	3		9	1
+279	2018-12-28 16:22:31.217446+08	173	2018-12-28 08:19:58.354950+00:00 > Azri	3		9	1
+280	2018-12-28 16:22:31.219535+08	172	2018-12-28 08:19:38.964928+00:00 > Ramlan	3		9	1
+281	2018-12-28 16:22:31.221364+08	171	2018-12-28 08:19:06.332884+00:00 > Azri	3		9	1
+282	2018-12-28 16:22:31.223485+08	170	2018-12-28 08:15:58.110632+00:00 > Ramlan	3		9	1
+283	2018-12-28 16:22:31.225686+08	169	2018-12-28 08:15:34.521927+00:00 > Ramlan	3		9	1
+284	2018-12-28 16:22:31.227995+08	168	2018-12-28 08:13:39.142530+00:00 > Ramlan	3		9	1
+285	2018-12-28 16:22:31.452287+08	167	2018-12-28 08:13:05.253575+00:00 > Ramlan	3		9	1
+286	2018-12-28 16:22:31.454539+08	166	2018-12-28 08:11:06.267333+00:00 > Ramlan	3		9	1
+287	2018-12-28 16:22:31.457073+08	165	2018-12-28 08:05:42.361776+00:00 > Ramlan	3		9	1
+288	2018-12-28 16:22:31.458955+08	164	2018-12-28 08:04:58.308394+00:00 > Ramlan	3		9	1
+289	2018-12-28 16:22:31.461257+08	163	2018-12-28 08:04:25.537804+00:00 > Azri	3		9	1
+290	2018-12-28 16:22:31.465225+08	162	2018-12-28 08:04:01.797571+00:00 > Azri	3		9	1
+291	2018-12-28 16:22:31.46838+08	161	2018-12-28 08:03:56.353047+00:00 > Ramlan	3		9	1
+292	2018-12-28 16:22:31.470261+08	160	2018-12-28 08:03:31.403483+00:00 > Ramlan	3		9	1
+293	2018-12-28 16:22:31.473096+08	159	2018-12-28 08:01:47.401263+00:00 > Azri	3		9	1
+294	2018-12-28 16:22:31.475176+08	158	2018-12-28 08:00:26.540414+00:00 > Ramlan	3		9	1
+295	2018-12-28 16:22:31.476989+08	157	2018-12-28 07:59:26.981282+00:00 > Ramlan	3		9	1
+296	2018-12-28 16:22:31.480593+08	156	2018-12-28 07:57:03.923004+00:00 > Azri	3		9	1
+297	2018-12-28 16:22:31.483098+08	155	2018-12-28 07:56:49.569299+00:00 > Ramlan	3		9	1
+298	2018-12-28 16:22:31.484936+08	154	2018-12-28 07:53:21.113504+00:00 > Azri	3		9	1
+299	2018-12-28 16:22:31.486707+08	153	2018-12-28 07:52:04.164715+00:00 > Ramlan	3		9	1
+300	2018-12-28 16:22:31.490017+08	152	2018-12-28 07:50:14.956375+00:00 > Ramlan	3		9	1
+301	2018-12-28 16:22:31.492944+08	151	2018-12-28 07:50:00.090694+00:00 > Azri	3		9	1
+302	2018-12-28 16:22:31.495348+08	150	2018-12-28 06:49:48.163303+00:00 > Azri	3		9	1
+303	2018-12-28 16:22:31.498256+08	149	2018-12-28 06:47:47.008982+00:00 > Azri	3		9	1
+304	2018-12-28 16:22:31.500171+08	148	2018-12-28 04:44:46.764521+00:00 > Ramlan	3		9	1
+305	2018-12-28 16:22:31.718813+08	147	2018-12-28 04:43:46.892213+00:00 > Ramlan	3		9	1
+306	2018-12-28 16:22:31.721234+08	146	2018-12-28 04:40:24.648013+00:00 > Ramlan	3		9	1
+307	2018-12-28 16:22:31.723842+08	145	2018-12-28 04:37:59.360361+00:00 > Ramlan	3		9	1
+308	2018-12-28 16:22:31.726609+08	144	2018-12-28 04:28:55.447581+00:00 > Ramlan	3		9	1
+309	2018-12-28 16:22:31.728897+08	143	2018-12-28 04:26:26.063543+00:00 > Azri	3		9	1
+310	2018-12-28 16:22:31.730871+08	142	2018-12-27 08:22:48.448185+00:00 > Ramlan	3		9	1
+311	2018-12-28 16:22:31.732638+08	141	2018-12-27 08:22:43.336274+00:00 > Ramlan	3		9	1
+312	2018-12-28 16:22:31.73477+08	140	2018-12-27 08:21:08.481409+00:00 > Azri	3		9	1
+313	2018-12-28 16:22:31.736576+08	139	2018-12-27 08:19:49.759824+00:00 > Azri	3		9	1
+314	2018-12-28 16:22:31.738483+08	138	2018-12-27 06:44:10.061397+00:00 > Azri	3		9	1
+315	2018-12-28 16:22:31.74046+08	137	2018-12-27 04:55:45.442054+00:00 > Ramlan	3		9	1
+316	2018-12-28 16:22:31.742885+08	136	2018-12-27 04:33:14.568516+00:00 > Azri	3		9	1
+317	2018-12-28 16:22:31.745931+08	135	2018-12-27 04:22:24.796717+00:00 > Azri	3		9	1
+318	2018-12-28 16:22:31.748114+08	134	2018-12-27 04:19:58.944563+00:00 > Azri	3		9	1
+319	2018-12-28 16:22:31.749838+08	133	2018-12-27 04:16:44.903762+00:00 > Azri	3		9	1
+320	2018-12-28 16:22:31.751466+08	132	2018-12-26 16:49:04.647747+00:00 > Azri	3		9	1
+321	2018-12-28 16:22:31.753059+08	131	2018-12-26 16:46:19.476410+00:00 > Ramlan	3		9	1
+322	2018-12-28 16:22:31.754679+08	130	2018-12-26 16:43:31.039875+00:00 > Ramlan	3		9	1
+323	2018-12-28 16:22:31.757174+08	129	2018-12-26 16:39:48.469949+00:00 > Azri	3		9	1
+324	2018-12-28 16:22:31.759689+08	128	2018-12-26 16:36:54.174079+00:00 > Ramlan	3		9	1
+325	2018-12-28 16:22:31.986516+08	127	2018-12-26 16:35:59.333457+00:00 > Azri	3		9	1
+326	2018-12-28 16:22:31.989846+08	126	2018-12-26 16:34:58.240114+00:00 > Ramlan	3		9	1
+327	2018-12-28 16:22:31.992128+08	125	2018-12-26 16:33:43.135592+00:00 > Azri	3		9	1
+328	2018-12-28 16:22:31.99423+08	124	2018-12-26 16:23:30.734676+00:00 > Ramlan	3		9	1
+329	2018-12-28 16:22:31.996492+08	123	2018-12-26 16:22:58.337090+00:00 > Ramlan	3		9	1
+330	2018-12-28 16:22:31.998544+08	122	2018-12-26 15:16:06.614338+00:00 > Azri	3		9	1
+331	2018-12-28 16:22:32.000476+08	121	2018-12-25 04:26:15.941312+00:00 > Ramlan	3		9	1
+332	2018-12-28 16:22:32.029693+08	120	2018-12-24 23:57:19.045674+00:00 > Ramlan	3		9	1
+333	2018-12-28 16:22:32.032641+08	119	2018-12-24 23:55:00.391538+00:00 > Ramlan	3		9	1
+334	2018-12-28 16:22:32.034747+08	118	2018-12-24 23:54:36.450625+00:00 > Ramlan	3		9	1
+335	2018-12-28 16:22:32.036829+08	117	2018-12-24 23:47:24.005013+00:00 > Ramlan	3		9	1
+336	2018-12-28 16:22:32.039153+08	116	2018-12-24 23:45:02.759292+00:00 > Ramlan	3		9	1
+337	2018-12-28 16:22:32.041928+08	115	2018-12-24 23:41:07.574847+00:00 > Ramlan	3		9	1
+338	2018-12-28 16:22:32.0439+08	114	2018-12-23 16:00:23.267541+00:00 > Azri	3		9	1
+339	2018-12-28 16:22:32.04598+08	113	2018-12-23 16:00:03.078253+00:00 > Ramlan	3		9	1
+340	2018-12-28 16:22:32.048639+08	112	2018-12-23 15:48:21.648429+00:00 > Ramlan	3		9	1
+341	2018-12-28 16:22:32.050766+08	111	2018-12-23 15:44:43.556820+00:00 > Ramlan	3		9	1
+342	2018-12-28 16:22:32.274888+08	110	2018-12-23 13:42:44.261200+00:00 > Azri	3		9	1
+343	2018-12-28 16:22:32.277508+08	109	2018-12-23 13:42:39.199191+00:00 > Azri	3		9	1
+344	2018-12-28 16:22:32.279715+08	108	2018-12-23 13:42:11.221883+00:00 > Azri	3		9	1
+345	2018-12-28 16:22:32.281798+08	107	2018-12-23 13:42:02.676391+00:00 > Badruddin	3		9	1
+346	2018-12-28 16:22:32.283713+08	106	2018-12-23 13:41:46.307226+00:00 > Azri	3		9	1
+347	2018-12-28 16:22:32.285805+08	105	2018-12-23 13:41:36.065786+00:00 > Badruddin	3		9	1
+348	2018-12-28 16:22:32.287647+08	104	2018-12-23 13:41:21.199729+00:00 > Azri	3		9	1
+349	2018-12-28 16:22:32.28947+08	103	2018-12-23 13:41:14.176689+00:00 > Badruddin	3		9	1
+350	2018-12-28 16:22:32.293447+08	102	2018-12-23 13:40:52.372639+00:00 > Azri	3		9	1
+351	2018-12-28 16:22:32.295898+08	101	2018-12-23 13:40:09.041845+00:00 > Azri	3		9	1
+352	2018-12-28 16:22:32.297901+08	100	2018-12-23 13:39:14.143489+00:00 > Azri	3		9	1
+353	2018-12-28 16:22:32.299699+08	99	2018-12-23 13:37:59.057891+00:00 > Azri	3		9	1
+354	2018-12-28 16:22:32.301446+08	98	2018-12-23 13:37:07.291044+00:00 > Azri	3		9	1
+355	2018-12-28 16:23:11.365334+08	47	47.Personal	3		18	1
+356	2018-12-28 16:23:11.369098+08	46	46.Personal	3		18	1
+357	2018-12-28 16:23:11.371409+08	45	45.Personal	3		18	1
+358	2018-12-28 16:23:11.373815+08	44	44.Personal	3		18	1
+359	2018-12-28 16:39:52.89521+08	191	2018-12-28 08:39:02.945287+00:00 > Azri	3		9	1
+360	2018-12-28 16:39:52.899766+08	190	2018-12-28 08:38:52.826422+00:00 > Ramlan	3		9	1
+361	2018-12-28 16:39:52.902085+08	189	2018-12-28 08:35:16.267389+00:00 > Azri	3		9	1
+362	2018-12-28 16:39:52.90395+08	188	2018-12-28 08:35:00.554386+00:00 > Ramlan	3		9	1
+363	2018-12-28 16:39:52.906077+08	187	2018-12-28 08:34:49.787978+00:00 > Azri	3		9	1
+364	2018-12-28 16:39:52.908478+08	186	2018-12-28 08:33:01.522024+00:00 > Azri	3		9	1
+365	2018-12-28 16:39:52.910268+08	185	2018-12-28 08:32:41.289432+00:00 > Ramlan	3		9	1
+366	2018-12-28 16:39:52.911879+08	184	2018-12-28 08:32:25.983536+00:00 > Azri	3		9	1
+367	2018-12-28 16:39:52.913647+08	183	2018-12-28 08:31:52.647320+00:00 > Azri	3		9	1
+368	2018-12-28 16:39:52.916293+08	182	2018-12-28 08:30:39.893782+00:00 > Azri	3		9	1
+369	2018-12-28 16:39:52.918401+08	181	2018-12-28 08:29:59.755350+00:00 > Azri	3		9	1
+370	2018-12-28 16:39:52.920021+08	180	2018-12-28 08:29:32.955146+00:00 > Ramlan	3		9	1
+371	2018-12-28 16:39:52.921553+08	179	2018-12-28 08:24:29.617430+00:00 > Ramlan	3		9	1
+372	2018-12-28 16:39:52.923072+08	178	2018-12-28 08:24:01.707593+00:00 > Azri	3		9	1
+373	2018-12-28 16:40:04.05437+08	52	52.Personal	3		18	1
+374	2018-12-28 16:40:04.059617+08	51	51.Personal	3		18	1
+375	2018-12-28 17:09:29.60779+08	52	52. inbox	3		21	1
+376	2018-12-28 17:09:29.611957+08	51	51. inbox	3		21	1
+377	2018-12-28 17:09:29.615142+08	24	24. group inbox	3		21	1
+378	2018-12-28 17:09:29.617436+08	23	23. group inbox	3		21	1
+379	2018-12-28 17:09:29.61962+08	22	22. group inbox	3		21	1
+380	2018-12-28 17:09:29.621583+08	21	21. group inbox	3		21	1
+381	2018-12-28 17:09:29.623456+08	20	20. group inbox	3		21	1
+382	2018-12-28 17:09:29.625254+08	19	19. group inbox	3		21	1
+383	2018-12-28 17:09:29.62717+08	18	18. group inbox	3		21	1
+384	2018-12-28 17:09:29.629014+08	17	17. group inbox	3		21	1
+385	2018-12-28 17:09:29.631686+08	16	16. group inbox	3		21	1
+386	2018-12-28 17:09:29.634713+08	15	15. group inbox	3		21	1
+387	2018-12-28 17:09:29.636715+08	14	14. group inbox	3		21	1
+388	2018-12-28 17:09:29.638528+08	13	13. group inbox	3		21	1
+389	2018-12-28 17:09:29.640302+08	12	12. group inbox	3		21	1
+390	2018-12-28 17:56:00.187744+08	72	72. group inbox	3		21	1
+391	2018-12-28 17:56:00.192278+08	71	71. group inbox	3		21	1
+392	2018-12-28 17:56:00.199173+08	70	70. group inbox	3		21	1
+393	2018-12-28 17:56:00.202199+08	69	69. group inbox	3		21	1
+394	2018-12-28 17:56:00.204233+08	68	68. group inbox	3		21	1
+395	2018-12-28 17:56:00.207172+08	67	67. group inbox	3		21	1
+396	2018-12-28 17:56:00.209745+08	66	66. group inbox	3		21	1
+397	2018-12-28 17:56:00.211708+08	65	65. group inbox	3		21	1
+398	2018-12-28 17:56:00.213964+08	64	64. group inbox	3		21	1
+399	2018-12-28 17:56:00.216724+08	63	63. group inbox	3		21	1
+400	2018-12-28 17:56:00.218839+08	62	62. group inbox	3		21	1
+401	2018-12-28 17:56:00.220686+08	61	61. group inbox	3		21	1
+402	2018-12-28 17:56:00.222523+08	60	60. group inbox	3		21	1
+403	2018-12-28 17:56:00.224641+08	59	59. group inbox	3		21	1
+404	2018-12-28 17:56:00.227546+08	58	58. group inbox	3		21	1
+405	2018-12-28 17:56:00.229721+08	57	57. group inbox	3		21	1
+406	2018-12-28 17:56:00.232365+08	56	56. group inbox	3		21	1
+407	2018-12-28 17:56:00.234372+08	55	55. group inbox	3		21	1
+408	2018-12-28 17:56:00.236188+08	54	54. group inbox	3		21	1
+409	2018-12-28 17:56:00.269584+08	53	53. group inbox	3		21	1
+410	2018-12-30 10:12:45.903232+08	92	92. inbox	3		21	1
+411	2018-12-30 10:12:46.962368+08	91	91. inbox	3		21	1
+412	2018-12-30 10:12:46.995968+08	90	90. inbox	3		21	1
+413	2018-12-30 10:12:47.125203+08	89	89. inbox	3		21	1
+414	2018-12-30 10:12:47.206617+08	88	88. inbox	3		21	1
+415	2018-12-30 10:12:47.261446+08	87	87. inbox	3		21	1
+416	2018-12-30 10:12:47.329899+08	86	86. inbox	3		21	1
+417	2018-12-30 10:12:47.340399+08	85	85. inbox	3		21	1
+418	2018-12-30 10:12:47.342894+08	84	84. inbox	3		21	1
+419	2018-12-30 10:12:47.347886+08	83	83. inbox	3		21	1
+420	2018-12-30 10:12:47.356728+08	82	82. group inbox	3		21	1
+421	2018-12-30 10:12:47.358939+08	81	81. group inbox	3		21	1
+422	2018-12-30 10:12:47.361948+08	80	80. inbox	3		21	1
+423	2018-12-30 10:12:47.394097+08	79	79. inbox	3		21	1
+424	2018-12-30 10:12:47.444795+08	78	78. inbox	3		21	1
+425	2018-12-30 10:12:47.473726+08	77	77. inbox	3		21	1
+426	2018-12-30 10:12:47.529878+08	76	76. inbox	3		21	1
+427	2018-12-30 10:12:47.586633+08	75	75. group inbox	3		21	1
+428	2018-12-30 10:12:47.610074+08	74	74. group inbox	3		21	1
+429	2018-12-30 10:12:47.659009+08	73	73. group inbox	3		21	1
+430	2018-12-30 11:11:59.945089+08	104	104. inbox	3		21	1
+431	2018-12-30 11:12:00.109645+08	103	103. inbox	3		21	1
+432	2018-12-30 11:12:00.154776+08	102	102. inbox	3		21	1
+433	2018-12-30 11:12:00.297424+08	101	101. inbox	3		21	1
+434	2018-12-30 11:12:00.50505+08	100	100. inbox	3		21	1
+435	2018-12-30 11:12:00.702504+08	99	99. inbox	3		21	1
+436	2018-12-30 11:12:00.908171+08	98	98. inbox	3		21	1
+437	2018-12-30 11:12:00.917273+08	97	97. inbox	3		21	1
+438	2018-12-30 11:12:01.075882+08	96	96. inbox	3		21	1
+439	2018-12-30 11:12:01.271728+08	95	95. inbox	3		21	1
+440	2018-12-30 11:12:01.310192+08	94	94. inbox	3		21	1
+441	2018-12-30 11:12:01.486177+08	93	93. inbox	3		21	1
+442	2018-12-31 14:29:29.216411+08	40	2018-12-31 06:24:24.050753+00:00	3		11	1
+443	2018-12-31 14:29:29.301383+08	39	2018-12-31 06:24:16.179948+00:00	3		11	1
+444	2018-12-31 14:29:29.305108+08	38	2018-12-31 06:22:42.528444+00:00	3		11	1
+445	2018-12-31 14:29:29.308208+08	37	2018-12-31 06:20:34.034260+00:00	3		11	1
+446	2018-12-31 14:29:29.310374+08	36	2018-12-31 06:19:57.965947+00:00	3		11	1
+447	2018-12-31 14:29:29.312484+08	35	2018-12-31 06:18:24.001552+00:00	3		11	1
+448	2018-12-31 14:29:29.315002+08	34	2018-12-31 06:16:28.981112+00:00	3		11	1
+449	2018-12-31 14:29:29.31748+08	33	2018-12-31 06:16:09.046321+00:00	3		11	1
+450	2018-12-31 14:29:29.320438+08	32	2018-12-31 06:13:30.616048+00:00	3		11	1
+451	2018-12-31 14:29:29.322559+08	31	2018-12-31 06:10:58.704290+00:00	3		11	1
+452	2018-12-31 14:29:29.325147+08	30	2018-12-31 06:10:00.119835+00:00	3		11	1
+453	2018-12-31 14:29:29.32701+08	29	2018-12-31 06:09:07.224992+00:00	3		11	1
+454	2018-12-31 14:29:29.329561+08	28	2018-12-31 06:08:48.333317+00:00	3		11	1
+455	2018-12-31 14:29:29.332908+08	27	2018-12-31 06:08:20.604186+00:00	3		11	1
+456	2018-12-31 14:29:29.334961+08	26	2018-12-31 06:07:48.458583+00:00	3		11	1
+457	2018-12-31 14:29:29.337412+08	25	2018-12-31 06:04:13.382382+00:00	3		11	1
+458	2018-12-31 14:29:29.340349+08	24	2018-12-31 06:01:58.616300+00:00	3		11	1
+459	2018-12-31 14:29:29.342431+08	23	2018-12-31 05:59:25.082221+00:00	3		11	1
+460	2018-12-31 14:29:29.344193+08	22	2018-12-31 05:58:58.661541+00:00	3		11	1
+461	2018-12-31 14:29:29.346494+08	21	2018-12-31 05:58:02.663699+00:00	3		11	1
+462	2018-12-31 14:29:29.348946+08	20	2018-12-31 05:56:51.240282+00:00	3		11	1
+463	2018-12-31 14:29:29.350805+08	19	2018-12-31 05:55:03.020575+00:00	3		11	1
+464	2018-12-31 14:29:29.352538+08	18	2018-12-31 04:32:08.293422+00:00	3		11	1
+465	2018-12-31 14:29:29.356295+08	17	2018-12-31 04:31:58.367970+00:00	3		11	1
+466	2018-12-31 14:29:29.358552+08	16	2018-12-31 04:30:27.116551+00:00	3		11	1
+467	2018-12-31 14:29:29.360346+08	15	2018-12-31 04:27:10.306755+00:00	3		11	1
+468	2018-12-31 14:29:29.362297+08	14	2018-12-31 04:26:58.855562+00:00	3		11	1
+469	2018-12-31 14:29:29.365357+08	13	2018-12-31 04:26:46.066374+00:00	3		11	1
+470	2018-12-31 14:29:29.367258+08	12	2018-12-31 04:26:34.946893+00:00	3		11	1
+471	2018-12-31 14:29:29.369646+08	11	2018-12-31 04:25:35.019446+00:00	3		11	1
+472	2018-12-31 14:29:29.373141+08	10	2018-12-31 04:25:12.767473+00:00	3		11	1
+473	2018-12-31 14:29:29.375062+08	9	2018-12-31 04:21:59.234414+00:00	3		11	1
+474	2018-12-31 14:29:29.376824+08	8	2018-12-31 04:21:24.411734+00:00	3		11	1
+475	2018-12-31 14:29:29.380117+08	7	2018-12-31 04:20:57.928519+00:00	3		11	1
+476	2018-12-31 14:29:29.382184+08	6	2018-12-31 04:19:54.384460+00:00	3		11	1
+477	2018-12-31 14:29:29.383835+08	5	2018-12-31 04:19:47.624843+00:00	3		11	1
+478	2018-12-31 14:29:29.386467+08	4	2018-12-31 04:18:35.990830+00:00	3		11	1
+479	2018-12-31 14:29:29.389272+08	3	2018-12-31 04:18:27.571947+00:00	3		11	1
+480	2018-12-31 14:29:29.390977+08	2	2018-12-31 04:18:03.886480+00:00	3		11	1
+481	2018-12-31 14:29:29.393072+08	1	2018-12-31 04:17:45.380320+00:00	3		11	1
+482	2018-12-31 15:25:13.433253+08	5	like	1	[{"added": {}}]	22	1
+483	2018-12-31 15:27:06.163356+08	6	comment	1	[{"added": {}}]	22	1
+484	2019-01-02 14:28:55.44072+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+485	2019-01-02 14:29:52.503048+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+486	2019-01-02 14:39:10.994395+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+487	2019-01-02 14:45:49.068459+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+488	2019-01-02 14:50:32.411655+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+489	2019-01-02 14:51:03.910578+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+490	2019-01-02 19:03:10.72365+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+491	2019-01-02 19:03:33.094016+08	3	3. Azri	2	[{"changed": {"fields": ["group"]}}]	28	1
+492	2019-01-04 23:11:00.09495+08	2	ramlan@cwa.com	2	[{"changed": {"fields": ["password"]}}]	6	1
+493	2019-01-06 17:30:48.842451+08	55	55.Group chat (agency)	1	[{"added": {}}]	18	1
+494	2019-01-06 17:31:11.829818+08	4	4. Badruddin	2	[{"changed": {"fields": ["inbox"]}}]	28	1
+495	2019-01-09 14:22:50.086934+08	2	ramlan@cwa.com	2	[{"changed": {"fields": ["password"]}}]	6	1
 \.
 
 
@@ -3336,31 +4288,37 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 5	sessions	session
 6	account	user
 7	apis	agency
-8	apis	applause
-9	apis	comment
-10	apis	company
-11	apis	contact
-12	apis	contactstatus
-13	apis	contacttype
-14	apis	conversation
-15	apis	designation
-16	apis	group
-17	apis	inbox
-18	apis	industry
-19	apis	notification
-20	apis	notificationtype
-21	apis	point
-22	apis	post
-23	apis	posttype
-24	apis	profile
-25	apis	sales
-26	apis	salesstatus
-27	apis	salestype
-28	apis	schedule
-29	apis	surcharge
-30	apis	pointattribute
-31	apis	pointfield
-32	apis	like
+8	apis	chat
+9	apis	chatmessage
+10	apis	chattype
+11	apis	comment
+12	apis	company
+13	apis	contact
+14	apis	contactstatus
+15	apis	contacttype
+16	apis	designation
+17	apis	group
+18	apis	inbox
+19	apis	industry
+20	apis	like
+21	apis	notification
+22	apis	notificationtype
+23	apis	point
+24	apis	pointattribute
+25	apis	pointfield
+26	apis	post
+27	apis	posttype
+28	apis	profile
+29	apis	sales
+30	apis	salesstatus
+31	apis	salestype
+32	apis	schedule
+33	apis	surcharge
+34	apis	pointlog
+35	apis	pointlogtype
+36	apis	groupchat
+37	apis	groupchatrole
+38	apis	googleapi
 \.
 
 
@@ -3369,52 +4327,23 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2018-11-13 23:50:02.937678+08
-2	contenttypes	0002_remove_content_type_name	2018-11-13 23:50:03.121125+08
-3	auth	0001_initial	2018-11-13 23:50:03.47371+08
-4	auth	0002_alter_permission_name_max_length	2018-11-13 23:50:03.485505+08
-5	auth	0003_alter_user_email_max_length	2018-11-13 23:50:03.499245+08
-6	auth	0004_alter_user_username_opts	2018-11-13 23:50:03.51301+08
-7	auth	0005_alter_user_last_login_null	2018-11-13 23:50:03.526143+08
-8	auth	0006_require_contenttypes_0002	2018-11-13 23:50:03.530699+08
-9	auth	0007_alter_validators_add_error_messages	2018-11-13 23:50:03.543174+08
-10	auth	0008_alter_user_username_max_length	2018-11-13 23:50:03.562888+08
-11	auth	0009_alter_user_last_name_max_length	2018-11-13 23:50:03.576566+08
-12	account	0001_initial	2018-11-13 23:50:03.671906+08
-13	admin	0001_initial	2018-11-13 23:50:03.775119+08
-14	admin	0002_logentry_remove_auto_add	2018-11-13 23:50:03.816171+08
-15	admin	0003_logentry_add_action_flag_choices	2018-11-13 23:50:03.848963+08
-16	apis	0001_initial	2018-11-13 23:50:06.618043+08
-17	apis	0002_auto_20181113_1549	2018-11-13 23:50:06.689002+08
-18	sessions	0001_initial	2018-11-13 23:50:06.705651+08
-19	apis	0003_auto_20181113_1704	2018-11-14 01:04:23.676038+08
-20	apis	0004_auto_20181114_0255	2018-11-14 11:18:20.391931+08
-21	apis	0005_auto_20181114_0426	2018-11-14 12:26:50.179819+08
-22	apis	0006_auto_20181114_0707	2018-11-14 15:07:29.996376+08
-23	apis	0007_auto_20181114_1049	2018-11-14 18:49:53.370328+08
-24	apis	0008_auto_20181114_1501	2018-11-14 23:01:45.016391+08
-25	apis	0009_auto_20181115_2253	2018-11-16 06:53:30.028202+08
-26	apis	0010_auto_20181115_2258	2018-11-16 06:59:00.117179+08
-27	apis	0011_auto_20181119_1153	2018-11-19 19:53:56.405957+08
-28	apis	0012_auto_20181119_2337	2018-11-20 07:37:41.30181+08
-29	apis	0013_auto_20181120_0932	2018-11-20 17:32:58.120766+08
-30	apis	0014_auto_20181122_0401	2018-11-22 12:02:06.65597+08
-31	apis	0015_auto_20181122_0426	2018-11-22 12:26:15.132728+08
-32	apis	0016_auto_20181122_0429	2018-11-22 12:29:18.511742+08
-33	apis	0017_auto_20181122_0433	2018-11-22 12:33:29.446483+08
-34	apis	0018_auto_20181123_0354	2018-11-23 11:54:07.102568+08
-35	apis	0019_auto_20181123_0811	2018-11-23 16:15:04.258663+08
-36	apis	0020_auto_20181125_2306	2018-11-26 07:06:06.381803+08
-37	apis	0020_auto_20181125_2319	2018-11-26 07:23:07.557772+08
-38	apis	0021_auto_20181126_1017	2018-11-26 18:17:29.076715+08
-39	apis	0022_auto_20181128_0826	2018-11-28 16:26:19.238399+08
-40	apis	0023_auto_20181129_0308	2018-11-29 11:08:54.644132+08
-41	apis	0024_auto_20181130_0108	2018-11-30 09:08:38.002936+08
-42	apis	0025_auto_20181203_0817	2018-12-03 16:18:18.235359+08
-43	apis	0026_auto_20181203_0820	2018-12-03 16:20:57.37551+08
-44	apis	0027_notification_post_rel	2018-12-08 12:29:35.287425+08
-45	apis	0028_auto_20181208_1332	2018-12-08 21:33:18.525426+08
-46	apis	0029_profile_fcm_token	2018-12-09 14:17:17.350295+08
+1	contenttypes	0001_initial	2018-12-20 00:30:51.606896+08
+2	contenttypes	0002_remove_content_type_name	2018-12-20 00:30:51.628598+08
+3	auth	0001_initial	2018-12-20 00:30:51.683272+08
+4	auth	0002_alter_permission_name_max_length	2018-12-20 00:30:51.693756+08
+5	auth	0003_alter_user_email_max_length	2018-12-20 00:30:51.706453+08
+6	auth	0004_alter_user_username_opts	2018-12-20 00:30:51.740855+08
+7	auth	0005_alter_user_last_login_null	2018-12-20 00:30:51.755643+08
+8	auth	0006_require_contenttypes_0002	2018-12-20 00:30:51.76709+08
+9	auth	0007_alter_validators_add_error_messages	2018-12-20 00:30:51.781248+08
+10	auth	0008_alter_user_username_max_length	2018-12-20 00:30:51.807483+08
+11	auth	0009_alter_user_last_name_max_length	2018-12-20 00:30:51.827194+08
+12	account	0001_initial	2018-12-20 00:30:51.893928+08
+13	admin	0001_initial	2018-12-20 00:30:51.942521+08
+14	admin	0002_logentry_remove_auto_add	2018-12-20 00:30:51.977392+08
+15	admin	0003_logentry_add_action_flag_choices	2018-12-20 00:30:52.007224+08
+17	sessions	0001_initial	2018-12-20 00:30:54.949196+08
+43	apis	0001_initial	2019-01-10 13:29:58.730557+08
 \.
 
 
@@ -3423,9 +4352,8 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
-u04wzebmxik0h3rl1w0psyd1cb2abim8	M2ZhYTI3YWIyYjE2MTExYjg2ZTQwZWMxYmYzN2FkYTk4MTUwZDA1Yjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmOTk0OTYxNWIxZmRkYzQzMTFkZDJjMjU4Nzg2YTllYTk4MzU0ZTZjIn0=	2018-11-27 23:51:32.556776+08
-n3q2p3kkquvfxjjvblj0h196h6acccbn	M2ZhYTI3YWIyYjE2MTExYjg2ZTQwZWMxYmYzN2FkYTk4MTUwZDA1Yjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmOTk0OTYxNWIxZmRkYzQzMTFkZDJjMjU4Nzg2YTllYTk4MzU0ZTZjIn0=	2018-12-12 14:05:52.896691+08
-337ifo1vrbmnlr0q3vij9texz03c4az7	M2ZhYTI3YWIyYjE2MTExYjg2ZTQwZWMxYmYzN2FkYTk4MTUwZDA1Yjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmOTk0OTYxNWIxZmRkYzQzMTFkZDJjMjU4Nzg2YTllYTk4MzU0ZTZjIn0=	2018-12-24 14:42:41.664341+08
+bkkai1i05tczl57k965rto1w15rxbdc2	N2RmMDlkZTdmYzk3ZGNmZmM0NDc1M2I5MWMzYzNhMzdmMzQ0ZjU5ZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4OWZhMWM2MmM3ZmIwNDA1YWI2Y2ZkYTc2NmQ1NjNlZjg3MzMyZDY4In0=	2019-01-03 01:08:47.430784+08
+ukmrl5k5kupyzjfvihml6p5tfvbk41dw	N2RmMDlkZTdmYzk3ZGNmZmM0NDc1M2I5MWMzYzNhMzdmMzQ0ZjU5ZTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4OWZhMWM2MmM3ZmIwNDA1YWI2Y2ZkYTc2NmQ1NjNlZjg3MzMyZDY4In0=	2019-01-23 14:22:50.487797+08
 \.
 
 
@@ -3440,7 +4368,7 @@ SELECT pg_catalog.setval('public.account_user_groups_id_seq', 1, false);
 -- Name: account_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.account_user_id_seq', 14, true);
+SELECT pg_catalog.setval('public.account_user_id_seq', 4, true);
 
 
 --
@@ -3468,14 +4396,21 @@ SELECT pg_catalog.setval('public.apis_agency_members_id_seq', 3, true);
 -- Name: apis_agency_posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_agency_posts_id_seq', 10, true);
+SELECT pg_catalog.setval('public.apis_agency_posts_id_seq', 6, true);
+
+
+--
+-- Name: apis_chatmessage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_chatmessage_id_seq', 294, true);
 
 
 --
 -- Name: apis_comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_comment_id_seq', 10, true);
+SELECT pg_catalog.setval('public.apis_comment_id_seq', 54, true);
 
 
 --
@@ -3489,21 +4424,21 @@ SELECT pg_catalog.setval('public.apis_company_id_seq', 2, true);
 -- Name: apis_contact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_contact_id_seq', 59, true);
+SELECT pg_catalog.setval('public.apis_contact_id_seq', 6, true);
 
 
 --
--- Name: apis_contact_schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_contact_schedules_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_contact_schedule_id_seq', 9, true);
+SELECT pg_catalog.setval('public.apis_contact_schedules_id_seq', 1, false);
 
 
 --
 -- Name: apis_contactstatus_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_contactstatus_id_seq', 7, true);
+SELECT pg_catalog.setval('public.apis_contactstatus_id_seq', 6, true);
 
 
 --
@@ -3514,24 +4449,17 @@ SELECT pg_catalog.setval('public.apis_contacttype_id_seq', 5, true);
 
 
 --
--- Name: apis_conversation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
---
-
-SELECT pg_catalog.setval('public.apis_conversation_id_seq', 1, false);
-
-
---
--- Name: apis_conversation_subscriber_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
---
-
-SELECT pg_catalog.setval('public.apis_conversation_subscriber_id_seq', 1, false);
-
-
---
 -- Name: apis_designation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
 SELECT pg_catalog.setval('public.apis_designation_id_seq', 4, true);
+
+
+--
+-- Name: apis_googleapi_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_googleapi_id_seq', 1, false);
 
 
 --
@@ -3545,14 +4473,49 @@ SELECT pg_catalog.setval('public.apis_group_id_seq', 2, true);
 -- Name: apis_group_members_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_group_members_id_seq', 7, true);
+SELECT pg_catalog.setval('public.apis_group_members_id_seq', 2, true);
+
+
+--
+-- Name: apis_groupchat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_groupchat_id_seq', 2, true);
+
+
+--
+-- Name: apis_groupchat_messages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_groupchat_messages_id_seq', 86, true);
+
+
+--
+-- Name: apis_groupchat_participants_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_groupchat_participants_id_seq', 5, true);
+
+
+--
+-- Name: apis_groupchatrole_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_groupchatrole_id_seq', 3, true);
 
 
 --
 -- Name: apis_inbox_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_inbox_id_seq', 1, false);
+SELECT pg_catalog.setval('public.apis_inbox_id_seq', 57, true);
+
+
+--
+-- Name: apis_inbox_messages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_inbox_messages_id_seq', 380, true);
 
 
 --
@@ -3566,42 +4529,49 @@ SELECT pg_catalog.setval('public.apis_industry_id_seq', 1, true);
 -- Name: apis_like_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_like_id_seq', 44, true);
+SELECT pg_catalog.setval('public.apis_like_id_seq', 88, true);
 
 
 --
 -- Name: apis_notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_notification_id_seq', 1, false);
+SELECT pg_catalog.setval('public.apis_notification_id_seq', 127, true);
 
 
 --
 -- Name: apis_notificationtype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_notificationtype_id_seq', 5, true);
+SELECT pg_catalog.setval('public.apis_notificationtype_id_seq', 6, true);
 
 
 --
 -- Name: apis_point_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_point_attributes_id_seq', 111, true);
+SELECT pg_catalog.setval('public.apis_point_attributes_id_seq', 22, true);
 
 
 --
 -- Name: apis_point_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_point_id_seq', 23, true);
+SELECT pg_catalog.setval('public.apis_point_id_seq', 10, true);
+
+
+--
+-- Name: apis_point_logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_point_logs_id_seq', 28, true);
 
 
 --
 -- Name: apis_pointattribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_pointattribute_id_seq', 116, true);
+SELECT pg_catalog.setval('public.apis_pointattribute_id_seq', 22, true);
 
 
 --
@@ -3612,31 +4582,45 @@ SELECT pg_catalog.setval('public.apis_pointfield_id_seq', 15, true);
 
 
 --
+-- Name: apis_pointlog_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_pointlog_id_seq', 41, true);
+
+
+--
+-- Name: apis_pointlogtype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
+--
+
+SELECT pg_catalog.setval('public.apis_pointlogtype_id_seq', 2, true);
+
+
+--
 -- Name: apis_post_comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_post_comments_id_seq', 9, true);
+SELECT pg_catalog.setval('public.apis_post_comments_id_seq', 54, true);
 
 
 --
 -- Name: apis_post_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_post_id_seq', 10, true);
+SELECT pg_catalog.setval('public.apis_post_id_seq', 6, true);
 
 
 --
 -- Name: apis_post_likes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_post_likes_id_seq', 44, true);
+SELECT pg_catalog.setval('public.apis_post_likes_id_seq', 88, true);
 
 
 --
 -- Name: apis_post_sales_rel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_post_sales_rel_id_seq', 6, true);
+SELECT pg_catalog.setval('public.apis_post_sales_rel_id_seq', 16, true);
 
 
 --
@@ -3657,63 +4641,63 @@ SELECT pg_catalog.setval('public.apis_posttype_id_seq', 2, true);
 -- Name: apis_profile_contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_contacts_id_seq', 59, true);
+SELECT pg_catalog.setval('public.apis_profile_contacts_id_seq', 6, true);
 
 
 --
 -- Name: apis_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_id_seq', 17, true);
+SELECT pg_catalog.setval('public.apis_profile_id_seq', 4, true);
 
 
 --
 -- Name: apis_profile_inbox_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_inbox_id_seq', 1, false);
+SELECT pg_catalog.setval('public.apis_profile_inbox_id_seq', 61, true);
 
 
 --
 -- Name: apis_profile_notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_notifications_id_seq', 1, false);
+SELECT pg_catalog.setval('public.apis_profile_notifications_id_seq', 127, true);
 
 
 --
 -- Name: apis_profile_points_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_points_id_seq', 23, true);
+SELECT pg_catalog.setval('public.apis_profile_points_id_seq', 10, true);
 
 
 --
 -- Name: apis_profile_sales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_sales_id_seq', 21, true);
+SELECT pg_catalog.setval('public.apis_profile_sales_id_seq', 17, true);
 
 
 --
 -- Name: apis_profile_schedules_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_profile_schedules_id_seq', 51, true);
+SELECT pg_catalog.setval('public.apis_profile_schedules_id_seq', 5, true);
 
 
 --
 -- Name: apis_sales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_sales_id_seq', 21, true);
+SELECT pg_catalog.setval('public.apis_sales_id_seq', 17, true);
 
 
 --
 -- Name: apis_salesstatus_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_salesstatus_id_seq', 4, true);
+SELECT pg_catalog.setval('public.apis_salesstatus_id_seq', 1, true);
 
 
 --
@@ -3727,14 +4711,14 @@ SELECT pg_catalog.setval('public.apis_salestype_id_seq', 6, true);
 -- Name: apis_schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_schedule_id_seq', 52, true);
+SELECT pg_catalog.setval('public.apis_schedule_id_seq', 5, true);
 
 
 --
 -- Name: apis_surcharge_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.apis_surcharge_id_seq', 2, true);
+SELECT pg_catalog.setval('public.apis_surcharge_id_seq', 3, true);
 
 
 --
@@ -3755,28 +4739,28 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 128, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 152, true);
 
 
 --
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 237, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 495, true);
 
 
 --
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 32, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 38, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: irsyadmhdilham
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 46, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 43, true);
 
 
 --
@@ -3868,6 +4852,14 @@ ALTER TABLE ONLY public.apis_agency_posts
 
 
 --
+-- Name: apis_chatmessage apis_chatmessage_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_chatmessage
+    ADD CONSTRAINT apis_chatmessage_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: apis_comment apis_comment_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -3892,19 +4884,19 @@ ALTER TABLE ONLY public.apis_contact
 
 
 --
--- Name: apis_contact_schedules apis_contact_schedule_contact_id_schedule_id_a434e481_uniq; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_contact_schedules apis_contact_schedules_contact_id_schedule_id_c251de6b_uniq; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_contact_schedules
-    ADD CONSTRAINT apis_contact_schedule_contact_id_schedule_id_a434e481_uniq UNIQUE (contact_id, schedule_id);
+    ADD CONSTRAINT apis_contact_schedules_contact_id_schedule_id_c251de6b_uniq UNIQUE (contact_id, schedule_id);
 
 
 --
--- Name: apis_contact_schedules apis_contact_schedule_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_contact_schedules apis_contact_schedules_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_contact_schedules
-    ADD CONSTRAINT apis_contact_schedule_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT apis_contact_schedules_pkey PRIMARY KEY (id);
 
 
 --
@@ -3932,35 +4924,19 @@ ALTER TABLE ONLY public.apis_contacttype
 
 
 --
--- Name: apis_conversation apis_conversation_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_conversation
-    ADD CONSTRAINT apis_conversation_pkey PRIMARY KEY (id);
-
-
---
--- Name: apis_conversation_subscriber apis_conversation_subscr_conversation_id_profile__d465048c_uniq; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_conversation_subscriber
-    ADD CONSTRAINT apis_conversation_subscr_conversation_id_profile__d465048c_uniq UNIQUE (conversation_id, profile_id);
-
-
---
--- Name: apis_conversation_subscriber apis_conversation_subscriber_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_conversation_subscriber
-    ADD CONSTRAINT apis_conversation_subscriber_pkey PRIMARY KEY (id);
-
-
---
 -- Name: apis_designation apis_designation_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_designation
     ADD CONSTRAINT apis_designation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_googleapi apis_googleapi_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_googleapi
+    ADD CONSTRAINT apis_googleapi_pkey PRIMARY KEY (id);
 
 
 --
@@ -3985,6 +4961,70 @@ ALTER TABLE ONLY public.apis_group_members
 
 ALTER TABLE ONLY public.apis_group
     ADD CONSTRAINT apis_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_groupchat_messages apis_groupchat_messages_groupchat_id_chatmessage_5c96050c_uniq; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_messages
+    ADD CONSTRAINT apis_groupchat_messages_groupchat_id_chatmessage_5c96050c_uniq UNIQUE (groupchat_id, chatmessage_id);
+
+
+--
+-- Name: apis_groupchat_messages apis_groupchat_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_messages
+    ADD CONSTRAINT apis_groupchat_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_groupchat_participants apis_groupchat_participa_groupchat_id_profile_id_cc90f76a_uniq; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_participants
+    ADD CONSTRAINT apis_groupchat_participa_groupchat_id_profile_id_cc90f76a_uniq UNIQUE (groupchat_id, profile_id);
+
+
+--
+-- Name: apis_groupchat_participants apis_groupchat_participants_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_participants
+    ADD CONSTRAINT apis_groupchat_participants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_groupchat apis_groupchat_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat
+    ADD CONSTRAINT apis_groupchat_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_groupchatrole apis_groupchatrole_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchatrole
+    ADD CONSTRAINT apis_groupchatrole_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_inbox_messages apis_inbox_messages_inbox_id_chatmessage_id_e4947a50_uniq; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_inbox_messages
+    ADD CONSTRAINT apis_inbox_messages_inbox_id_chatmessage_id_e4947a50_uniq UNIQUE (inbox_id, chatmessage_id);
+
+
+--
+-- Name: apis_inbox_messages apis_inbox_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_inbox_messages
+    ADD CONSTRAINT apis_inbox_messages_pkey PRIMARY KEY (id);
 
 
 --
@@ -4044,6 +5084,22 @@ ALTER TABLE ONLY public.apis_point_attributes
 
 
 --
+-- Name: apis_point_logs apis_point_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_point_logs
+    ADD CONSTRAINT apis_point_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_point_logs apis_point_logs_point_id_pointlog_id_4476446f_uniq; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_point_logs
+    ADD CONSTRAINT apis_point_logs_point_id_pointlog_id_4476446f_uniq UNIQUE (point_id, pointlog_id);
+
+
+--
 -- Name: apis_point apis_point_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -4065,6 +5121,22 @@ ALTER TABLE ONLY public.apis_pointattribute
 
 ALTER TABLE ONLY public.apis_pointfield
     ADD CONSTRAINT apis_pointfield_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_pointlog apis_pointlog_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_pointlog
+    ADD CONSTRAINT apis_pointlog_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: apis_pointlogtype apis_pointlogtype_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_pointlogtype
+    ADD CONSTRAINT apis_pointlogtype_pkey PRIMARY KEY (id);
 
 
 --
@@ -4260,19 +5332,19 @@ ALTER TABLE ONLY public.apis_sales
 
 
 --
+-- Name: apis_salesstatus apis_salesstatus_name_key; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_salesstatus
+    ADD CONSTRAINT apis_salesstatus_name_key UNIQUE (name);
+
+
+--
 -- Name: apis_salesstatus apis_salesstatus_pkey; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_salesstatus
     ADD CONSTRAINT apis_salesstatus_pkey PRIMARY KEY (id);
-
-
---
--- Name: apis_salesstatus apis_salesstatus_sales_status_key; Type: CONSTRAINT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_salesstatus
-    ADD CONSTRAINT apis_salesstatus_sales_status_key UNIQUE (name);
 
 
 --
@@ -4472,6 +5544,13 @@ CREATE INDEX apis_agency_posts_post_id_52dfab18 ON public.apis_agency_posts USIN
 
 
 --
+-- Name: apis_chatmessage_person_id_50e431f8; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_chatmessage_person_id_50e431f8 ON public.apis_chatmessage USING btree (person_id);
+
+
+--
 -- Name: apis_comment_commented_by_id_48622e67; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -4493,17 +5572,17 @@ CREATE INDEX apis_contact_referrer_id_4516a6cd ON public.apis_contact USING btre
 
 
 --
--- Name: apis_contact_schedule_contact_id_e04f1785; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_contact_schedules_contact_id_b948e9d7; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE INDEX apis_contact_schedule_contact_id_e04f1785 ON public.apis_contact_schedules USING btree (contact_id);
+CREATE INDEX apis_contact_schedules_contact_id_b948e9d7 ON public.apis_contact_schedules USING btree (contact_id);
 
 
 --
--- Name: apis_contact_schedule_schedule_id_cc74735c; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_contact_schedules_schedule_id_7cd7e2c4; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE INDEX apis_contact_schedule_schedule_id_cc74735c ON public.apis_contact_schedules USING btree (schedule_id);
+CREATE INDEX apis_contact_schedules_schedule_id_7cd7e2c4 ON public.apis_contact_schedules USING btree (schedule_id);
 
 
 --
@@ -4528,20 +5607,6 @@ CREATE INDEX apis_contactstatus_status_2fc12b88_like ON public.apis_contactstatu
 
 
 --
--- Name: apis_conversation_subscriber_conversation_id_d17e4f4f; Type: INDEX; Schema: public; Owner: irsyadmhdilham
---
-
-CREATE INDEX apis_conversation_subscriber_conversation_id_d17e4f4f ON public.apis_conversation_subscriber USING btree (conversation_id);
-
-
---
--- Name: apis_conversation_subscriber_profile_id_29fa3e12; Type: INDEX; Schema: public; Owner: irsyadmhdilham
---
-
-CREATE INDEX apis_conversation_subscriber_profile_id_29fa3e12 ON public.apis_conversation_subscriber USING btree (profile_id);
-
-
---
 -- Name: apis_group_members_group_id_ee819d28; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -4563,24 +5628,87 @@ CREATE INDEX apis_group_owner_id_44b25c10 ON public.apis_group USING btree (owne
 
 
 --
--- Name: apis_inbox_conversation_id_beed7a3c; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_groupchat_messages_chatmessage_id_88aca116; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE INDEX apis_inbox_conversation_id_beed7a3c ON public.apis_inbox USING btree (conversation_id);
-
-
---
--- Name: apis_inbox_sender_id_f7ac6d88; Type: INDEX; Schema: public; Owner: irsyadmhdilham
---
-
-CREATE INDEX apis_inbox_sender_id_f7ac6d88 ON public.apis_inbox USING btree (sender_id);
+CREATE INDEX apis_groupchat_messages_chatmessage_id_88aca116 ON public.apis_groupchat_messages USING btree (chatmessage_id);
 
 
 --
--- Name: apis_like_likers_id_6becaf55; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_groupchat_messages_groupchat_id_e1c9626b; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE INDEX apis_like_likers_id_6becaf55 ON public.apis_like USING btree (liker_id);
+CREATE INDEX apis_groupchat_messages_groupchat_id_e1c9626b ON public.apis_groupchat_messages USING btree (groupchat_id);
+
+
+--
+-- Name: apis_groupchat_owner_id_4ccc30f0; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_groupchat_owner_id_4ccc30f0 ON public.apis_groupchat USING btree (owner_id);
+
+
+--
+-- Name: apis_groupchat_participants_groupchat_id_226dc3e9; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_groupchat_participants_groupchat_id_226dc3e9 ON public.apis_groupchat_participants USING btree (groupchat_id);
+
+
+--
+-- Name: apis_groupchat_participants_profile_id_927a2270; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_groupchat_participants_profile_id_927a2270 ON public.apis_groupchat_participants USING btree (profile_id);
+
+
+--
+-- Name: apis_groupchat_role_id_0d308ecf; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_groupchat_role_id_0d308ecf ON public.apis_groupchat USING btree (role_id);
+
+
+--
+-- Name: apis_inbox_chat_with_id_14248c92; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_inbox_chat_with_id_14248c92 ON public.apis_inbox USING btree (chat_with_id);
+
+
+--
+-- Name: apis_inbox_group_chat_id_71eac19b; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_inbox_group_chat_id_71eac19b ON public.apis_inbox USING btree (group_chat_id);
+
+
+--
+-- Name: apis_inbox_messages_chatmessage_id_fe9b3c70; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_inbox_messages_chatmessage_id_fe9b3c70 ON public.apis_inbox_messages USING btree (chatmessage_id);
+
+
+--
+-- Name: apis_inbox_messages_inbox_id_a52ae67e; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_inbox_messages_inbox_id_a52ae67e ON public.apis_inbox_messages USING btree (inbox_id);
+
+
+--
+-- Name: apis_like_liker_id_43520600; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_like_liker_id_43520600 ON public.apis_like USING btree (liker_id);
+
+
+--
+-- Name: apis_notification_inbox_rel_id_fad669b1; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_notification_inbox_rel_id_fad669b1 ON public.apis_notification USING btree (inbox_rel_id);
 
 
 --
@@ -4619,10 +5747,38 @@ CREATE INDEX apis_point_attributes_pointattribute_id_b5c01253 ON public.apis_poi
 
 
 --
--- Name: apis_pointattribute_field_id_38e78352; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_point_logs_point_id_03926bdc; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE INDEX apis_pointattribute_field_id_38e78352 ON public.apis_pointattribute USING btree (attribute_id);
+CREATE INDEX apis_point_logs_point_id_03926bdc ON public.apis_point_logs USING btree (point_id);
+
+
+--
+-- Name: apis_point_logs_pointlog_id_be28b106; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_point_logs_pointlog_id_be28b106 ON public.apis_point_logs USING btree (pointlog_id);
+
+
+--
+-- Name: apis_pointattribute_attribute_id_68a88a17; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_pointattribute_attribute_id_68a88a17 ON public.apis_pointattribute USING btree (attribute_id);
+
+
+--
+-- Name: apis_pointlog_attribute_id_f7377ac0; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_pointlog_attribute_id_f7377ac0 ON public.apis_pointlog USING btree (attribute_id);
+
+
+--
+-- Name: apis_pointlog_point_type_id_04218b06; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+--
+
+CREATE INDEX apis_pointlog_point_type_id_04218b06 ON public.apis_pointlog USING btree (point_type_id);
 
 
 --
@@ -4640,10 +5796,10 @@ CREATE INDEX apis_post_comments_post_id_d644be5b ON public.apis_post_comments US
 
 
 --
--- Name: apis_post_contact_relation_id_520caf94; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_post_contact_rel_id_0d8911ab; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE INDEX apis_post_contact_relation_id_520caf94 ON public.apis_post USING btree (contact_rel_id);
+CREATE INDEX apis_post_contact_rel_id_0d8911ab ON public.apis_post USING btree (contact_rel_id);
 
 
 --
@@ -4857,10 +6013,10 @@ CREATE INDEX apis_sales_surcharge_id_a0745407 ON public.apis_sales USING btree (
 
 
 --
--- Name: apis_salesstatus_sales_status_7192711c_like; Type: INDEX; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_salesstatus_name_8bfe33ff_like; Type: INDEX; Schema: public; Owner: irsyadmhdilham
 --
 
-CREATE INDEX apis_salesstatus_sales_status_7192711c_like ON public.apis_salesstatus USING btree (name varchar_pattern_ops);
+CREATE INDEX apis_salesstatus_name_8bfe33ff_like ON public.apis_salesstatus USING btree (name varchar_pattern_ops);
 
 
 --
@@ -5015,6 +6171,14 @@ ALTER TABLE ONLY public.apis_agency_posts
 
 
 --
+-- Name: apis_chatmessage apis_chatmessage_person_id_50e431f8_fk_apis_profile_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_chatmessage
+    ADD CONSTRAINT apis_chatmessage_person_id_50e431f8_fk_apis_profile_id FOREIGN KEY (person_id) REFERENCES public.apis_profile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: apis_comment apis_comment_commented_by_id_48622e67_fk_apis_profile_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -5063,22 +6227,6 @@ ALTER TABLE ONLY public.apis_contact
 
 
 --
--- Name: apis_conversation_subscriber apis_conversation_su_conversation_id_d17e4f4f_fk_apis_conv; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_conversation_subscriber
-    ADD CONSTRAINT apis_conversation_su_conversation_id_d17e4f4f_fk_apis_conv FOREIGN KEY (conversation_id) REFERENCES public.apis_conversation(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: apis_conversation_subscriber apis_conversation_su_profile_id_29fa3e12_fk_apis_prof; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
---
-
-ALTER TABLE ONLY public.apis_conversation_subscriber
-    ADD CONSTRAINT apis_conversation_su_profile_id_29fa3e12_fk_apis_prof FOREIGN KEY (profile_id) REFERENCES public.apis_profile(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
 -- Name: apis_group_members apis_group_members_group_id_ee819d28_fk_apis_group_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
@@ -5103,19 +6251,83 @@ ALTER TABLE ONLY public.apis_group
 
 
 --
--- Name: apis_inbox apis_inbox_conversation_id_beed7a3c_fk_apis_conversation_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_groupchat_messages apis_groupchat_messa_chatmessage_id_88aca116_fk_apis_chat; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_messages
+    ADD CONSTRAINT apis_groupchat_messa_chatmessage_id_88aca116_fk_apis_chat FOREIGN KEY (chatmessage_id) REFERENCES public.apis_chatmessage(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_groupchat_messages apis_groupchat_messa_groupchat_id_e1c9626b_fk_apis_grou; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_messages
+    ADD CONSTRAINT apis_groupchat_messa_groupchat_id_e1c9626b_fk_apis_grou FOREIGN KEY (groupchat_id) REFERENCES public.apis_groupchat(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_groupchat apis_groupchat_owner_id_4ccc30f0_fk_apis_profile_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat
+    ADD CONSTRAINT apis_groupchat_owner_id_4ccc30f0_fk_apis_profile_id FOREIGN KEY (owner_id) REFERENCES public.apis_profile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_groupchat_participants apis_groupchat_parti_groupchat_id_226dc3e9_fk_apis_grou; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_participants
+    ADD CONSTRAINT apis_groupchat_parti_groupchat_id_226dc3e9_fk_apis_grou FOREIGN KEY (groupchat_id) REFERENCES public.apis_groupchat(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_groupchat_participants apis_groupchat_parti_profile_id_927a2270_fk_apis_prof; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat_participants
+    ADD CONSTRAINT apis_groupchat_parti_profile_id_927a2270_fk_apis_prof FOREIGN KEY (profile_id) REFERENCES public.apis_profile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_groupchat apis_groupchat_role_id_0d308ecf_fk_apis_groupchatrole_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_groupchat
+    ADD CONSTRAINT apis_groupchat_role_id_0d308ecf_fk_apis_groupchatrole_id FOREIGN KEY (role_id) REFERENCES public.apis_groupchatrole(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_inbox apis_inbox_chat_with_id_14248c92_fk_apis_profile_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_inbox
-    ADD CONSTRAINT apis_inbox_conversation_id_beed7a3c_fk_apis_conversation_id FOREIGN KEY (conversation_id) REFERENCES public.apis_conversation(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT apis_inbox_chat_with_id_14248c92_fk_apis_profile_id FOREIGN KEY (chat_with_id) REFERENCES public.apis_profile(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- Name: apis_inbox apis_inbox_sender_id_f7ac6d88_fk_apis_profile_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_inbox apis_inbox_group_chat_id_71eac19b_fk_apis_groupchat_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_inbox
-    ADD CONSTRAINT apis_inbox_sender_id_f7ac6d88_fk_apis_profile_id FOREIGN KEY (sender_id) REFERENCES public.apis_profile(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT apis_inbox_group_chat_id_71eac19b_fk_apis_groupchat_id FOREIGN KEY (group_chat_id) REFERENCES public.apis_groupchat(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_inbox_messages apis_inbox_messages_chatmessage_id_fe9b3c70_fk_apis_chat; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_inbox_messages
+    ADD CONSTRAINT apis_inbox_messages_chatmessage_id_fe9b3c70_fk_apis_chat FOREIGN KEY (chatmessage_id) REFERENCES public.apis_chatmessage(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_inbox_messages apis_inbox_messages_inbox_id_a52ae67e_fk_apis_inbox_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_inbox_messages
+    ADD CONSTRAINT apis_inbox_messages_inbox_id_a52ae67e_fk_apis_inbox_id FOREIGN KEY (inbox_id) REFERENCES public.apis_inbox(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -5124,6 +6336,14 @@ ALTER TABLE ONLY public.apis_inbox
 
 ALTER TABLE ONLY public.apis_like
     ADD CONSTRAINT apis_like_liker_id_43520600_fk_apis_profile_id FOREIGN KEY (liker_id) REFERENCES public.apis_profile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_notification apis_notification_inbox_rel_id_fad669b1_fk_apis_inbox_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_notification
+    ADD CONSTRAINT apis_notification_inbox_rel_id_fad669b1_fk_apis_inbox_id FOREIGN KEY (inbox_rel_id) REFERENCES public.apis_inbox(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -5167,11 +6387,43 @@ ALTER TABLE ONLY public.apis_point_attributes
 
 
 --
+-- Name: apis_point_logs apis_point_logs_point_id_03926bdc_fk_apis_point_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_point_logs
+    ADD CONSTRAINT apis_point_logs_point_id_03926bdc_fk_apis_point_id FOREIGN KEY (point_id) REFERENCES public.apis_point(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_point_logs apis_point_logs_pointlog_id_be28b106_fk_apis_pointlog_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_point_logs
+    ADD CONSTRAINT apis_point_logs_pointlog_id_be28b106_fk_apis_pointlog_id FOREIGN KEY (pointlog_id) REFERENCES public.apis_pointlog(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: apis_pointattribute apis_pointattribute_attribute_id_68a88a17_fk_apis_pointfield_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_pointattribute
     ADD CONSTRAINT apis_pointattribute_attribute_id_68a88a17_fk_apis_pointfield_id FOREIGN KEY (attribute_id) REFERENCES public.apis_pointfield(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_pointlog apis_pointlog_attribute_id_f7377ac0_fk_apis_pointfield_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_pointlog
+    ADD CONSTRAINT apis_pointlog_attribute_id_f7377ac0_fk_apis_pointfield_id FOREIGN KEY (attribute_id) REFERENCES public.apis_pointfield(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: apis_pointlog apis_pointlog_point_type_id_04218b06_fk_apis_pointlogtype_id; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+--
+
+ALTER TABLE ONLY public.apis_pointlog
+    ADD CONSTRAINT apis_pointlog_point_type_id_04218b06_fk_apis_pointlogtype_id FOREIGN KEY (point_type_id) REFERENCES public.apis_pointlogtype(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -5407,11 +6659,11 @@ ALTER TABLE ONLY public.apis_sales
 
 
 --
--- Name: apis_sales apis_sales_sales_status_id_03600a56_fk_apis_sale; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
+-- Name: apis_sales apis_sales_sales_status_id_03600a56_fk_apis_salesstatus_name; Type: FK CONSTRAINT; Schema: public; Owner: irsyadmhdilham
 --
 
 ALTER TABLE ONLY public.apis_sales
-    ADD CONSTRAINT apis_sales_sales_status_id_03600a56_fk_apis_sale FOREIGN KEY (sales_status_id) REFERENCES public.apis_salesstatus(name) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT apis_sales_sales_status_id_03600a56_fk_apis_salesstatus_name FOREIGN KEY (sales_status_id) REFERENCES public.apis_salesstatus(name) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
