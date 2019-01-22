@@ -18,7 +18,6 @@ from .functions.income import Income
 from .. .functions.push_notification import SendNotification
 import json
 import os
-import asyncio
 
 path = os.path.abspath(os.path.dirname(__file__) + "../../../../static/commissions-struct.json")
 file = open(path, 'r')

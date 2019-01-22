@@ -8,16 +8,19 @@ from .. .functions.create_account import CreateAccount
 
 class AuthenticationView(APIView):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         email = request.query_params.get('email')
         password = request.query_params.get('password')
         fcm_token = request.query_params.get('fcmToken')
         auth = authenticate(email=email, password=password)
         if auth is not None:
             user = Profile.objects.get(user__email__exact=auth.email)
+            if user.is_auth:
+                return Response({'auth': False}, status=status.HTTP_401_UNAUTHORIZED)
             if fcm_token == 'null':
                 fcm_token = None
             user.fcm_token = fcm_token
+            user.is_auth = True
             user.save()
             data = {
                 'user_id': user.pk,
@@ -28,7 +31,7 @@ class AuthenticationView(APIView):
 
 class CreateAccount(APIView):
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         data = request.data
         email = data.get('email')
         password = data.get('password')

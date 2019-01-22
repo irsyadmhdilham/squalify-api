@@ -83,6 +83,7 @@ class SignOut(APIView):
         profile = Profile.objects.get(pk=pk)
         try:
             profile.fcm_token = None
+            profile.is_auth = False
             profile.save()
             return Response({'status': 'user signed out'}, status=status.HTTP_200_OK)
         except Exception as err:

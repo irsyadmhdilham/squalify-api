@@ -3,22 +3,23 @@ from oauth2client.service_account import ServiceAccountCredentials
 from .._models.google import GoogleApi
 from datetime import timedelta
 import requests
+import asyncio
 
 class SendNotification:
 
     url = 'https://fcm.googleapis.com/v1/projects/squalify-119ee/messages:send'
     scope = 'https://www.googleapis.com/auth/firebase.messaging'
     service_account = 'service-account.json'
-    token = None
     message = None
     sound = False
     data = None
+    access_token = None
 
-    def __init__(self, token, message, data, sound=False):
-        self.token = token
+    def __init__(self, message, data, sound=False):
         self.message = message
         self.sound = sound
         self.data = data
+        self.get_access_token()
 
     def get_access_token(self):
         def request_token():
@@ -38,25 +39,25 @@ class SendNotification:
                 instance.token_expiry = expire_on
                 instance.save()
                 access_token = instance.access_token
-            return access_token
+            self.access_token = access_token
         
         access_token = request_token()
         expire_on = timezone.now() + timedelta(hours=1)
         GoogleApi.objects.create(access_token=access_token, token_expiry=expire_on)
-        return access_token
+        self.access_token = access_token
 
     def headers(self):
         return {
-            'Authorization': 'Bearer ' + self.get_access_token(),
+            'Authorization': 'Bearer ' + self.access_token,
             'Content-Type': 'application/json; UTF-8'
         }
     
-    def body(self):
+    def body(self, token):
         body = {
             'message': {
-                'token': self.token,
+                'token': token,
                 'notification': {
-                    'title': 'Squalify',
+                    'title': 'New post',
                     'body': self.message
                 },
                 'data': self.data
@@ -77,6 +78,19 @@ class SendNotification:
             }
         return body
     
-    def send(self):
-        send = requests.post(self.url, json=self.body(), headers=self.headers())
+    def send(self, token):
+        send = requests.post(self.url, json=self.body(token), headers=self.headers())
         print(send.json())
+    
+    def send_group(self, members):
+        tasks = []
+        async def send_notif(token):
+            send = await requests.post(self.url, json=self.body(token), headers=self.headers())
+            print(send)
+        for member in members:
+            token = member.fcm_token
+            tasks.append(asyncio.ensure_future(send_notif(token)))
+        event_loop = asyncio.get_event_loop()
+        gather = asyncio.gather(*tasks)
+        event_loop.run_until_complete(gather)
+        event_loop.close()
