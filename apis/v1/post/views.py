@@ -4,7 +4,7 @@ from .. ._models.profile import Profile
 from .. ._models.agency import Agency
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer
 from .. ._models.notification import Notification, NotificationType
-from .. .functions.push_notification import SendNotification
+from .. .functions.push_notification import NotificationInit
 
 """create notification"""
 def create_notif(notified_by, post, notif_type):
@@ -47,14 +47,13 @@ class CommentList(generics.ListCreateAPIView):
             posted_by.notifications.add(notif)
             fcm_token = posted_by.fcm_token
             if fcm_token is not None:
-                message = f'{profile.name} commented your post'
                 data = {
                     'title': 'comment post',
-                    'post_id': post.pk,
-                    'notif_id': notif.pk
+                    'post_id': str(post.pk),
+                    'notif_id': str(notif.pk)
                 }
-                send_notif = SendNotification(fcm_token, message, data, True)
-                send_notif.send()
+                send_notif = NotificationInit('New comment', f'{profile.name} commented your post', data, True)
+                send_notif.send(fcm_token)
 
 class LikeList(generics.ListCreateAPIView):
     serializer_class = LikeSerializer
@@ -78,14 +77,13 @@ class LikeList(generics.ListCreateAPIView):
             posted_by.notifications.add(notif)
             fcm_token = posted_by.fcm_token
             if fcm_token is not None:
-                message = f'{profile.name} liked your post'
                 data = {
                     'title': 'like post',
-                    'post_id': post.pk,
-                    'notif_id': notif.pk
+                    'post_id': str(post.pk),
+                    'notif_id': str(notif.pk)
                 }
-                send_notif = SendNotification(fcm_token, message, data)
-                send_notif.send()
+                send_notif = NotificationInit('Post liked', f'{profile.name} liked your post', data, True)
+                send_notif.send(fcm_token)
 
 class Unlike(generics.DestroyAPIView):
     serializer_class = LikeSerializer

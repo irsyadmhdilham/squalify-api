@@ -11,19 +11,26 @@ from apis._models.profile import Profile
 from apis._models.agency import Agency
 from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, Surcharge
+from .. ._models.notification import Notification, NotificationType
 
 from .functions.personal import Personal
 from .functions.sales_filter import SalesFilter
 from .functions.income import Income
-from .. .functions.push_notification import SendNotification
+from .. .functions.push_notification import NotificationInit
 import json
 import os
+import asyncio
 
 path = os.path.abspath(os.path.dirname(__file__) + "../../../../static/commissions-struct.json")
 file = open(path, 'r')
 comm_struct = json.loads(file.read())
 file.close()
 
+"""create notification"""
+def create_notif(notified_by, post, notif_type):
+    notif_type = NotificationType.objects.get(name=notif_type)
+    notif = Notification.objects.create(notified_by=notified_by, notification_type=notif_type, post_rel=post)
+    return notif
 
 class SalesList(generics.ListCreateAPIView):
     serializer_class = SalesSerializer
@@ -77,7 +84,7 @@ class SalesList(generics.ListCreateAPIView):
             Q(timestamp__date=timezone.now().date()) &
             Q(posted_by__pk=user_pk)
         )
-
+        post = None
         if today_post.count() > 0:
             post = today_post[0]
             post.sales_rel.add(instance)
@@ -88,9 +95,22 @@ class SalesList(generics.ListCreateAPIView):
             create_post.save()
             create_post.sales_rel.add(instance)
             profile.agency.posts.add(create_post)
-        
-        """send push notification"""
-        agency_members = profile.agency.members.filter(fcm_token__isnull=False)
+            post = create_post
+
+        """Create notification"""
+        filter_token = profile.agency.members.filter(fcm_token__isnull=False)
+        members_with_token = filter(lambda val: val.pk != profile.pk, filter_token)
+        members = profile.agency.members.all()
+        new_notif = create_notif(profile, post, 'closed sales')
+        for member in members:
+            member.notifications.add(new_notif)
+        notif_data = {
+            'post_id': str(post.pk),
+            'notif_id': str(new_notif.pk)
+        }
+        if members_with_token.count() > 0:
+            notif = NotificationInit('New sales closed', f'{profile.name} just closed a sales', notif_data)
+            notif.send_group(members_with_token)
 
 class SalesRemove(generics.DestroyAPIView):
     serializer_class = SalesSerializer

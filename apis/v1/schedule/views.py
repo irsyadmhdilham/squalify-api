@@ -3,6 +3,10 @@ from .. ._models.profile import Profile
 from .. ._models.schedule import Schedule
 from .serializers import SchedulesSerializer
 
+async def task(num):
+    await asyncio.sleep(1)
+    print(f'couroutine :{num}')
+
 class ScheduleList(generics.ListCreateAPIView):
     serializer_class = SchedulesSerializer
     

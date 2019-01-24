@@ -4,19 +4,22 @@ from .._models.google import GoogleApi
 from datetime import timedelta
 import requests
 import asyncio
+from functools import partial
 
-class SendNotification:
+class NotificationInit:
 
     url = 'https://fcm.googleapis.com/v1/projects/squalify-119ee/messages:send'
     scope = 'https://www.googleapis.com/auth/firebase.messaging'
     service_account = 'service-account.json'
     message = None
+    title = None
     sound = False
     data = None
     access_token = None
 
-    def __init__(self, message, data, sound=False):
+    def __init__(self, title, message, data, sound=False):
         self.message = message
+        self.title = title
         self.sound = sound
         self.data = data
         self.get_access_token()
@@ -28,23 +31,23 @@ class SendNotification:
             return access_token_info.access_token
 
         """check whether access token had been saved or not"""
-        if GoogleApi.objects.count() == 1:
-            instance = GoogleApi.objects.get(pk=1)
+        if GoogleApi.objects.count() > 0:
+            instance = GoogleApi.objects.all()[0]
             access_token = None
             if instance.token_expiry <= timezone.now():
-                access_token = instance.access_token
-            else:
                 expire_on = timezone.now() + timedelta(hours=1)
                 instance.access_token = request_token()
                 instance.token_expiry = expire_on
                 instance.save()
                 access_token = instance.access_token
+            else:
+                access_token = instance.access_token
             self.access_token = access_token
-        
-        access_token = request_token()
-        expire_on = timezone.now() + timedelta(hours=1)
-        GoogleApi.objects.create(access_token=access_token, token_expiry=expire_on)
-        self.access_token = access_token
+        else:
+            access_token = request_token()
+            expire_on = timezone.now() + timedelta(hours=1)
+            GoogleApi.objects.create(access_token=access_token, token_expiry=expire_on)
+            self.access_token = access_token
 
     def headers(self):
         return {
@@ -57,7 +60,7 @@ class SendNotification:
             'message': {
                 'token': token,
                 'notification': {
-                    'title': 'New post',
+                    'title': self.title,
                     'body': self.message
                 },
                 'data': self.data
@@ -83,14 +86,20 @@ class SendNotification:
         print(send.json())
     
     def send_group(self, members):
+        event_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(event_loop)
         tasks = []
         async def send_notif(token):
-            send = await requests.post(self.url, json=self.body(token), headers=self.headers())
-            print(send)
+            loop = asyncio.get_event_loop()
+            data = {
+                'url': self.url,
+                'json': self.body(token),
+                'headers': self.headers()
+            }
+            await loop.run_in_executor(None, partial(requests.post, **data))
         for member in members:
             token = member.fcm_token
             tasks.append(asyncio.ensure_future(send_notif(token)))
-        event_loop = asyncio.get_event_loop()
         gather = asyncio.gather(*tasks)
         event_loop.run_until_complete(gather)
         event_loop.close()

@@ -5,6 +5,7 @@ from ..notification.serializers import NotificationSerializer
 from .. ._models.profile import Profile
 from .. ._models.notification import Notification, NotificationType
 from .. ._models.inbox import ChatMessage, GroupChat, Inbox
+from .. .functions.push_notification import NotificationInit
 
 """create notification"""
 def create_notif(notified_by, inbox, notif_type):
@@ -44,25 +45,41 @@ class InboxList(generics.ListCreateAPIView):
 
         """find receiver inbox to avoid double instance"""
         find_inbox = receiver.inbox.filter(chat_with=profile)
+        inbox_id = None
+        notif_id = None
         if find_inbox.count() > 0:
             receiver_inbox = find_inbox[0]
+            inbox_id = receiver_inbox.pk
             receiver_inbox.messages.add(message)
             receiver_inbox.unread += 1
             receiver_inbox.save()
             data['receiver_update'] = { 'pk': receiver_inbox.pk, 'message': serializer.data }
             new_notif = create_notif(profile, receiver_inbox, 'inbox')
+            notif_id = new_notif.pk
             receiver.notifications.add(new_notif)
             notif = NotificationSerializer(new_notif, context={'request': request}).data
             data['notif'] = notif
         else:
             create_new = Inbox.objects.create(chat_with=profile)
+            inbox_id = create_new.pk
             create_new.messages.add(message)
             receiver.inbox.add(create_new)
             data['receiver_create'] = self.serializer_class(create_new, context={'request': request}).data
             new_notif = create_notif(profile, create_new, 'inbox')
+            notif_id = new_notif.pk
             receiver.notifications.add(new_notif)
             notif = NotificationSerializer(new_notif, context={'request': request}).data
             data['notif'] = notif
+
+        """send push notification"""
+        if receiver.fcm_token is not None:
+            notif_data = {
+                'title': 'personal inbox',
+                'inbox_id': str(inbox_id),
+                'notif_id': str(notif_id)
+            }
+            notif_init = NotificationInit('New message', f'{receiver.name} send message', notif_data, True)
+            notif_init.send(receiver.fcm_token)
 
         return Response(data, status=status.HTTP_200_OK)
 
@@ -94,30 +111,46 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
         inbox.messages.add(message)
         serializer = ChatMessageSerializer(message, context={'request': request})
         data = { 'message': serializer.data }
+        notif_id = None
+        inbox_id = None
 
         """receiver chat"""
         find_inbox = receiver.inbox.filter(chat_with=profile)
         if find_inbox.count() > 0:
             receiver_inbox = find_inbox[0]
+            inbox_id = receiver_inbox.pk
             receiver_inbox.messages.add(message)
             receiver_inbox.unread += 1
             receiver_inbox.save()
             data['receiver_update'] = { 'pk': receiver_inbox.pk, 'message': serializer.data }
             if initial:
                 new_notif = create_notif(profile, receiver_inbox, 'inbox')
+                notif_id = new_notif.pk
                 receiver.notifications.add(new_notif)
                 notif = NotificationSerializer(new_notif, context={'request': request}).data
                 data['notif'] = notif
         else:
             create_new = Inbox.objects.create(chat_with=profile)
+            inbox_id = create_new.pk
             create_new.messages.add(message)
             receiver.inbox.add(create_new)
             data['receiver_create'] = self.serializer_class(create_new, context={'request': request}).data
             if initial:
                 new_notif = create_notif(profile, create_new, 'inbox')
+                notif_id = new_notif.pk
                 receiver.notifications.add(new_notif)
                 notif = NotificationSerializer(new_notif, context={'request': request}).data
                 data['notif'] = notif
+
+        """send push notification"""
+        if receiver.fcm_token is not None:
+            notif_data = {
+                'title': 'personal inbox',
+                'inbox_id': str(inbox_id),
+                'notif_id': str(notif_id)
+            }
+            notif_init = NotificationInit('New message', f'{receiver.name} send message', notif_data, True)
+            notif_init.send(receiver.fcm_token)
 
         return Response(data, status=status.HTTP_200_OK)
 
@@ -163,4 +196,13 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         message = ChatMessage.objects.create(person=profile, text=text)
         group_chat.messages.add(message)
         serializer = ChatMessageSerializer(message, context={'request': request})
+
+        """push notification"""
+        participants_with_token = participants.filter(fcm_token__isnull=False)
+        if participants_with_token.count() > 0:
+            notif_data = {
+                'title': 'group inbox'
+            }
+            notif_init = NotificationInit('New group message', f'{profile.name} send a message', notif_data, True)
+            notif_init.send_group(participants_with_token)
         return Response(serializer.data, status=status.HTTP_200_OK)
