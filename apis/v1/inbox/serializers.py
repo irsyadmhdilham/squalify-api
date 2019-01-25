@@ -15,7 +15,7 @@ class AgencySerializer(serializers.ModelSerializer):
         model = Agency
         fields = ('agency_image', 'name',)
 
-class OwnerSerializer(serializers.ModelSerializer):
+class CreatedBySerializer(serializers.ModelSerializer):
     designation = serializers.StringRelatedField(read_only=True)
     agency = AgencySerializer(read_only=True)
 
@@ -31,23 +31,23 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         fields = ('timestamp', 'person', 'text',)
 
 class GroupChatSerializer(serializers.ModelSerializer):
-    owner = OwnerSerializer(read_only=True)
+    created_by = CreatedBySerializer(read_only=True)
     participants = ProfileSerializer(many=True, read_only=True)
     messages = ChatMessageSerializer(many=True, read_only=True)
     role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = GroupChat
-        fields = ('pk', 'messages', 'owner', 'participants', 'role',)
+        fields = ('pk', 'messages', 'created_by', 'participants', 'role',)
     
     def get_role(self, obj):
         kwargs = self.context.get('request').parser_context.get('kwargs')
         user_pk = kwargs.get('user_pk')
         profile = Profile.objects.get(pk=user_pk)
         upline = profile.upline
-        if obj.role.name == 'group' and upline == obj.owner:
+        if obj.role.name == 'group' and upline == obj.created_by:
             return 'upline group'
-        elif obj.role.name == 'group' and profile == obj.owner:
+        elif obj.role.name == 'group' and profile == obj.created_by:
             return 'group'
         else:
             return 'agency'

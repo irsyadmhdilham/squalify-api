@@ -82,8 +82,7 @@ class NotificationInit:
         return body
     
     def send(self, token):
-        send = requests.post(self.url, json=self.body(token), headers=self.headers())
-        print(send.json())
+        requests.post(self.url, json=self.body(token), headers=self.headers())
     
     def send_group(self, members):
         event_loop = asyncio.new_event_loop()

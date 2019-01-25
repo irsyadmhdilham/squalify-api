@@ -78,7 +78,7 @@ class InboxList(generics.ListCreateAPIView):
                 'inbox_id': str(inbox_id),
                 'notif_id': str(notif_id)
             }
-            notif_init = NotificationInit('New message', f'{receiver.name} send message', notif_data, True)
+            notif_init = NotificationInit(f'Message: {profile.name}', text, notif_data, True)
             notif_init.send(receiver.fcm_token)
 
         return Response(data, status=status.HTTP_200_OK)
@@ -149,7 +149,7 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
                 'inbox_id': str(inbox_id),
                 'notif_id': str(notif_id)
             }
-            notif_init = NotificationInit('New message', f'{receiver.name} send message', notif_data, True)
+            notif_init = NotificationInit(f'Message: {profile.name}', text, notif_data, True)
             notif_init.send(receiver.fcm_token)
 
         return Response(data, status=status.HTTP_200_OK)
@@ -203,6 +203,6 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
             notif_data = {
                 'title': 'group inbox'
             }
-            notif_init = NotificationInit('New group message', f'{profile.name} send a message', notif_data, True)
+            notif_init = NotificationInit(f'Message: {group_chat.title}', text, notif_data, True)
             notif_init.send_group(participants_with_token)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -17,15 +17,14 @@ class GroupChatRole(models.Model):
         return self.name
 
 class GroupChat(models.Model):
+    title = models.CharField(max_length=200, null=True, blank=True)
     messages = models.ManyToManyField(ChatMessage, blank=True)
-    owner = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
+    created_by = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
     participants = models.ManyToManyField('Profile', related_name='chats', blank=True)
     role = models.ForeignKey(GroupChatRole, on_delete=models.CASCADE)
 
     def __str__(self):
-        person = self.owner.name
-        role = self.role
-        return f'{person} ({role})'
+        return self.title
 
 class Inbox(models.Model):
     group_chat = models.ForeignKey(GroupChat, blank=True, null=True, on_delete=models.CASCADE)

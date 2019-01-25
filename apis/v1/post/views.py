@@ -52,7 +52,7 @@ class CommentList(generics.ListCreateAPIView):
                     'post_id': str(post.pk),
                     'notif_id': str(notif.pk)
                 }
-                send_notif = NotificationInit('New comment', f'{profile.name} commented your post', data, True)
+                send_notif = NotificationInit(f'{profile.name} commented your post', text, data, True)
                 send_notif.send(fcm_token)
 
 class LikeList(generics.ListCreateAPIView):

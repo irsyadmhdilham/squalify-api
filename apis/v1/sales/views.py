@@ -61,6 +61,12 @@ class SalesList(generics.ListCreateAPIView):
         sales_type = self.request.data.get('sales_type')
         repeat_sales = self.request.data.get('repeat_sales')
         amount = self.request.data.get('amount')
+        surcharge_val = self.request.data.get('surcharge')
+
+        """surcharge instance"""
+        surcharge = None
+        if surcharge_val:
+            surcharge = Surcharge.objects.get(name=surcharge_val)
 
         """instances"""
         profile = Profile.objects.get(pk=user_pk)
@@ -74,9 +80,15 @@ class SalesList(generics.ListCreateAPIView):
         
         instance = None
         if repeat_sales:
-            instance = serializer.save(sales_type=sales_type_instance, commission=income, repeat_sales=True)
+            if surcharge is not None:
+                instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income, repeat_sales=True)
+            else:
+                instance = serializer.save(sales_type=sales_type_instance, commission=income, repeat_sales=True)
         else:
-            instance = serializer.save(sales_type=sales_type_instance, commission=income)
+            if surcharge is not None:
+                instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income)
+            else:
+                instance = serializer.save(sales_type=sales_type_instance, commission=income)
         profile.sales.add(instance)
 
         """create/update post"""
@@ -98,13 +110,13 @@ class SalesList(generics.ListCreateAPIView):
             post = create_post
 
         """Create notification"""
-        filter_token = profile.agency.members.filter(fcm_token__isnull=False)
-        members_with_token = filter(lambda val: val.pk != profile.pk, filter_token)
-        members = profile.agency.members.all()
+        members_with_token = profile.agency.members.filter(fcm_token__isnull=False).exclude(pk=profile.pk)
+        members = profile.agency.members.exclude(pk=profile.pk)
         new_notif = create_notif(profile, post, 'closed sales')
         for member in members:
             member.notifications.add(new_notif)
         notif_data = {
+            'title': 'closed sales',
             'post_id': str(post.pk),
             'notif_id': str(new_notif.pk)
         }
