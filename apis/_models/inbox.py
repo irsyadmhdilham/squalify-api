@@ -24,7 +24,7 @@ class GroupChat(models.Model):
     role = models.ForeignKey(GroupChatRole, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 class Inbox(models.Model):
     group_chat = models.ForeignKey(GroupChat, blank=True, null=True, on_delete=models.CASCADE)

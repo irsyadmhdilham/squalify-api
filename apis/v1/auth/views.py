@@ -16,7 +16,7 @@ class AuthenticationView(APIView):
         if auth is not None:
             user = Profile.objects.get(user__email__exact=auth.email)
             if user.is_auth:
-                return Response({'auth': False}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'auth': False, 'is_auth': True}, status=status.HTTP_401_UNAUTHORIZED)
             if fcm_token == 'null':
                 fcm_token = None
             user.fcm_token = fcm_token

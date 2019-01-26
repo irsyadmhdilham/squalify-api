@@ -15,9 +15,7 @@ services:
     build: .
     image: irsyadmhdilham/api
     container_name: api
-    command: > 
-      bash -c "python manage.py migrate &&
-      pipenv run uwsgi --ini uwsgi.ini"
+    command: pipenv run uwsgi --ini uwsgi.ini
     ports:
       - '8100:8100'
     volumes:
