@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField, ArrayField
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
@@ -62,6 +62,7 @@ class Profile(models.Model):
     settings = JSONField(default=default_settings)
     fcm_token = models.TextField(blank=True, null=True)
     is_auth = models.BooleanField(default=False)
+    words = ArrayField(models.TextField(), default=list)
 
     def __str__(self):
         return f'{self.pk}. {self.name}'

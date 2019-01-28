@@ -14,6 +14,10 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
+    def perform_update(self, serializer):
+        words = self.request.data.get('amazingTips')
+        serializer.save(words=words)
+
 class ProfileImage(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileImageSerializer
     queryset = Profile.objects.all()
