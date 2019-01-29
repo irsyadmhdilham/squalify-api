@@ -54,6 +54,7 @@ class PostSerializer(serializers.ModelSerializer):
             'likes',
             'comments',
             'monthly_sales',
+            'tips',
         )
     
     def get_likes(self, obj):

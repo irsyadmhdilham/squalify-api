@@ -62,6 +62,7 @@ class SalesList(generics.ListCreateAPIView):
         repeat_sales = self.request.data.get('repeat_sales')
         amount = self.request.data.get('amount')
         surcharge_val = self.request.data.get('surcharge')
+        tips = self.request.data.get('tips')
 
         """surcharge instance"""
         surcharge = None
@@ -99,11 +100,17 @@ class SalesList(generics.ListCreateAPIView):
         post = None
         if today_post.count() > 0:
             post = today_post[0]
+            if tips is not None:
+                post.tips = tips
             post.sales_rel.add(instance)
             post.save()
         else:
             post_type = PostType.objects.get(name='sales closed')
-            create_post = Post.objects.create(posted_by=profile, post_type=post_type)
+            create_post = None
+            if tips is not None:
+                create_post = Post.objects.create(posted_by=profile, post_type=post_type, tips=tips)
+            else:
+                create_post = Post.objects.create(posted_by=profile, post_type=post_type)
             create_post.save()
             create_post.sales_rel.add(instance)
             profile.agency.posts.add(create_post)
