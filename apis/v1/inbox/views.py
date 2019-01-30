@@ -1,11 +1,16 @@
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import InboxSerializer, ChatMessageSerializer, GroupChatSerializer
+from django.conf import settings
+from .serializers import InboxSerializer, ChatMessageSerializer, GroupChatSerializer, GroupImageSerializer
 from ..notification.serializers import NotificationSerializer
 from .. ._models.profile import Profile
 from .. ._models.notification import Notification, NotificationType
 from .. ._models.inbox import ChatMessage, GroupChat, Inbox
 from .. .functions.push_notification import NotificationInit
+import asyncio
+
+base_dir = settings.BASE_DIR
 
 """create notification"""
 def create_notif(notified_by, inbox, notif_type):
@@ -154,22 +159,80 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
 
         return Response(data, status=status.HTTP_200_OK)
 
+class CreateGroupImage(APIView):
+
+    def post(self, request, *args, **kwargs):
+        group_image = request.data.get('group_image')
+        title = request.data.get('title')
+        user_pk = request.data.get('userId')
+
+        """instances"""
+        profile = Profile.objects.get(pk=user_pk)
+
+        date = timezone.now().isoformat()
+        group_image._set_name(f'{title}_{date}.jpg')
+        image = ImageMutation()
+        group_chat = GroupChat.objects.create(title=title, created_by=profile, group_image=group_image)
+        image.resize_image(150, group_chat)
+        
+        data = {
+            'pk': group_chat.pk,
+            'group_image': group_chat.group_image
+        }
+        serializer = GroupImageSerializer(data, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CreateGroup(APIView):
+
+    def post(self, request, *args, **kwargs):
+        user_pk = kwargs.get('user_pk')
+        members = request.data.get('members')
+        title = request.data.get('title')
+        group_chat_id = request.data.get('chatId')
+
+        profile = Profile.objects.get(pk=user_pk)
+
+        group_chat = None
+        if group_chat_id is None:
+            group_chat = GroupChat.objects.create(title=title, created_by=profile)
+        else:
+            group_chat = GroupChat.objects.get(pk=group_chat_id)
+        self_inbox = Inbox.objects.create(group_chat=group_chat, unread=0)
+        profile.inbox.add(self_inbox)
+
+        members.append(int(user_pk))
+        get_members = Profile.objects.in_bulk(members)
+
+        event_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(event_loop)
+
+        async def create_inbox(member):
+            group_chat.participants.add(member)
+            create_inbox = Inbox.objects.create(group_chat=group_chat, unread=0)
+            member.inbox.add(create_inbox)
+
+        tasks = []
+        for member in get_members.values():
+            tasks.append(asyncio.ensure_future(create_inbox(member)))
+        event_loop.run_until_complete(asyncio.gather(*tasks))
+        event_loop.close()
+        
+        serializer = InboxSerializer(self_inbox, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = GroupChatSerializer
+    serializer_class = InboxSerializer
     queryset = Inbox.objects.all()
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        inbox = self.get_queryset().filter(pk=pk)[0]
-        return inbox.group_chat
+        return self.get_queryset().filter(pk=pk)[0]
     
     def update(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk')
         cu = request.query_params.get('cu')
-        group_chat = self.get_object()
-        inbox = Inbox.objects.get(pk=pk)
+        inbox = self.get_object()
+        group_chat = inbox.group_chat
         initial = request.data.get('initialSend')
-        role = request.data.get('role')
         
         """clear unread"""
         if cu == 'true':
@@ -181,20 +244,21 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         user_pk = kwargs.get('user_pk')
         text = request.data.get('text')
         profile = Profile.objects.get(pk=user_pk)
-        participants = group_chat.participants.all()
-        for participant in participants:
-            if profile != participant:
-                participant_inbox = participant.inbox.filter(group_chat__pk=group_chat.pk)[0]
-                participant_inbox.unread = participant_inbox.unread + 1
-                participant_inbox.save()
-                
-                if initial:
-                    notif_type = 'group inbox'
-                    new_notif = create_notif(profile, inbox, notif_type)
-                    participant.notifications.add(new_notif)
-
+        participants = inbox.group_chat.participants.all()
         message = ChatMessage.objects.create(person=profile, text=text)
-        group_chat.messages.add(message)
+
+        for participant in participants:
+            participant_inbox = participant.inbox.filter(group_chat=group_chat)[0]
+            if participant != profile:
+                participant_inbox.unread = participant_inbox.unread + 1
+            participant_inbox.save()
+            participant_inbox.messages.add(message)
+            
+            if initial:
+                notif_type = 'group inbox'
+                new_notif = create_notif(profile, inbox, notif_type)
+                participant.notifications.add(new_notif)
+
         serializer = ChatMessageSerializer(message, context={'request': request})
 
         """push notification"""

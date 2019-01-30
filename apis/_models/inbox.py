@@ -10,18 +10,14 @@ class ChatMessage(models.Model):
         timestamp = str(self.timestamp)
         return f'{timestamp} > {person}'
 
-class GroupChatRole(models.Model):
-    name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.name
+def image_directory_path(instance, filename):
+    return f'group_chat/{filename}'
 
 class GroupChat(models.Model):
     title = models.CharField(max_length=200, null=True, blank=True)
-    messages = models.ManyToManyField(ChatMessage, blank=True)
     created_by = models.ForeignKey('Profile', on_delete=models.CASCADE, blank=True, null=True)
     participants = models.ManyToManyField('Profile', related_name='chats', blank=True)
-    role = models.ForeignKey(GroupChatRole, on_delete=models.CASCADE)
+    group_image = models.ImageField(upload_to=image_directory_path, default='no_image.jpeg')
 
     def __str__(self):
         return str(self.title)
@@ -36,13 +32,7 @@ class Inbox(models.Model):
 
     def __str__(self):
         group_chat = self.group_chat
-
-        """group chat name"""
-        role = None
-        if group_chat is not None:
-            role = self.group_chat.role
-        group_chat_name = f'{self.pk}.Group chat ({role})'
-        return group_chat_name if group_chat is not None else f'{self.pk}.Personal'
+        return f'{self.pk}. group ({group_chat.title})' if group_chat is not None else f'{self.pk}. personal (chat with {self.chat_with.name})'
     
     class Meta:
         verbose_name_plural = 'Inboxes'

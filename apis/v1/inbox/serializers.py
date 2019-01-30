@@ -34,23 +34,10 @@ class GroupChatSerializer(serializers.ModelSerializer):
     created_by = CreatedBySerializer(read_only=True)
     participants = ProfileSerializer(many=True, read_only=True)
     messages = ChatMessageSerializer(many=True, read_only=True)
-    role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = GroupChat
-        fields = ('pk', 'messages', 'created_by', 'participants', 'role',)
-    
-    def get_role(self, obj):
-        kwargs = self.context.get('request').parser_context.get('kwargs')
-        user_pk = kwargs.get('user_pk')
-        profile = Profile.objects.get(pk=user_pk)
-        upline = profile.upline
-        if obj.role.name == 'group' and upline == obj.created_by:
-            return 'upline group'
-        elif obj.role.name == 'group' and profile == obj.created_by:
-            return 'group'
-        else:
-            return 'agency'
+        fields = ('pk', 'messages', 'created_by', 'participants', 'title', 'group_image',)
 
 class InboxSerializer(serializers.ModelSerializer):
     chat_with = ProfileSerializer(read_only=True)
@@ -60,3 +47,7 @@ class InboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inbox
         fields = ('pk', 'chat_with', 'group_chat', 'unread', 'messages',)
+
+class GroupImageSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+    group_image = serializers.ImageField()
