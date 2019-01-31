@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
+from django.utils import timezone
 from .serializers import InboxSerializer, ChatMessageSerializer, GroupChatSerializer, GroupImageSerializer
 from ..notification.serializers import NotificationSerializer
 from .. ._models.profile import Profile
@@ -9,6 +10,7 @@ from .. ._models.notification import Notification, NotificationType
 from .. ._models.inbox import ChatMessage, GroupChat, Inbox
 from .. .functions.push_notification import NotificationInit
 import asyncio
+from .. .functions.image import ImageMutation
 
 base_dir = settings.BASE_DIR
 
@@ -173,7 +175,8 @@ class CreateGroupImage(APIView):
         group_image._set_name(f'{title}_{date}.jpg')
         image = ImageMutation()
         group_chat = GroupChat.objects.create(title=title, created_by=profile, group_image=group_image)
-        image.resize_image(150, group_chat)
+        image_path = f'{base_dir}/uploads/{group_chat.group_image}'
+        image.resize_image(150, image_path)
         
         data = {
             'pk': group_chat.pk,
