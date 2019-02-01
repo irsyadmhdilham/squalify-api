@@ -1,6 +1,14 @@
 from django.conf.urls import url
 from django.urls import include
-from .views import ProfileDetail, PushNotification, EmailNotification, SignOut, ProfileImage, ChangeEmail, ChangePassword, ProfileWords
+from .views import (
+    ProfileDetail,
+    PushNotification,
+    EmailNotification,
+    SignOut,
+    ProfileImage,
+    ChangeEmail,
+    ChangePassword
+)
 
 app_name = 'profile'
 
@@ -19,5 +27,4 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/sign-out/$', SignOut.as_view(), name='sign-out'),
     url(r'^(?P<pk>\d+)/change-email/$', ChangeEmail.as_view(), name='change-email'),
     url(r'^(?P<pk>\d+)/change-password/$', ChangePassword.as_view(), name='change-password'),
-    url(r'^(?P<pk>\d+)/words/$', ProfileWords.as_view(), name='profile-words'),
 ]

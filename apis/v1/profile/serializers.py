@@ -40,8 +40,7 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'settings',
             'agency',
             'group',
-            'upline',
-            'words',
+            'upline'
         )
     
     def get_upline(self, obj):

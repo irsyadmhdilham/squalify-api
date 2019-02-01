@@ -18,13 +18,6 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         words = self.request.data.get('amazingTips')
         serializer.save(words=words)
 
-class ProfileWords(APIView):
-
-    def get(self, request, *arg, **kwargs):
-        pk = kwargs.get('pk')
-        profile = Profile.objects.get(pk=pk)
-        return Response(profile.words, status=status.HTTP_200_OK)
-
 class ProfileImage(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileImageSerializer
     queryset = Profile.objects.all()

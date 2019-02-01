@@ -62,7 +62,6 @@ class Profile(models.Model):
     settings = JSONField(default=default_settings)
     fcm_token = models.TextField(blank=True, null=True)
     is_auth = models.BooleanField(default=False)
-    words = ArrayField(models.TextField(), default=list, blank=True)
 
     def __str__(self):
         return f'{self.pk}. {self.name}'

@@ -32,7 +32,6 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     comments = models.ManyToManyField(Comment, blank=True)
     likes = models.ManyToManyField(Like, blank=True)
-    tips = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.pk}.{self.posted_by.name}, posted on {self.timestamp}'
