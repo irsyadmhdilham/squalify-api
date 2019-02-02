@@ -18,8 +18,7 @@ class AuthenticationView(APIView):
             profile = Profile.objects.get(user__email__exact=auth.email)
             data = {
                 'user_id': profile.pk,
-                'agency_id': profile.agency.pk,
-                'token': profile.api_token
+                'agency_id': profile.agency.pk
             }
             if fcm_token is not None:
                 fcm_instance = FcmToken.objects.create(user=profile, token=fcm_token)
@@ -32,7 +31,8 @@ class AuthenticationView(APIView):
                 profile.api_token = token
                 profile.save()
                 data['token'] = token.key
-
+            else:
+                data['token'] = profile.api_token.key
             return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
         return Response({'auth': False}, status=status.HTTP_401_UNAUTHORIZED)
 

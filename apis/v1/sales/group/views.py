@@ -5,10 +5,10 @@ from ..functions.group import Group
 from ..functions.period.summary import Summary
 from .. .._models.profile import Profile
 from .serializers import GroupSerializer, GroupSummarySerializer, DownlineSerializer
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
 class YearGroupSales(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -30,7 +30,7 @@ class YearGroupSales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class MonthGroupSales(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -52,7 +52,7 @@ class MonthGroupSales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class WeekGroupSales(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -74,7 +74,7 @@ class WeekGroupSales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class TodayGroupSales(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -96,7 +96,7 @@ class TodayGroupSales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GroupSummarySales(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get(self, request, user_pk):
         profile = Profile.objects.get(pk=user_pk)
@@ -116,7 +116,7 @@ class GroupSummarySales(APIView):
 class YearDownlineList(generics.RetrieveAPIView):
     serializer_class = DownlineSerializer
     queryset = Profile.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_object(self):
         pk = self.kwargs.get('member_pk')
@@ -146,7 +146,7 @@ class YearDownlineList(generics.RetrieveAPIView):
 class MonthDownlineList(generics.RetrieveAPIView):
     serializer_class = DownlineSerializer
     queryset = Profile.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_object(self):
         pk = self.kwargs.get('member_pk')
@@ -176,7 +176,7 @@ class MonthDownlineList(generics.RetrieveAPIView):
 class WeekDownlineList(generics.RetrieveAPIView):
     serializer_class = DownlineSerializer
     queryset = Profile.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_object(self):
         pk = self.kwargs.get('member_pk')
@@ -206,7 +206,7 @@ class WeekDownlineList(generics.RetrieveAPIView):
 class TodayDownlineList(generics.RetrieveAPIView):
     serializer_class = DownlineSerializer
     queryset = Profile.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_object(self):
         pk = self.kwargs.get('member_pk')

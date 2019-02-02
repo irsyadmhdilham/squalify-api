@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from .. ._models.post import Post, Comment, Like
 from .. ._models.profile import Profile
 from .. ._models.agency import Agency
@@ -15,7 +15,7 @@ def create_notif(notified_by, post, notif_type):
 
 class PostList(generics.ListAPIView):
     serializer_class = PostSerializer
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     
     def get_queryset(self):
         agency_pk = self.kwargs.get('agency_pk')
@@ -25,11 +25,11 @@ class PostList(generics.ListAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     
     def get_queryset(self):
         pk = self.kwargs.get('pk')
@@ -61,7 +61,7 @@ class CommentList(generics.ListCreateAPIView):
 
 class LikeList(generics.ListCreateAPIView):
     serializer_class = LikeSerializer
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
@@ -93,7 +93,7 @@ class LikeList(generics.ListCreateAPIView):
 class Unlike(generics.DestroyAPIView):
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def perform_destroy(self, instance):
         post_pk = self.kwargs.get('post_pk')
