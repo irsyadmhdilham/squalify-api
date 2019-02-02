@@ -1,4 +1,5 @@
 from rest_framework import status, generics
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from apis._models.profile import Profile
@@ -13,10 +14,7 @@ base_dir = settings.BASE_DIR
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
-
-    def perform_update(self, serializer):
-        words = self.request.data.get('amazingTips')
-        serializer.save(words=words)
+    authentication_classes = (TokenAuthentication,)
 
 class ProfileImage(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileImageSerializer
@@ -87,7 +85,6 @@ class SignOut(APIView):
         profile = Profile.objects.get(pk=pk)
         try:
             profile.fcm_token = None
-            profile.is_auth = False
             profile.save()
             return Response({'status': 'user signed out'}, status=status.HTTP_200_OK)
         except Exception as err:

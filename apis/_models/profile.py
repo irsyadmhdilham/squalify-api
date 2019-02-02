@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField, ArrayField
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from rest_framework.authtoken.models import Token
 
 from .contact import Contact
 from .schedule import Schedule
@@ -21,6 +22,13 @@ class Designation(models.Model):
 
     def __str__(self):
         return self.name
+
+class FcmToken(models.Model):
+    token = models.TextField()
+    user = models.ForeignKey('Profile', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.name
 
 def default_settings():
     return {
@@ -60,8 +68,8 @@ class Profile(models.Model):
     upline = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     inbox = models.ManyToManyField(Inbox, blank=True)
     settings = JSONField(default=default_settings)
-    fcm_token = models.TextField(blank=True, null=True)
-    is_auth = models.BooleanField(default=False)
+    fcm_token = models.ManyToManyField(FcmToken, blank=True)
+    api_token = models.OneToOneField(Token, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.pk}. {self.name}'

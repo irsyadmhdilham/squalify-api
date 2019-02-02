@@ -2,30 +2,37 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from .. ._models.profile import Profile
+from rest_framework.authtoken.models import Token
+from .. ._models.profile import Profile, FcmToken
 from account.models import User
 from .. .functions.create_account import CreateAccount
 
 class AuthenticationView(APIView):
 
-    def get(self, request, *args, **kwargs):
-        email = request.query_params.get('email')
-        password = request.query_params.get('password')
-        fcm_token = request.query_params.get('fcmToken')
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        fcm_token = request.data.get('fcmToken')
         auth = authenticate(email=email, password=password)
         if auth is not None:
-            user = Profile.objects.get(user__email__exact=auth.email)
-            if user.is_auth:
-                return Response({'auth': False, 'is_auth': True}, status=status.HTTP_401_UNAUTHORIZED)
-            if fcm_token == 'null':
-                fcm_token = None
-            user.fcm_token = fcm_token
-            user.is_auth = True
-            user.save()
+            profile = Profile.objects.get(user__email__exact=auth.email)
             data = {
-                'user_id': user.pk,
-                'agency_id': user.agency.pk
+                'user_id': profile.pk,
+                'agency_id': profile.agency.pk,
+                'token': profile.api_token
             }
+            if fcm_token is not None:
+                fcm_instance = FcmToken.objects.create(user=profile, token=fcm_token)
+                profile.fcm_token.add(fcm_instance)
+                data['fcmTokenId'] = fcm_instance.pk
+
+            """api token"""
+            if profile.api_token is None:
+                token = Token.objects.create(user=profile.user)
+                profile.api_token = token
+                profile.save()
+                data['token'] = token.key
+
             return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
         return Response({'auth': False}, status=status.HTTP_401_UNAUTHORIZED)
 
