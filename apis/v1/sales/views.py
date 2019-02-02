@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
+from rest_framework.authentication import TokenAuthentication
 
 from .serializers import SalesSerializer, SummarySerializer
 
@@ -34,6 +35,7 @@ def create_notif(notified_by, post, notif_type):
 
 class SalesList(generics.ListCreateAPIView):
     serializer_class = SalesSerializer
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -134,6 +136,7 @@ class SalesList(generics.ListCreateAPIView):
 class SalesRemove(generics.DestroyAPIView):
     serializer_class = SalesSerializer
     queryset = Sales.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
     def perform_destroy(self, instance):
         user_pk = self.kwargs.get('user_pk')
@@ -142,6 +145,7 @@ class SalesRemove(generics.DestroyAPIView):
         instance.delete()
 
 class PersonalSummary(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, user_pk):
         profile = Profile.objects.get(pk=user_pk)

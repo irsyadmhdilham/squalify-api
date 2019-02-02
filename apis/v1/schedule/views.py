@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.authentication import TokenAuthentication
 from .. ._models.profile import Profile
 from .. ._models.schedule import Schedule
 from .serializers import SchedulesSerializer
@@ -9,6 +10,7 @@ async def task(num):
 
 class ScheduleList(generics.ListCreateAPIView):
     serializer_class = SchedulesSerializer
+    authentication_classes = (TokenAuthentication,)
     
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -24,6 +26,7 @@ class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SchedulesSerializer
     lookup_field = 'pk'
     queryset = Schedule.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
     def perform_destroy(self, instance):
         user_pk = self.kwargs.get('user_pk')

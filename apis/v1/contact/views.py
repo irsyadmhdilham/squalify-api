@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.authentication import TokenAuthentication
 from .. ._models.profile import Profile
 from .. ._models.contact import Contact, ContactType, ContactStatus
 from .. ._models.schedule import Schedule
@@ -8,6 +9,7 @@ import json
 
 class ContactList(generics.ListCreateAPIView):
     serializer_class = ContactSerializer
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -28,6 +30,7 @@ class ContactList(generics.ListCreateAPIView):
 class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
+    authentication_classes = (TokenAuthentication,)
 
     def perform_update(self, serializer):
         pk = self.kwargs.get('pk')

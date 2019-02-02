@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 from .. ._models.profile import Profile
 from .. ._models.point import Point, PointField, PointAttribute, PointLog, PointLogType
 
@@ -14,6 +15,7 @@ from .serializers import PointSerializer, ScoreboardSerializer, AllPointsSeriali
 
 class PointList(generics.ListCreateAPIView):
     serializer_class = PointSerializer
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -51,6 +53,7 @@ class PointList(generics.ListCreateAPIView):
 class PointDetail(generics.RetrieveUpdateAPIView):
     serializer_class = PointSerializer
     queryset = Point.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -98,6 +101,7 @@ class PointDetail(generics.RetrieveUpdateAPIView):
             attr.save()
 
 class ContactPointView(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, *args, **kwargs):
         user_pk = kwargs.get('user_pk')
@@ -115,6 +119,7 @@ class ContactPointView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class ScoreboardPoints(APIView):
+    authentication_classes = (TokenAuthentication,)
     
     def get(self, request, *args, **kwargs):
         user_pk = kwargs.get('user_pk')
@@ -135,6 +140,7 @@ class ScoreboardPoints(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AllPoints(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, *args, **kwargs):
         user_pk = kwargs.get('user_pk')

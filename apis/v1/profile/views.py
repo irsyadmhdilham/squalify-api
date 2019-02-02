@@ -19,6 +19,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 class ProfileImage(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileImageSerializer
     queryset = Profile.objects.all()
+    authentication_classes = (TokenAuthentication,)
 
     def update(self, request, *args, **kwargs):
         profile = self.get_object()
@@ -36,6 +37,7 @@ class ProfileImage(generics.RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class PushNotification(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
@@ -59,6 +61,7 @@ class PushNotification(APIView):
             return Response({'Succeed': False}, status=status.HTTP_400_BAD_REQUEST)
 
 class EmailNotification(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
@@ -79,6 +82,7 @@ class EmailNotification(APIView):
             return Response({'Succeed': False}, status=status.HTTP_400_BAD_REQUEST)
 
 class SignOut(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
@@ -91,6 +95,7 @@ class SignOut(APIView):
             return Response({'status': 'Failed to signed out'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ChangeEmail(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
@@ -105,6 +110,7 @@ class ChangeEmail(APIView):
         return Response(True, status=status.HTTP_200_OK)
 
 class ChangePassword(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get('pk')

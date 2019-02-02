@@ -5,8 +5,10 @@ from ..functions.agency import Agency
 from ..functions.period.summary import Summary
 from .. .._models.profile import Profile
 from .serializers import AgencySerializer, AgencySummarySerializer
+from rest_framework.authentication import TokenAuthentication
 
 class YearAgencySales(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -28,6 +30,7 @@ class YearAgencySales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class MonthAgencySales(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -49,6 +52,7 @@ class MonthAgencySales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class WeekAgencySales(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -70,6 +74,7 @@ class WeekAgencySales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class TodayAgencySales(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, user_pk):
         q = request.query_params.get('q')
@@ -91,6 +96,7 @@ class TodayAgencySales(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AgencySummarySales(APIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, user_pk):
         profile = Profile.objects.get(pk=user_pk)
