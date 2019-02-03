@@ -272,9 +272,9 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         serializer = ChatMessageSerializer(message, context={'request': request})
 
         """push notification"""
-        participants_with_token = participants.exclude(pk=profile.pk)
+        participants_with_token = (participants.exclude(pk=profile.pk)
                                 .annotate(token_count=Count('fcm_token'))
-                                .filter(token_count__gt=0)
+                                .filter(token_count__gt=0))
         if participants_with_token.count() > 0:
             notif_data = {
                 'title': 'group inbox'

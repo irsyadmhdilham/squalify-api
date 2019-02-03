@@ -119,10 +119,10 @@ class SalesList(generics.ListCreateAPIView):
             post = create_post
 
         """Create notification"""
-        members_with_token = profile.agency.members
+        members_with_token = (profile.agency.members
                             .exclude(pk=profile.pk)
                             .annotate(token_count=Count('fcm_token'))
-                            .filter(token_count__gt=0)
+                            .filter(token_count__gt=0))
         members = profile.agency.members.exclude(pk=profile.pk)
         new_notif = create_notif(profile, post, 'closed sales')
         for member in members:

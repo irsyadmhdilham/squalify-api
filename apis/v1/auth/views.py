@@ -32,7 +32,7 @@ class AuthenticationView(APIView):
         if fcm_token is not None:
             fcm_instance = FcmToken.objects.create(user=profile, token=fcm_token)
             profile.fcm_token.add(fcm_instance)
-            data['fcmTokenId'] = fcm_instance.pk
+            data['fcm_id'] = fcm_instance.pk
 
         """api token"""
         if profile.api_token is None:

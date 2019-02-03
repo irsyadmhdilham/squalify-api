@@ -19,7 +19,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 class ProfileImage(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileImageSerializer
     queryset = Profile.objects.all()
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def update(self, request, *args, **kwargs):
         profile = self.get_object()
