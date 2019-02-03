@@ -81,8 +81,23 @@ class NotificationInit:
             }
         return body
     
-    def send(self, token):
-        requests.post(self.url, json=self.body(token), headers=self.headers())
+    def send(self, fcm_token):
+        event_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(event_loop)
+        async def send_notif(token):
+            loop = asyncio.get_event_loop()
+            data = {
+                'url': self.url,
+                'json': self.body(token),
+                'headers': self.headers()
+            }
+            return await loop.run_in_executor(None, partial(requests.post, **data))
+        tasks = []
+        for fcm in fcm_token.all():
+            tasks.append(asyncio.ensure_future(send_notif(fcm.token)))
+        gather = asyncio.gather(*tasks)
+        event_loop.run_until_complete(gather)
+        event_loop.close()
     
     def send_group(self, members):
         event_loop = asyncio.new_event_loop()
@@ -95,10 +110,11 @@ class NotificationInit:
                 'json': self.body(token),
                 'headers': self.headers()
             }
-            await loop.run_in_executor(None, partial(requests.post, **data))
+            return await loop.run_in_executor(None, partial(requests.post, **data))
+
         for member in members:
-            token = member.fcm_token
-            tasks.append(asyncio.ensure_future(send_notif(token)))
+            for fcm in member.fcm_token.all():
+                tasks.append(asyncio.ensure_future(send_notif(fcm.token)))
         gather = asyncio.gather(*tasks)
         event_loop.run_until_complete(gather)
         event_loop.close()

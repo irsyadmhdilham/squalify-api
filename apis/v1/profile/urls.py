@@ -4,7 +4,6 @@ from .views import (
     ProfileDetail,
     PushNotification,
     EmailNotification,
-    SignOut,
     ProfileImage,
     ChangeEmail,
     ChangePassword
@@ -24,7 +23,6 @@ urlpatterns = [
     url(r'(?P<user_pk>\d+)/notification/', include('apis.v1.notification.urls', namespace='notification')),
     url(r'^(?P<pk>\d+)/settings/push-notifications/$', PushNotification.as_view(), name='push-notifications'),
     url(r'^(?P<pk>\d+)/settings/email-notification/$', EmailNotification.as_view(), name='email-notification'),
-    url(r'^(?P<pk>\d+)/sign-out/$', SignOut.as_view(), name='sign-out'),
     url(r'^(?P<pk>\d+)/change-email/$', ChangeEmail.as_view(), name='change-email'),
     url(r'^(?P<pk>\d+)/change-password/$', ChangePassword.as_view(), name='change-password'),
 ]

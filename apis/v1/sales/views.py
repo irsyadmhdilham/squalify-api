@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils import timezone
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
@@ -119,7 +119,10 @@ class SalesList(generics.ListCreateAPIView):
             post = create_post
 
         """Create notification"""
-        members_with_token = profile.agency.members.filter(fcm_token__isnull=False).exclude(pk=profile.pk)
+        members_with_token = profile.agency.members
+                            .exclude(pk=profile.pk)
+                            .annotate(token_count=Count('fcm_token'))
+                            .filter(token_count__gt=0)
         members = profile.agency.members.exclude(pk=profile.pk)
         new_notif = create_notif(profile, post, 'closed sales')
         for member in members:

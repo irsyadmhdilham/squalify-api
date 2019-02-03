@@ -1,40 +1,61 @@
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, exceptions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from .. ._models.profile import Profile, FcmToken
 from account.models import User
 from .. .functions.create_account import CreateAccount
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BaseAuthentication
+
+class EmailAuthentication(BaseAuthentication):
+
+    def authenticate(self, request):
+        auth = request.META['HTTP_AUTHORIZATION'].split(':')
+        email = auth[0]
+        password = auth[1]
+        user = authenticate(email=email, password=password)
+        if user is None:
+            return None
+        return (user, None)
 
 class AuthenticationView(APIView):
+    authentication_classes = (EmailAuthentication, SessionAuthentication,)
 
     def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        password = request.data.get('password')
         fcm_token = request.data.get('fcmToken')
-        auth = authenticate(email=email, password=password)
-        if auth is not None:
-            profile = Profile.objects.get(user__email__exact=auth.email)
-            data = {
-                'user_id': profile.pk,
-                'agency_id': profile.agency.pk
-            }
-            if fcm_token is not None:
-                fcm_instance = FcmToken.objects.create(user=profile, token=fcm_token)
-                profile.fcm_token.add(fcm_instance)
-                data['fcmTokenId'] = fcm_instance.pk
+        profile = Profile.objects.get(user=request.user)
+        data = {
+            'user_id': profile.pk,
+            'agency_id': profile.agency.pk
+        }
+        if fcm_token is not None:
+            fcm_instance = FcmToken.objects.create(user=profile, token=fcm_token)
+            profile.fcm_token.add(fcm_instance)
+            data['fcmTokenId'] = fcm_instance.pk
 
-            """api token"""
-            if profile.api_token is None:
-                token = Token.objects.create(user=profile.user)
-                profile.api_token = token
-                profile.save()
-                data['token'] = token.key
-            else:
-                data['token'] = profile.api_token.key
-            return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
-        return Response({'auth': False}, status=status.HTTP_401_UNAUTHORIZED)
+        """api token"""
+        if profile.api_token is None:
+            token = Token.objects.create(user=profile.user)
+            profile.api_token = token
+            profile.save()
+            data['token'] = token.key
+        else:
+            data['token'] = profile.api_token.key
+        return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
+
+class SignOut(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
+
+    def post(self, request, *args, **kwargs):
+        pk = request.data.get('userId')
+        fcm_pk = request.data.get('fcmId')
+        try:
+            token = FcmToken.objects.get(pk=fcm_pk)
+            token.delete()
+        except FcmToken.DoesNotExist:
+            pass
+        return Response(True, status=status.HTTP_200_OK)
 
 class CreateAccount(APIView):
 

@@ -50,7 +50,7 @@ class CommentList(generics.ListCreateAPIView):
             notif = create_notif(profile, post, 'comment')
             posted_by.notifications.add(notif)
             fcm_token = posted_by.fcm_token
-            if fcm_token is not None:
+            if fcm_token.count() > 0:
                 data = {
                     'title': 'comment post',
                     'post_id': str(post.pk),
@@ -81,7 +81,7 @@ class LikeList(generics.ListCreateAPIView):
             notif = create_notif(profile, post, 'like')
             posted_by.notifications.add(notif)
             fcm_token = posted_by.fcm_token
-            if fcm_token is not None:
+            if fcm_token.count() > 0:
                 data = {
                     'title': 'like post',
                     'post_id': str(post.pk),

@@ -12,6 +12,7 @@ from .. ._models.inbox import ChatMessage, GroupChat, Inbox
 from .. .functions.push_notification import NotificationInit
 import asyncio
 from .. .functions.image import ImageMutation
+from django.db.models import Count
 
 base_dir = settings.BASE_DIR
 
@@ -81,7 +82,7 @@ class InboxList(generics.ListCreateAPIView):
             data['notif'] = notif
 
         """send push notification"""
-        if receiver.fcm_token is not None:
+        if receiver.fcm_token.count() > 0:
             notif_data = {
                 'title': 'personal inbox',
                 'inbox_id': str(inbox_id),
@@ -153,7 +154,7 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
                 data['notif'] = notif
 
         """send push notification"""
-        if receiver.fcm_token is not None:
+        if receiver.fcm_token.count() > 0:
             notif_data = {
                 'title': 'personal inbox',
                 'inbox_id': str(inbox_id),
@@ -253,10 +254,10 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         user_pk = kwargs.get('user_pk')
         text = request.data.get('text')
         profile = Profile.objects.get(pk=user_pk)
-        participants = inbox.group_chat.participants.all()
+        participants = inbox.group_chat.participants
         message = ChatMessage.objects.create(person=profile, text=text)
 
-        for participant in participants:
+        for participant in participants.all():
             participant_inbox = participant.inbox.filter(group_chat=group_chat)[0]
             if participant != profile:
                 participant_inbox.unread = participant_inbox.unread + 1
@@ -271,7 +272,9 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
         serializer = ChatMessageSerializer(message, context={'request': request})
 
         """push notification"""
-        participants_with_token = participants.filter(fcm_token__isnull=False)
+        participants_with_token = participants.exclude(pk=profile.pk)
+                                .annotate(token_count=Count('fcm_token'))
+                                .filter(token_count__gt=0)
         if participants_with_token.count() > 0:
             notif_data = {
                 'title': 'group inbox'
