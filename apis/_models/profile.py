@@ -70,6 +70,7 @@ class Profile(models.Model):
     settings = JSONField(default=default_settings)
     fcm_token = models.ManyToManyField(FcmToken, blank=True)
     api_token = models.OneToOneField(Token, on_delete=models.CASCADE, null=True)
+    call_logs = JSONField(default=dict, blank=True)
 
     def __str__(self):
         return f'{self.pk}. {self.name}'
