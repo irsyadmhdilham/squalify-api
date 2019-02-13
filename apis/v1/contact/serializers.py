@@ -4,6 +4,7 @@ from .. ._models.contact import Contact
 from .. ._models.schedule import Schedule
 from .. ._models.point import Point
 from .. ._models.profile import Profile
+from datetime import datetime
 
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,6 +27,7 @@ class ContactSerializer(QueryFieldsMixin, serializers.ModelSerializer):
         fields = (
             'pk',
             'name',
+            'email',
             'contact_type',
             'status',
             'contact_no',

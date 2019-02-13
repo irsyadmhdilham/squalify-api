@@ -20,6 +20,7 @@ def contact_directory_path(instance, filename):
 
 class Contact(models.Model):
     name = models.CharField(max_length=200)
+    email = models.CharField(max_length=200, null=True, blank=True)
     status = models.ForeignKey(ContactStatus, on_delete=models.CASCADE, to_field='status', default='None')
     contact_type = models.ForeignKey(ContactType, on_delete=models.CASCADE)
     remark = models.TextField(blank=True, null=True)

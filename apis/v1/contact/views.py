@@ -75,6 +75,10 @@ class CallLogs(generics.ListCreateAPIView):
                 return { 'pk': i, **val }
             return map(serialize, enumerate(logs))
         return []
+    
+    def perform_create(self, serializer):
+        data = self.request.data
+        serializer.save(**data)
 
 class CallLogsUpdate(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
