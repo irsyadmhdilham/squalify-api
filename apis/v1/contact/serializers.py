@@ -40,6 +40,7 @@ class CallLogSerializer(serializers.Serializer):
     pk = serializers.IntegerField(read_only=True)
     date = serializers.DateTimeField()
     name = serializers.CharField()
+    remark = serializers.CharField(allow_null=True)
     answered = serializers.BooleanField()
 
     def create(self, validated_data):

@@ -266,3 +266,21 @@ class CallLogsFilter(generics.ListAPIView):
 
             return filtered
         return []
+
+class CallLogRemark(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('user_pk')
+        data = request.data
+        log_date = parser.parse(data.get('date'))
+        profile = Profile.objects.get(pk=pk)
+        call_log = None
+        for i, log in enumerate(profile.call_logs['logs']):
+            d = parser.parse(log['date'])
+            if d == log_date:
+                call_log = profile.call_logs['logs'][i]
+                call_log['remark'] = data['remark']
+        profile.save()
+        serializer = CallLogSerializer(call_log)
+        return Response(serializer.data, status=status.HTTP_200_OK)
