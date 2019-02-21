@@ -4,7 +4,10 @@ from .. ._models.profile import Profile
 from .. ._models.schedule import Schedule
 from .serializers import SchedulesSerializer
 from dateutil import parser
+from django.utils import timezone
 from django.db.models import Q
+from datetime import timedelta
+from .functions.reminder import Reminder
 
 async def task(num):
     await asyncio.sleep(1)
@@ -20,8 +23,15 @@ class ScheduleList(generics.ListCreateAPIView):
     
     def perform_create(self, serializer):
         user_pk = self.kwargs.get('user_pk')
+        sd = parser.parse(self.request.data.get('date'))
+        rd = self.request.data.get('reminderDate')
         profile = Profile.objects.get(pk=user_pk)
-        instance = serializer.save()
+        instance = None
+        if rd is not None:
+            reminder = Reminder(sd, rd)
+            instance = serializer.save(reminder=reminder.reminder())
+        else:
+            instance = serializer.save()
         profile.schedules.add(instance)
 
 class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -129,3 +139,12 @@ class SchedulesFilter(generics.ListAPIView):
             result = schedules.filter(date__range=(date_from, date_until))
 
         return result
+
+class ScheduleReminders(generics.ListAPIView):
+    serializer_class = SchedulesSerializer
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
+
+    def get_queryset(self):
+        pk = self.kwargs.get('user_pk')
+        profile = Profile.objects.get(pk=pk)
+        return profile.schedules.filter(reminder__gt=timezone.now())

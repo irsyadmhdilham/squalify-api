@@ -10,7 +10,7 @@ class Schedule(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
-    reminder = JSONField(null=True, blank=True)
+    reminder = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
