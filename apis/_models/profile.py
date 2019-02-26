@@ -30,6 +30,13 @@ class FcmToken(models.Model):
     def __str__(self):
         return self.user.name
 
+class CallLog(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    remark = models.CharField(max_length=200, null=True, blank=True)
+    answered = models.BooleanField(default=False)
+
+
 def default_settings():
     return {
         'social_net_acc': {
@@ -70,7 +77,7 @@ class Profile(models.Model):
     settings = JSONField(default=default_settings)
     fcm_token = models.ManyToManyField(FcmToken, blank=True)
     api_token = models.OneToOneField(Token, on_delete=models.CASCADE, null=True)
-    call_logs = JSONField(default=dict, blank=True)
+    call_logs = models.ManyToManyField(CallLog, blank=True)
 
     def __str__(self):
         return f'{self.pk}. {self.name}'

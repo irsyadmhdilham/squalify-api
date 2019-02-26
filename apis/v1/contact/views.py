@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-from .. ._models.profile import Profile
+from .. ._models.profile import Profile, CallLog
 from .. ._models.point import Point, PointLogType, PointLog, PointField, PointAttribute
 from .. ._models.contact import Contact, ContactType, ContactStatus
 from .. ._models.schedule import Schedule
@@ -111,71 +111,63 @@ class CallLogs(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
-        call_logs = Profile.objects.get(pk=user_pk).call_logs
-        if 'logs' in call_logs:
-            logs = call_logs['logs']
-            def serialize(value):
-                i = value[0]
-                val = value[1]
-                return { 'pk': i, **val }
-            return map(serialize, enumerate(logs))
-        return []
+        return Profile.objects.get(pk=user_pk).call_logs.order_by('-date')
     
     def perform_create(self, serializer):
-        data = self.request.data
-        serializer.save(**data)
+        user_pk = self.kwargs.get('user_pk')
+        contact_pk = self.request.data.get('contactId')
+        contact = Contact.objects.get(pk=contact_pk)
+        instance = serializer.save(contact=contact)
+        Profile.objects.get(pk=user_pk).call_logs.add(instance)
 
-class CallLogsUpdate(APIView):
+
+class CallLogsDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
+    serializer_class = CallLogSerializer
+    queryset = CallLog.objects.all()
 
-    def put(self, request, *args, **kwargs):
-        user_pk = kwargs.get('user_pk')
-        answered = request.data.get('answered')
-        pk = kwargs.get('pk')
+    def perform_update(self, serializer):
+        answered = self.request.data.get('answered')
+        user_pk = self.kwargs.get('user_pk')
         profile = Profile.objects.get(pk=user_pk)
-        log = profile.call_logs['logs'][int(pk)]
-
-        log_date = parser.parse(log['date'])
-        point = profile.points.filter(date=log_date.date())
-        point_field = PointField.objects.get(name='Calls/Email/Socmed')
-        if answered is True:
-            point_type = PointLogType.objects.get(name='Add')
-            if point.count() == 0:
-                attr = PointAttribute.objects.create(attribute=point_field, point=1)
-                point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=1)
-                create = Point.objects.create()
-                create.attributes.add(attr)
-                create.logs.add(point_log)
-                profile.points.add(create)
-                create.date = log_date.date()
-                create.save()
+        if answered is not None:
+            log = self.get_object()
+            point = profile.points.filter(date=log.date)
+            point_field = PointField.objects.get(name='Calls/Email/Socmed')
+            if answered is True:
+                point_type = PointLogType.objects.get(name='Add')
+                if point.count() == 0:
+                    attr = PointAttribute.objects.create(attribute=point_field, point=1)
+                    point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=1)
+                    create = Point.objects.create()
+                    create.attributes.add(attr)
+                    create.logs.add(point_log)
+                    profile.points.add(create)
+                else:
+                    instance = point[0]
+                    get_attr = instance.attributes.filter(attribute__name='Calls/Email/Socmed')
+                    total = 1
+                    if get_attr.count() > 0:
+                        attr = get_attr[0]
+                        total = attr.point + 1
+                        attr.point = total
+                        attr.save()
+                    else:
+                        attr = PointAttribute.objects.create(attribute=point_field, point=total)
+                        instance.attributes.add(attr)
+                    point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
+                    instance.logs.add(point_log)
             else:
+                point_type = PointLogType.objects.get(name='Subtract')
                 instance = point[0]
-                get_attr = instance.attributes.filter(attribute__name='Calls/Email/Socmed')
-                total = 1
-                if get_attr.count() > 0:
-                    attr = get_attr[0]
-                    total = attr.point + 1
+                attr = instance.attributes.filter(attribute__name='Calls/Email/Socmed')[0]
+                if attr.point > 0:
+                    total = attr.point - 1
                     attr.point = total
                     attr.save()
-                else:
-                    attr = PointAttribute.objects.create(attribute=point_field, point=total)
-                    instance.attributes.add(attr)
-                point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
-                instance.logs.add(point_log)
-        else:
-            point_type = PointLogType.objects.get(name='Subtract')
-            instance = point[0]
-            attr = instance.attributes.filter(attribute__name='Calls/Email/Socmed')[0]
-            if attr.point > 0:
-                total = attr.point - 1
-                attr.point = total
-                attr.save()
-                point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
-                instance.logs.add(point_log)
-        log['answered'] = answered
-        profile.save()
-        return Response(None, status=status.HTTP_200_OK)
+                    point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
+                    instance.logs.add(point_log)
+        serializer.save()
 
 class CallLogsFilter(generics.ListAPIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
@@ -197,90 +189,32 @@ class CallLogsFilter(generics.ListAPIView):
         if u != 'null':
             date_until = parser.parse(u)
 
-        if 'logs' in call_logs:
-            logs = call_logs['logs']
-            def serialize(value):
-                i = value[0]
-                val = value[1]
-                return { 'pk': i, **val }
-            mapped = map(serialize, enumerate(logs))
-            filtered = mapped
-
-            if name != 'undefined' and date_from is not None and date_until is not None and a != 'undefined':
-
-                def func(value):
-                    search = re.search(r'{}'.format(name), value['name'], re.I)
-                    answered_val = value['answered'] is answered
-                    d = parser.parse(value['date'])
-                    date_range = d >= date_from and d <= date_until
-                    return search and date_range and answered_val
-                filtered = filter(func, mapped)
-
-            elif name != 'undefined' and date_from is not None and date_until is not None:
-
-                def func(value):
-                    search = re.search(r'{}'.format(name), value['name'], re.I)
-                    d = parser.parse(value['date'])
-                    date_range = d >= date_from and d <= date_until
-                    return search and date_range
-                filtered = filter(func, mapped)
-
-            elif name != 'undefined' and a != 'undefined':
-
-                def func(value):
-                    search = re.search(r'{}'.format(name), value['name'], re.I)
-                    answered_val = value['answered'] is answered
-                    return search and answered_val
-                filtered = filter(func, mapped)
-            
-            elif a != 'undefined' and date_from is not None and date_until is not None:
-
-                def func(value):
-                    answered_val = value['answered'] is answered
-                    d = parser.parse(value['date'])
-                    date_range = d >= date_from and d <= date_until
-                    return date_range and answered_val
-                filtered = filter(func, mapped)
-
-            elif name != 'undefined':
-
-                def func(value):
-                    search = re.search(r'{}'.format(name), value['name'], re.I)
-                    return search
-                filtered = filter(func, mapped)
-
-            elif a != 'undefined':
-
-                def func(value):
-                    answered_val = value['answered'] is answered
-                    return answered_val
-                filtered = filter(func, mapped)
-
-            elif date_from is not None and date_until is not None:
-
-                def func(value):
-                    d = parser.parse(value['date'])
-                    date_range = d >= date_from and d <= date_until
-                    return date_range
-                filtered = filter(func, mapped)
-
-            return filtered
-        return []
-
-class CallLogRemark(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
-
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get('user_pk')
-        data = request.data
-        log_date = parser.parse(data.get('date'))
-        profile = Profile.objects.get(pk=pk)
-        call_log = None
-        for i, log in enumerate(profile.call_logs['logs']):
-            d = parser.parse(log['date'])
-            if d == log_date:
-                call_log = profile.call_logs['logs'][i]
-                call_log['remark'] = data['remark']
-        profile.save()
-        serializer = CallLogSerializer(call_log)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if name != 'undefined' and date_from is not None and date_until is not None and a != 'undefined':
+            return call_logs.filter(
+                Q(contact__name__icontains=name) &
+                Q(date__range=(date_from, date_until)) &
+                Q(answered=answered)
+            ).order_by('-date')
+        elif name != 'undefined' and date_from is not None and date_until is not None:
+            return call_logs.filter(
+                Q(contact__name__icontains=name) &
+                Q(date__range=(date_from, date_until))
+            ).order_by('-date')
+        elif name != 'undefined' and a != 'undefined':
+            return call_logs.filter(
+                Q(contact__name__icontains=name) &
+                Q(answered=answered)
+            ).order_by('-date')
+        elif a != 'undefined' and date_from is not None and date_until is not None:
+            return call_logs.filter(
+                Q(date__range=(date_from, date_until)) &
+                Q(answered=answered)
+            ).order_by('-date')
+        elif name != 'undefined':
+            return call_logs.filter(contact__name__icontains=name).order_by('-date')
+        elif a != 'undefined':
+            return call_logs.filter(answered=answered).order_by('-date')
+        elif date_from is not None and date_until is not None:
+            return call_logs.filter(date__range=(date_from, date_until)).order_by('-date')
+        else:
+            return call_logs.order_by('-date')

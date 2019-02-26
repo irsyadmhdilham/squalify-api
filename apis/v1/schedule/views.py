@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.db.models import Q
 from datetime import timedelta
 from .functions.reminder import Reminder
+from .functions.update_reminder import UpdateReminder
 
 async def task(num):
     await asyncio.sleep(1)
@@ -39,6 +40,19 @@ class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
     queryset = Schedule.objects.all()
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
+
+    def perform_update(self, serializer):
+        rd = self.request.data.get('reminderDate')
+        clear = self.request.data.get('clearReminder')
+        date = parser.parse(self.request.data.get('date'))
+        if clear:
+            serializer.save(reminder=None)
+        else:
+            if rd is not None:
+                reminder = UpdateReminder(date, rd)
+                serializer.save(reminder=reminder.reminder())
+            else:
+                serializer.save()
 
     def perform_destroy(self, instance):
         user_pk = self.kwargs.get('user_pk')

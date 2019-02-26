@@ -3,7 +3,7 @@ from drf_queryfields import QueryFieldsMixin
 from .. ._models.contact import Contact
 from .. ._models.schedule import Schedule
 from .. ._models.point import Point
-from .. ._models.profile import Profile
+from .. ._models.profile import Profile, CallLog
 from datetime import datetime
 
 class ScheduleSerializer(serializers.ModelSerializer):
@@ -36,21 +36,14 @@ class ContactSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'schedules',
         )
 
-class CallLogSerializer(serializers.Serializer):
-    pk = serializers.IntegerField(read_only=True)
-    date = serializers.DateTimeField()
-    name = serializers.CharField()
-    remark = serializers.CharField(allow_null=True)
-    answered = serializers.BooleanField()
+class ContactLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ('pk', 'name',)
 
-    def create(self, validated_data):
-        request = self.context.get('request')
-        kwargs = request.parser_context.get('kwargs')
-        user_pk = kwargs.get('user_pk')
-        profile = Profile.objects.get(pk=user_pk)
-        if 'logs' in profile.call_logs:
-            profile.call_logs['logs'].append(validated_data)
-        else:
-            profile.call_logs['logs'] = [validated_data]
-        profile.save()
-        return validated_data
+class CallLogSerializer(serializers.ModelSerializer):
+    contact = ContactLogSerializer(read_only=True)
+
+    class Meta:
+        model = CallLog
+        fields = ('pk', 'date', 'answered', 'contact', 'remark',)
