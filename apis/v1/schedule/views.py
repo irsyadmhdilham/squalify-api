@@ -1,5 +1,4 @@
 from rest_framework import generics
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from .. ._models.profile import Profile
 from .. ._models.schedule import Schedule
 from .serializers import SchedulesSerializer
@@ -16,7 +15,6 @@ async def task(num):
 
 class ScheduleList(generics.ListCreateAPIView):
     serializer_class = SchedulesSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -39,7 +37,6 @@ class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SchedulesSerializer
     lookup_field = 'pk'
     queryset = Schedule.objects.all()
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def perform_update(self, serializer):
         rd = self.request.data.get('reminderDate')
@@ -61,7 +58,6 @@ class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):
         instance.delete()
 
 class SchedulesFilter(generics.ListAPIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     serializer_class = SchedulesSerializer
 
     def get_queryset(self):
@@ -156,7 +152,6 @@ class SchedulesFilter(generics.ListAPIView):
 
 class ScheduleReminders(generics.ListAPIView):
     serializer_class = SchedulesSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs.get('user_pk')
@@ -164,7 +159,6 @@ class ScheduleReminders(generics.ListAPIView):
         return profile.schedules.filter(reminder__gt=timezone.now())
 
 class ScheduleMonthFilter(generics.ListAPIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     serializer_class = SchedulesSerializer
 
     def get_queryset(self):
