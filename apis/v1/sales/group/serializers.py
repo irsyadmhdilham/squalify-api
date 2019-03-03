@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-class GroupSerializer(serializers.Serializer):
+class GroupSalesSerializer(serializers.Serializer):
     pk = serializers.IntegerField(read_only=True)
     name = serializers.CharField(read_only=True)
-    designation = serializers.CharField(read_only=True)
     profile_image = serializers.ImageField(read_only=True)
-    amount = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
-    downline = serializers.IntegerField(read_only=True)
+    group_sales = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    personal_sales = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    downlines = serializers.IntegerField(read_only=True)
 
 class GroupSummarySerializer(serializers.Serializer):
     today = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
@@ -19,4 +19,4 @@ class DownlineSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
     profile_image = serializers.ImageField(read_only=True)
     designation = serializers.CharField(read_only=True)
-    downlines = GroupSerializer(many=True, read_only=True)
+    downlines = GroupSalesSerializer(many=True, read_only=True)

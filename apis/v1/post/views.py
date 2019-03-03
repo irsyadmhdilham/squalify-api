@@ -1,11 +1,12 @@
 from rest_framework import generics
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-from .. ._models.post import Post, Comment, Like
+from .. ._models.post import Post, Comment, Like, Memo, PostType
 from .. ._models.profile import Profile
 from .. ._models.agency import Agency
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer
 from .. ._models.notification import Notification, NotificationType
 from .. .functions.push_notification import NotificationInit
+from dateutil import parser
 
 """create notification"""
 def create_notif(notified_by, post, notif_type):
@@ -13,7 +14,7 @@ def create_notif(notified_by, post, notif_type):
     notif = Notification.objects.create(notified_by=notified_by, notification_type=notif_type, post_rel=post)
     return notif
 
-class PostList(generics.ListAPIView):
+class PostList(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
     
@@ -21,11 +22,68 @@ class PostList(generics.ListAPIView):
         agency_pk = self.kwargs.get('agency_pk')
         agency = Agency.objects.get(pk=agency_pk)
         return agency.posts.order_by('-timestamp')
+    
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('agency_pk')
+        user_pk = self.request.data.get('userId')
+        text = self.request.data.get('text')
+        start_date = self.request.data.get('startDate')
+        end_date = self.request.data.get('endDate')
+        countdown = self.request.data.get('countdown')
 
-class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+        if start_date is not None:
+            start_date = parser.parse(start_date)
+
+        if end_date is not None:
+            end_date = parser.parse(end_date)
+        
+        if countdown is not None:
+            countdown = parser.parse(countdown)
+
+        posts = Agency.objects.get(pk=pk).posts
+        posted_by = Profile.objects.get(pk=user_pk)
+
+        post_type = PostType.objects.get(name='memo')
+
+        """create memo"""
+        memo = None
+        if countdown is not None:
+            memo = Memo.objects.create(start_date=start_date, end_date=end_date, text=text, countdown=countdown)
+        else:
+            memo = Memo.objects.create(start_date=start_date, end_date=end_date, text=text)
+
+        """create post"""
+        post = serializer.save(posted_by=posted_by, post_type=post_type, memo=memo)
+        posts.add(post)
+
+class PostDetail(generics.RetrieveUpdateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     authentication_classes = (TokenAuthentication, SessionAuthentication,)
+
+    def perform_update(self, serializer):
+        pk = self.kwargs.get('pk')
+        text = self.request.data.get('text')
+        start_date = self.request.data.get('startDate')
+        end_date = self.request.data.get('endDate')
+        countdown = self.request.data.get('countdown')
+
+        if start_date is not None:
+            start_date = parser.parse(start_date)
+
+        if end_date is not None:
+            end_date = parser.parse(end_date)
+        
+        if countdown is not None:
+            countdown = parser.parse(countdown)
+
+        memo = Post.objects.get(pk=pk).memo
+        memo.text = text
+        memo.start_date = start_date
+        memo.end_date = end_date
+        if countdown is not None:
+            memo.countdown = countdown
+        memo.save()
 
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer

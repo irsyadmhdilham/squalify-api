@@ -162,3 +162,16 @@ class ScheduleReminders(generics.ListAPIView):
         pk = self.kwargs.get('user_pk')
         profile = Profile.objects.get(pk=pk)
         return profile.schedules.filter(reminder__gt=timezone.now())
+
+class ScheduleMonthFilter(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication,)
+    serializer_class = SchedulesSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('user_pk')
+        m = int(self.request.query_params.get('m'))
+        schedules = Profile.objects.get(pk=pk).schedules
+        if m == 0:
+            return schedules.order_by('-date')
+        else:
+            return schedules.filter(date__month=m).order_by('-date')
