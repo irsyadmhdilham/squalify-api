@@ -1,6 +1,5 @@
 from rest_framework import generics
 from .serializers import MemberSerializer, MemberPointSerializer, PointsSerializer
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from .. .._models.profile import Profile
 from django.utils import timezone
 from datetime import date, timedelta
@@ -11,7 +10,6 @@ from functools import reduce
 
 class GroupPointList(generics.ListAPIView):
     serializer_class = PointsSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs.get('user_pk')
@@ -48,7 +46,6 @@ class GroupPointList(generics.ListAPIView):
 
 class GroupMembers(generics.ListAPIView):
     serializer_class = MemberSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs.get('user_pk')
@@ -83,7 +80,6 @@ class GroupMembers(generics.ListAPIView):
 
 class GroupMemberPointList(generics.ListAPIView):
     serializer_class = MemberPointSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs.get('member_pk')
@@ -100,7 +96,6 @@ class GroupMemberPointList(generics.ListAPIView):
 
 class DownlineList(generics.ListAPIView):
     serializer_class = MemberSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs.get('member_pk')

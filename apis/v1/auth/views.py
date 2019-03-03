@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from .. ._models.profile import Profile, FcmToken
 from account.models import User
 from .. .functions.create_account import CreateAccount
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BaseAuthentication
+from rest_framework.authentication import SessionAuthentication, BaseAuthentication
 
 class EmailAuthentication(BaseAuthentication):
 
@@ -45,7 +45,6 @@ class AuthenticationView(APIView):
         return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
 
 class SignOut(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def post(self, request, *args, **kwargs):
         pk = request.data.get('userId')

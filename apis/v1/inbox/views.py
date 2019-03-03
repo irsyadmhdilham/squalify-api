@@ -1,7 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from django.conf import settings
 from django.utils import timezone
 from .serializers import InboxSerializer, ChatMessageSerializer, GroupChatSerializer, GroupImageSerializer
@@ -24,7 +23,6 @@ def create_notif(notified_by, inbox, notif_type):
 
 class InboxList(generics.ListCreateAPIView):
     serializer_class = InboxSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -96,7 +94,6 @@ class InboxList(generics.ListCreateAPIView):
 class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = InboxSerializer
     queryset = Inbox.objects.all()
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def update(self, request, *args, **kwargs):
         cu = request.query_params.get('cu')
@@ -166,7 +163,6 @@ class InboxDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class CreateGroupImage(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def post(self, request, *args, **kwargs):
         group_image = request.data.get('group_image')
@@ -191,7 +187,6 @@ class CreateGroupImage(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CreateGroup(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def post(self, request, *args, **kwargs):
         user_pk = kwargs.get('user_pk')
@@ -232,7 +227,6 @@ class CreateGroup(APIView):
 class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = InboxSerializer
     queryset = Inbox.objects.all()
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_object(self):
         pk = self.kwargs.get('pk')

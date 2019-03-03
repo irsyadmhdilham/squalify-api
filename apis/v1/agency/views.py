@@ -1,6 +1,5 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from apis._models.agency import Agency
 from .serializers import AgencySerializer, ProfileSerializer, AgencyImageSerializer
 from django.utils import timezone
@@ -12,11 +11,9 @@ base_dir = settings.BASE_DIR
 class AgencyDetail(generics.RetrieveUpdateAPIView):
     serializer_class = AgencySerializer
     queryset = Agency.objects.all()
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
 class AgencyMembers(generics.ListAPIView):
     serializer_class = ProfileSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     
     def get_queryset(self):
         pk = self.kwargs.get('pk')
@@ -27,7 +24,6 @@ class AgencyMembers(generics.ListAPIView):
 class AgencyImage(generics.RetrieveUpdateAPIView):
     serializer_class = AgencyImageSerializer
     queryset = Agency.objects.all()
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def update(self, request, *args, **kwargs):
         agency = self.get_object()

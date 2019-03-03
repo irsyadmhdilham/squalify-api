@@ -1,7 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from .. ._models.profile import Profile, CallLog
 from .. ._models.point import Point, PointLogType, PointLog, PointField, PointAttribute
 from .. ._models.contact import Contact, ContactType, ContactStatus
@@ -16,7 +15,6 @@ from django.utils import timezone
 
 class ContactList(generics.ListCreateAPIView):
     serializer_class = ContactSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -37,7 +35,6 @@ class ContactList(generics.ListCreateAPIView):
 class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def perform_update(self, serializer):
         pk = self.kwargs.get('pk')
@@ -65,7 +62,6 @@ class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ContactFilter(generics.ListAPIView):
     serializer_class = ContactSerializer
-    authentication_classes = (SessionAuthentication, TokenAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs.get('user_pk')
@@ -107,7 +103,6 @@ class ContactFilter(generics.ListAPIView):
 
 class CallLogs(generics.ListCreateAPIView):
     serializer_class = CallLogSerializer
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
@@ -122,7 +117,6 @@ class CallLogs(generics.ListCreateAPIView):
 
 
 class CallLogsDetail(generics.RetrieveUpdateAPIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     serializer_class = CallLogSerializer
     queryset = CallLog.objects.all()
 
@@ -170,7 +164,6 @@ class CallLogsDetail(generics.RetrieveUpdateAPIView):
         serializer.save()
 
 class CallLogsFilter(generics.ListAPIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication,)
     serializer_class = CallLogSerializer
 
     def get_queryset(self):
