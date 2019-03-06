@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .. ._models.post import Post, Comment, Like, Memo
+from .. ._models.post import Post, Comment, Like
 from .. ._models.profile import Profile
 from django.db.models import Sum
 
@@ -31,11 +31,6 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ('pk', 'commented_by', 'text', 'timestamp',)
 
-class MemoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Memo
-        fields = ('pk', 'start_date', 'end_date', 'text', 'countdown',)
-
 class PostSerializer(serializers.ModelSerializer):
     posted_by = ProfileSerializer(read_only=True)
     post_type = serializers.StringRelatedField(read_only=True)
@@ -45,7 +40,6 @@ class PostSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField()
     comments = CommentSerializer(read_only=True, many=True)
     monthly_sales = serializers.SerializerMethodField()
-    memo = MemoSerializer(read_only=True)
 
     class Meta:
         model = Post
@@ -60,7 +54,6 @@ class PostSerializer(serializers.ModelSerializer):
             'likes',
             'comments',
             'monthly_sales',
-            'memo',
         )
     
     def get_likes(self, obj):

@@ -24,15 +24,6 @@ class Like(models.Model):
     def __str__(self):
         return str(self.timestamp)
 
-class Memo(models.Model):
-    start_date = models.DateTimeField(default=timezone.now)
-    end_date = models.DateTimeField()
-    text = models.TextField()
-    countdown = models.DateTimeField()
-
-    def __str__(self):
-        return f'{str(self.start_date)}-{str(self.end_date)}: {self.text}'
-
 class Post(models.Model):
     posted_by = models.ForeignKey('Profile', on_delete=models.CASCADE)
     post_type = models.ForeignKey(PostType, on_delete=models.CASCADE)
@@ -42,7 +33,6 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     comments = models.ManyToManyField(Comment, blank=True)
     likes = models.ManyToManyField(Like, blank=True)
-    memo = models.ForeignKey(Memo, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f'{self.pk}.{self.posted_by.name}, posted on {self.timestamp}'

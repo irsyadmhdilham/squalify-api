@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .. ._models.post import Post, Comment, Like, Memo, PostType
+from .. ._models.post import Post, Comment, Like, PostType
 from .. ._models.profile import Profile
 from .. ._models.agency import Agency
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer
@@ -20,39 +20,6 @@ class PostList(generics.ListCreateAPIView):
         agency_pk = self.kwargs.get('agency_pk')
         agency = Agency.objects.get(pk=agency_pk)
         return agency.posts.order_by('-timestamp')
-    
-    def perform_create(self, serializer):
-        pk = self.kwargs.get('agency_pk')
-        user_pk = self.request.data.get('userId')
-        text = self.request.data.get('text')
-        start_date = self.request.data.get('startDate')
-        end_date = self.request.data.get('endDate')
-        countdown = self.request.data.get('countdown')
-
-        if start_date is not None:
-            start_date = parser.parse(start_date)
-
-        if end_date is not None:
-            end_date = parser.parse(end_date)
-        
-        if countdown is not None:
-            countdown = parser.parse(countdown)
-
-        posts = Agency.objects.get(pk=pk).posts
-        posted_by = Profile.objects.get(pk=user_pk)
-
-        post_type = PostType.objects.get(name='memo')
-
-        """create memo"""
-        memo = None
-        if countdown is not None:
-            memo = Memo.objects.create(start_date=start_date, end_date=end_date, text=text, countdown=countdown)
-        else:
-            memo = Memo.objects.create(start_date=start_date, end_date=end_date, text=text)
-
-        """create post"""
-        post = serializer.save(posted_by=posted_by, post_type=post_type, memo=memo)
-        posts.add(post)
 
 class PostDetail(generics.RetrieveUpdateAPIView):
     serializer_class = PostSerializer

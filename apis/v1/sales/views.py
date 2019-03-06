@@ -10,7 +10,7 @@ from .serializers import SalesSerializer, SummarySerializer
 from apis._models.profile import Profile
 from apis._models.agency import Agency
 from apis._models.post import Post, PostType
-from apis._models.sales import Sales, SalesType
+from apis._models.sales import Sales, SalesType, SalesStatus
 from .. ._models.notification import Notification, NotificationType
 
 from .functions.sales_filter import SalesFilter
@@ -51,17 +51,19 @@ class SalesList(generics.ListCreateAPIView):
         user_pk = self.kwargs.get('user_pk')
         sales_type = self.request.data.get('sales_type')
         amount = self.request.data.get('amount')
+        status = self.request.data.get('sales_status')
 
         # instances
         profile = Profile.objects.get(pk=user_pk)
         sales_type_instance = SalesType.objects.get(name=sales_type)
+        sales_status = SalesStatus.objects.get(name=status)
         designation = profile.designation.name
         company = profile.agency.company.name
 
         # income calculations
         income_ins = Income(comm_struct, amount, designation, company, sales_type)
         income = income_ins.self_income()
-        instance = serializer.save(sales_type=sales_type_instance, commission=income)
+        instance = serializer.save(sales_type=sales_type_instance, commission=income, sales_status=sales_status)
         profile.sales.add(instance)
 
         # create/update post
@@ -77,8 +79,6 @@ class SalesList(generics.ListCreateAPIView):
         if today_post.count() > 0:
             # create new post
             post = today_post[0]
-            if tips is not None:
-                post.tips = tips
             post.sales_rel.add(instance)
             post.save()
         else:
