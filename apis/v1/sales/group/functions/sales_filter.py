@@ -12,9 +12,12 @@ class SalesFilter(TotalSales):
     
     def __init__(self, period, sales_type, status, members):
         self.members = members.all()
-        self.period = period
-        self.sales_type = sales_type
-        self.status = status
+        if period != 'period' and period != 'all':
+            self.period = period
+        if sales_type != 'sales type' and sales_type != 'total':
+            self.sales_type = sales_type
+        if status != 'status' and status != 'all':
+            self.status = status
     
     def personal_period_filter(self, member):
         if self.period == 'year':
@@ -34,18 +37,23 @@ class SalesFilter(TotalSales):
     def group_period_filter(self, member):
         if member.group is not None:
             if self.period == 'year':
-                return member.group.members.filter(sales__timestamp__year=timezone.now().year).distinct()
+                sales = map(lambda val: val.sales.filter(timestamp__year=timezone.now().year), member.group.members.all())
+                return list(sales)[0]
             elif self.period == 'month':
-                return member.group.members.filter(sales__timestamp__year=timezone.now().month).distinct()
+                sales = map(lambda val: val.sales.filter(timestamp__month=timezone.now().month), member.group.members.all())
+                return list(sales)[0]
             elif self.period == 'week':
                 day = timezone.now().weekday()
                 start = timezone.now() - timedelta(days=day)
                 end = timezone.now() + timedelta(days=6 - day)
-                return member.group.members.filter(sales__timestamp__range=(start, end)).distinct()
+                sales = map(lambda val: val.sales.filter(timestamp__range=(start, end)), member.group.members.all())
+                return list(sales)[0]
             elif self.period == 'today':
-                return member.group.members.filter(sales__timestamp__date=timezone.now().date())
+                sales = map(lambda val: val.sales.filter(timestamp__date=timezone.now().date()), member.group.members.all())
+                return list(sales)[0]
             else:
-                return member.group.members.all()
+                sales = map(lambda val: val.sales.all(), member.group.members.all())
+                return list(sales)[0]
         else:
             return None
 
@@ -53,27 +61,31 @@ class SalesFilter(TotalSales):
         if self.sales_type is not None and self.status is not None:
             return self.personal_period_filter(member).filter(
                 Q(sales_type__name=self.sales_type) &
-                Q(status__name=self.status)
+                Q(sales_status__name=self.status)
             )
         elif self.sales_type is not None:
             return self.personal_period_filter(member).filter(sales_type__name=self.sales_type)
         elif self.status is not None:
-            return self.personal_period_filter(member).filter(status__name=self.status)
+            return self.personal_period_filter(member).filter(sales_status__name=self.status)
         else:
             return self.personal_period_filter(member)
     
     def group_filter(self, member):
-        if self.sales_type is not None and self.status is not None:
-            return self.group_period_filter(member).filter(
-                Q(sales__sales_type__name=self.sales_type) &
-                Q(sales__status__name=self.status)
-            )
-        elif self.sales_type is not None:
-            return self.group_period_filter(member).filter(sales__sales_type__name=self.sales_type)
-        elif self.status is not None:
-            return self.group_period_filter(member).filter(sales__sales_type__name=self.status)
+        period_filter = self.group_period_filter(member)
+        if period_filter is not None:
+            if self.sales_type is not None and self.status is not None:
+                return period_filter.filter(
+                    Q(sales_type__name=self.sales_type) &
+                    Q(sales_status__name=self.status)
+                )
+            elif self.sales_type is not None:
+                return period_filter.filter(sales_type__name=self.sales_type)
+            elif self.status is not None:
+                return period_filter.filter(sales_status__name=self.status)
+            else:
+                return period_filter
         else:
-            return self.group_period_filter(member)
+            return None
 
     def personal_total(self, member):
         sales = self.personal_filter(member)
@@ -84,10 +96,13 @@ class SalesFilter(TotalSales):
     
     def group_total(self, member):
         sales = self.group_filter(member)
-        total = sales.aggregate(total=Sum('sales__amount'))['total']
-        if total is not None:
-            return total
-        return 0
+        if sales is not None:
+            total = sales.aggregate(total=Sum('amount'))['total']
+            if total is not None:
+                return total
+            return 0
+        else:
+            return 0
 
     def map_function(self, member):
         return {

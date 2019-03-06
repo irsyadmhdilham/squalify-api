@@ -8,12 +8,6 @@ class SalesType(models.Model):
     def __str__(self):
         return self.name
 
-class Surcharge(models.Model):
-    name = models.FloatField(default=None)
-
-    def __str__(self):
-        return str(self.name)
-
 class SalesStatus(models.Model):
     name = models.CharField(max_length=30, unique=True)
 
@@ -29,11 +23,8 @@ class Sales(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     commission = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     sales_type = models.ForeignKey(SalesType, on_delete=models.CASCADE)
-    surcharge = models.ForeignKey(Surcharge, on_delete=models.CASCADE, null=True, blank=True)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
     sales_status = models.ForeignKey(SalesStatus, on_delete=models.CASCADE, to_field='name', default='Submitted')
-    document_id = models.CharField(max_length=100, null=True, blank=True)
-    repeat_sales = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Sales'

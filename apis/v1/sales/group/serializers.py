@@ -8,15 +8,14 @@ class GroupSalesSerializer(serializers.Serializer):
     personal = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
     downlines = serializers.IntegerField(read_only=True)
 
-class GroupSummarySerializer(serializers.Serializer):
-    today = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
-    week = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
-    month = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
-    year = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+class Status(serializers.Serializer):
+    in_hand = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    submitted = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    rejected = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    disburst = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
 
-class DownlineSerializer(serializers.Serializer):
-    pk = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(read_only=True)
-    profile_image = serializers.ImageField(read_only=True)
-    designation = serializers.CharField(read_only=True)
-    downlines = GroupSalesSerializer(many=True, read_only=True)
+class GroupSummarySerializer(serializers.Serializer):
+    today = Status(read_only=True)
+    week = Status(read_only=True)
+    month = Status(read_only=True)
+    year = Status(read_only=True)

@@ -10,7 +10,7 @@ from .serializers import SalesSerializer, SummarySerializer
 from apis._models.profile import Profile
 from apis._models.agency import Agency
 from apis._models.post import Post, PostType
-from apis._models.sales import Sales, SalesType, Surcharge
+from apis._models.sales import Sales, SalesType
 from .. ._models.notification import Notification, NotificationType
 
 from .functions.personal import Personal
@@ -37,23 +37,13 @@ class SalesList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user_pk = self.kwargs.get('user_pk')
-        p = self.request.query_params.get('p')
-        t = self.request.query_params.get('t')
+        period = self.request.query_params.get('p')
+        sales_type = self.request.query_params.get('st')
+        status = self.request.query_params.get('s')
         profile = Profile.objects.get(pk=user_pk)
-        sales = profile.sales.all()
-        sales_filter = SalesFilter(sales)
-        data = None
-        if t == 'epf':
-            data = sales_filter.epf(p)
-        elif t == 'cash':
-            data = sales_filter.cash(p)
-        elif t == 'asb':
-            data = sales_filter.asb(p)
-        elif t == 'prs':
-            data = sales_filter.prs(p)
-        else:
-            data = sales_filter.total(p)
-        return data
+        sales = profile.sales
+        sf = SalesFilter(sales, period, sales_type, status)
+        return sf.result()
     
     def perform_create(self, serializer):
         """request data"""
@@ -65,9 +55,9 @@ class SalesList(generics.ListCreateAPIView):
         tips = self.request.data.get('tips')
 
         """surcharge instance"""
-        surcharge = None
-        if surcharge_val:
-            surcharge = Surcharge.objects.get(name=surcharge_val)
+        # surcharge = None
+        # if surcharge_val:
+        #     surcharge = Surcharge.objects.get(name=surcharge_val)
 
         """instances"""
         profile = Profile.objects.get(pk=user_pk)
@@ -81,13 +71,15 @@ class SalesList(generics.ListCreateAPIView):
         
         instance = None
         if repeat_sales:
-            if surcharge is not None:
-                instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income, repeat_sales=True)
+            if surcharge_val is not None:
+                pass
+                # instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income, repeat_sales=True)
             else:
                 instance = serializer.save(sales_type=sales_type_instance, commission=income, repeat_sales=True)
         else:
-            if surcharge is not None:
-                instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income)
+            if surcharge_val is not None:
+                pass
+                # instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income)
             else:
                 instance = serializer.save(sales_type=sales_type_instance, commission=income)
         profile.sales.add(instance)

@@ -15,7 +15,7 @@ class TotalSales:
     def group(self, member):
         if member.group is not None:
             return member.group.members.aggregate(total=Sum('sales__amount'))['total']
-        return None
+        return 0
     
     def downlines(self, member):
         if member.group is not None:
