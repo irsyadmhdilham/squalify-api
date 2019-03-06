@@ -13,9 +13,10 @@ from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType
 from .. ._models.notification import Notification, NotificationType
 
-from .functions.personal import Personal
 from .functions.sales_filter import SalesFilter
 from .functions.income import Income
+from .functions.summary import Summary
+
 from .. .functions.push_notification import NotificationInit
 import json
 import os
@@ -26,7 +27,7 @@ file = open(path, 'r')
 comm_struct = json.loads(file.read())
 file.close()
 
-"""create notification"""
+# create notification
 def create_notif(notified_by, post, notif_type):
     notif_type = NotificationType.objects.get(name=notif_type)
     notif = Notification.objects.create(notified_by=notified_by, notification_type=notif_type, post_rel=post)
@@ -46,69 +47,50 @@ class SalesList(generics.ListCreateAPIView):
         return sf.result()
     
     def perform_create(self, serializer):
-        """request data"""
+        # request data
         user_pk = self.kwargs.get('user_pk')
         sales_type = self.request.data.get('sales_type')
-        repeat_sales = self.request.data.get('repeat_sales')
         amount = self.request.data.get('amount')
-        surcharge_val = self.request.data.get('surcharge')
-        tips = self.request.data.get('tips')
 
-        """surcharge instance"""
-        # surcharge = None
-        # if surcharge_val:
-        #     surcharge = Surcharge.objects.get(name=surcharge_val)
-
-        """instances"""
+        # instances
         profile = Profile.objects.get(pk=user_pk)
         sales_type_instance = SalesType.objects.get(name=sales_type)
         designation = profile.designation.name
         company = profile.agency.company.name
 
-        """income calculations"""
+        # income calculations
         income_ins = Income(comm_struct, amount, designation, company, sales_type)
         income = income_ins.self_income()
-        
-        instance = None
-        if repeat_sales:
-            if surcharge_val is not None:
-                pass
-                # instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income, repeat_sales=True)
-            else:
-                instance = serializer.save(sales_type=sales_type_instance, commission=income, repeat_sales=True)
-        else:
-            if surcharge_val is not None:
-                pass
-                # instance = serializer.save(sales_type=sales_type_instance, surcharge=surcharge, commission=income)
-            else:
-                instance = serializer.save(sales_type=sales_type_instance, commission=income)
+        instance = serializer.save(sales_type=sales_type_instance, commission=income)
         profile.sales.add(instance)
 
-        """create/update post"""
+        # create/update post
         today_post = Post.objects.filter(
             Q(timestamp__date=timezone.now().date()) &
             Q(posted_by__pk=user_pk)
         )
         post = None
+        """
+        check wether post for today has created or not
+        - If not created, then create one
+        """
         if today_post.count() > 0:
+            # create new post
             post = today_post[0]
             if tips is not None:
                 post.tips = tips
             post.sales_rel.add(instance)
             post.save()
         else:
+            # update created post
             post_type = PostType.objects.get(name='sales closed')
-            create_post = None
-            if tips is not None:
-                create_post = Post.objects.create(posted_by=profile, post_type=post_type, tips=tips)
-            else:
-                create_post = Post.objects.create(posted_by=profile, post_type=post_type)
+            create_post = Post.objects.create(posted_by=profile, post_type=post_type)
             create_post.save()
             create_post.sales_rel.add(instance)
             profile.agency.posts.add(create_post)
             post = create_post
 
-        """Create notification"""
+        # Create notification
         members_with_token = (profile.agency.members
                             .exclude(pk=profile.pk)
                             .annotate(token_count=Count('fcm_token'))
@@ -136,37 +118,15 @@ class SalesRemove(generics.DestroyAPIView):
         profile.sales.remove(instance)
         instance.delete()
 
-class PersonalSummary(APIView):
+class PersonalSummary(generics.RetrieveAPIView):
+    serializer_class = SummarySerializer
 
-    def get(self, request, user_pk):
-        profile = Profile.objects.get(pk=user_pk)
-        q = request.query_params.get('q')
-        sales = profile.sales.all()
-        designation = profile.designation.name
-        company = profile.agency.company.name
-        personal = Personal(sales, comm_struct, designation, company)
-        year = personal.year()
-        month = personal.month()
-        week = personal.week()
-        today = personal.today()
-        def sales_compiler(type):
-            return {
-                'year': { 'sales': year[type], 'income': year['income'] },
-                'month': { 'sales': month[type], 'income': month['income'] },
-                'week': { 'sales': week[type], 'income': week['income'] },
-                'today': { 'sales': today[type], 'income': today['income'] }
-            }
-        data = None
-        if q == 'epf':
-            data = sales_compiler('epf')
-        elif q == 'cash':
-            data = sales_compiler('cash')
-        elif q == 'asb':
-            data = sales_compiler('asb')
-        elif q == 'prs':
-            data = sales_compiler('prs')
-        else:
-            data = sales_compiler('total')
-        serializer = SummarySerializer(data)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        pk = self.kwargs.get('user_pk')
+        return Profile.objects.get(pk=pk).sales.all()
 
+    def get_object(self):
+        sales = self.get_queryset()
+        sales_type = self.request.query_params.get('st')
+        summary = Summary(sales, sales_type)
+        return summary.result()

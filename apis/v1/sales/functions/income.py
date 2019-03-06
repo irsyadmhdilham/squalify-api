@@ -19,11 +19,11 @@ class Income:
             rate = self.comm_struct[self.designation][self.sales_type]['Direct']
             calc = self.amount * ( rate / 100 )
             return round(calc, 2)
+        return 0
     
     def override(self, downline_designation):
         if self.company == 'Public Mutual':
             rate = self.comm_struct[self.designation][self.sales_type][downline_designation]
             calc = self.amount * ( rate / 100 )
             return round(calc, 2)
-        else:
-            return 0
+        return 0
