@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .serializers import MemoSerializer
 from .. ._models.agency import Agency
+from .. ._models.memo import Memo
 from .. ._models.profile import Profile
 from dateutil import parser
 
@@ -18,3 +19,7 @@ class MemoList(generics.ListCreateAPIView):
         posted_by = Profile.objects.get(pk=user_pk)
         memo = serializer.save(posted_by=posted_by)
         agency.memos.add(memo)
+
+class MemoDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MemoSerializer
+    queryset = Memo.objects.all()

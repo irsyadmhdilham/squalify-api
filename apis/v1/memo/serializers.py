@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .. ._models.agency import Memo
+from .. ._models.memo import Memo
 from .. ._models.profile import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
