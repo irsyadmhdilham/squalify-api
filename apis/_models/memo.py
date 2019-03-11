@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from .post import Comment, Like
 
 class Memo(models.Model):
     posted_by = models.ForeignKey('Profile', on_delete=models.CASCADE, null=True)
@@ -8,6 +9,8 @@ class Memo(models.Model):
     end_date = models.DateTimeField()
     text = models.TextField()
     countdown = models.DateTimeField(null=True, blank=True)
+    likes = models.ManyToManyField(Like, blank=True)
+    comments = models.ManyToManyField(Comment, blank=True)
 
     def __str__(self):
         return f'{str(self.start_date)}-{str(self.end_date)}: {self.text}'

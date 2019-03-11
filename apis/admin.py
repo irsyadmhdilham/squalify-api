@@ -1,11 +1,14 @@
-from ._admin import agency
-from ._admin import contact
-from ._admin import group
-from ._admin import inbox
-from ._admin import notification
-from ._admin import point
-from ._admin import post
-from ._admin import profile
-from ._admin import sales
-from ._admin import schedule
-from ._admin import google
+from ._admin import (
+    agency,
+    contact,
+    google,
+    inbox,
+    notification,
+    point,
+    post,
+    profile,
+    sales,
+    schedule,
+    google,
+    memo
+)
