@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .. ._models.agency import Agency
 from .serializers import ScoreboardSerializer
-from .functions.sales import SalesFilter
+from .functions import SalesFilter
 
 class ScoreboardList(generics.ListAPIView):
     serializer_class = ScoreboardSerializer
@@ -12,5 +12,4 @@ class ScoreboardList(generics.ListAPIView):
         pk = self.kwargs.get('agency_pk')
         members = Agency.objects.get(pk=pk).members
         sf = SalesFilter(members, period, sales_type)
-        print(sf.result())
-        return []
+        return sf.result()

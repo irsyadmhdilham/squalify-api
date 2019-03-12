@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.db.models import Q, Sum
 from datetime import timedelta
+from operator import itemgetter
 
 class SalesFilter:
     members = None
@@ -9,9 +10,9 @@ class SalesFilter:
     
     def __init__(self, members, period, sales_type):
         self.members = members.all()
-        if period != 'all':
+        if period != 'all' and period != 'period':
             self.period = period
-        if sales_type != 'all':
+        if sales_type != 'all' and period != 'sales type':
             self.sales_type = sales_type
     
     def year(self, sales):
@@ -83,11 +84,15 @@ class SalesFilter:
     def mapper(self, member):
         return {
             'pk': member.pk,
-            'name': member.pk,
+            'name': member.name,
             'designation': member.designation,
             'profile_image': member.profile_image,
-            'amount' self.amount(member.sales)
+            'amount': self.amount(member.sales)
         }
     
     def result(self):
-        return list(map(self.mapper, self.members))
+        output = filter(lambda val: val['designation'].name != 'Group Agency Manager', map(self.mapper, self.members))
+        return self.sort(output)
+    
+    def sort(self, output):
+        return sorted(output, key=itemgetter('amount'))
