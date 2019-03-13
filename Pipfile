@@ -46,6 +46,8 @@ uWSGI = "==2.0.17.1"
 "psycopg2" = "*"
 "psycopg2-binary" = "*"
 python-dateutil = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 

@@ -1,9 +1,16 @@
 from rest_framework import serializers
 from .. ._models.sales import Sales
+from .. ._models.contact import Contact
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ('pk', 'name',)
 
 class SalesSerializer(serializers.ModelSerializer):
     sales_type = serializers.StringRelatedField(read_only=True)
     sales_status = serializers.StringRelatedField(read_only=True)
+    contact = ContactSerializer(read_only=True)
 
     class Meta:
         model = Sales
@@ -16,6 +23,7 @@ class SalesSerializer(serializers.ModelSerializer):
             'sales_status',
             'location',
             'commission',
+            'contact',
         )
 
 class Status(serializers.Serializer):
