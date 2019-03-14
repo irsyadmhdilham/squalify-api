@@ -11,6 +11,7 @@ from apis._models.profile import Profile
 from apis._models.agency import Agency
 from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, SalesStatus
+from .. ._models.contact import Contact
 from .. ._models.notification import Notification, NotificationType
 
 from .functions.sales_filter import SalesFilter
@@ -52,6 +53,8 @@ class SalesList(generics.ListCreateAPIView):
         sales_type = self.request.data.get('sales_type')
         amount = self.request.data.get('amount')
         status = self.request.data.get('sales_status')
+        contact = self.request.data.get('contact')
+        client = self.request.data.get('client_name')
 
         # instances
         profile = Profile.objects.get(pk=user_pk)
@@ -63,7 +66,12 @@ class SalesList(generics.ListCreateAPIView):
         # income calculations
         income_ins = Income(comm_struct, amount, designation, company, sales_type)
         income = income_ins.self_income()
-        instance = serializer.save(sales_type=sales_type_instance, commission=income, sales_status=sales_status)
+        instance = None
+        if contact is not None:
+            _contact = Contact.objects.get(pk=contact)
+            instance = serializer.save(sales_type=sales_type_instance, commission=income, sales_status=sales_status, contact=_contact)
+        else:
+            instance = serializer.save(sales_type=sales_type_instance, commission=income, sales_status=sales_status)
         profile.sales.add(instance)
 
         # create/update post
@@ -108,9 +116,24 @@ class SalesList(generics.ListCreateAPIView):
             notif = NotificationInit('New sales closed', f'{profile.name} just closed a sales', notif_data)
             notif.send_group(members_with_token)
 
-class SalesRemove(generics.DestroyAPIView):
+class SalesDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SalesSerializer
     queryset = Sales.objects.all()
+
+    def perform_update(self, serializer):
+        sales_type = self.request.data.get('sales_type')
+        status = self.request.data.get('sales_status')
+        contact = self.request.data.get('contact')
+        
+        # instances
+        sales_type_obj = SalesType.objects.get(name=sales_type)
+        sales_status = SalesStatus.objects.get(name=status)
+        
+        if contact is not None:
+            _contact = Contact.objects.get(pk=contact)
+            serializer.save(sales_type=sales_type_obj, sales_status=sales_status, contact=_contact, client_name=None)
+        else:
+            serializer.save(sales_type=sales_type_obj, sales_status=sales_status, contact=None)
 
     def perform_destroy(self, instance):
         user_pk = self.kwargs.get('user_pk')

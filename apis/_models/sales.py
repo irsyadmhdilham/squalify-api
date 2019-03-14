@@ -25,6 +25,7 @@ class Sales(models.Model):
     sales_type = models.ForeignKey(SalesType, on_delete=models.CASCADE)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
     sales_status = models.ForeignKey(SalesStatus, on_delete=models.CASCADE, to_field='name', default='Submitted')
+    client_name = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Sales'

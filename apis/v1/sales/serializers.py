@@ -24,6 +24,7 @@ class SalesSerializer(serializers.ModelSerializer):
             'location',
             'commission',
             'contact',
+            'client_name',
         )
 
 class Status(serializers.Serializer):

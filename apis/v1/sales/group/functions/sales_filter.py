@@ -12,11 +12,11 @@ class SalesFilter(TotalSales):
     
     def __init__(self, period, sales_type, status, members):
         self.members = members.all()
-        if period != 'period' and period != 'all':
+        if period != 'all':
             self.period = period
-        if sales_type != 'sales type' and sales_type != 'total':
+        if sales_type != 'all':
             self.sales_type = sales_type
-        if status != 'status' and status != 'all':
+        if status != 'all':
             self.status = status
     
     def personal_period_filter(self, member):

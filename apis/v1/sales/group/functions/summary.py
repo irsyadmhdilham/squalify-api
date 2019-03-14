@@ -7,7 +7,7 @@ class Status:
     sales_type = None
 
     def __init__(self, sales_type):
-        if sales_type != 'All' and sales_type != 'sales type':
+        if sales_type != 'all':
             self.sales_type = sales_type
     
     def status_type_filter(self, sales, sales_status, sales_type=False):
