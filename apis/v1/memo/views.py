@@ -1,4 +1,6 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .serializers import MemoSerializer
 from ..post.serializers import LikeSerializer, CommentSerializer
 from .. ._models.agency import Agency
@@ -6,13 +8,21 @@ from .. ._models.memo import Memo
 from .. ._models.post import Like, Comment
 from .. ._models.profile import Profile
 from dateutil import parser
+from datetime import timedelta
+from django.utils import timezone
 
 class MemoList(generics.ListCreateAPIView):
     serializer_class = MemoSerializer
 
     def get_queryset(self):
         pk = self.kwargs.get('agency_pk')
-        return Agency.objects.get(pk=pk).memos.order_by('-posted_date')
+        q = self.request.query_params.get('q')
+        agency = Agency.objects.get(pk=pk)
+        memos = agency.memos.filter(expiry_date__gte=timezone.now()).order_by('-posted_date')
+        if q is not None:
+            user_pk = self.request.query_params.get('uid')
+            memos = agency.memos.filter(posted_by__pk=user_pk).order_by('-posted_date')
+        return memos
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('agency_pk')
@@ -25,6 +35,16 @@ class MemoList(generics.ListCreateAPIView):
 class MemoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MemoSerializer
     queryset = Memo.objects.all()
+
+class ExtendMemo(APIView):
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        memo = Memo.objects.get(pk=pk)
+        extended = memo.expiry_date + timedelta(weeks=1)
+        memo.expiry_date = extended
+        memo.save()
+        return Response(memo.expiry_date, status=status.HTTP_200_OK)
 
 class LikeMemo(generics.ListCreateAPIView):
     serializer_class = LikeSerializer

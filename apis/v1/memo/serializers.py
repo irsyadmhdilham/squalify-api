@@ -6,7 +6,7 @@ from ..post.serializers import CommentSerializer
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('profile_image', 'name',)
+        fields = ('pk', 'profile_image', 'name',)
 
 class MemoSerializer(serializers.ModelSerializer):
     posted_by = ProfileSerializer(read_only=True)
@@ -19,8 +19,7 @@ class MemoSerializer(serializers.ModelSerializer):
             'pk', 
             'posted_by',
             'posted_date',
-            'start_date',
-            'end_date',
+            'expiry_date',
             'countdown',
             'text',
             'likes',
