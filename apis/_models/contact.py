@@ -21,8 +21,8 @@ def contact_directory_path(instance, filename):
 class Contact(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200, null=True, blank=True)
-    status = models.ForeignKey(ContactStatus, on_delete=models.CASCADE, to_field='name', default='None')
-    contact_type = models.ForeignKey(ContactType, on_delete=models.CASCADE)
+    status = models.ForeignKey(ContactStatus, on_delete=models.CASCADE, to_field='name', default='None', null=True)
+    contact_type = models.ForeignKey(ContactType, on_delete=models.CASCADE, null=True)
     remark = models.TextField(blank=True, null=True)
     contact_no = models.CharField(max_length=30)
     schedules = models.ManyToManyField('Schedule', blank=True, related_name='contacts')

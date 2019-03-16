@@ -19,36 +19,36 @@ class Status:
         if in_hand.count() > 0:
             total = in_hand.aggregate(total=Sum('amount'))['total']
             if total is not None:
-                return total
-            return 0
-        return 0
+                return { 'cases': in_hand.count(), 'total': total }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
     
     def submitted(self, sales):
         submitted = self.sales_type_filter(sales).filter(sales_status__name='Submitted')
         if submitted.count() > 0:
             total = submitted.aggregate(total=Sum('amount'))['total']
             if total is not None:
-                return total
-            return 0
-        return 0
+                return { 'cases': submitted.count(), 'total': total }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
     
     def rejected(self, sales):
         rejected = self.sales_type_filter(sales).filter(sales_status__name='Rejected')
         if rejected.count() > 0:
             total = rejected.aggregate(total=Sum('amount'))['total']
             if total is not None:
-                return total
-            return 0
-        return 0
+                return { 'cases': rejected.count(), 'total': total }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
     
     def disburst(self, sales):
         disburst = self.sales_type_filter(sales).filter(sales_status__name='Disburst')
         if disburst.count() > 0:
             total = disburst.aggregate(total=Sum('amount'))['total']
             if total is not None:
-                return total
-            return 0
-        return 0
+                return { 'cases': disburst.count(), 'total': total }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
     
     def serializer(self, sales):
         return {

@@ -124,10 +124,17 @@ class CallLogsDetail(generics.RetrieveUpdateAPIView):
         answered = self.request.data.get('answered')
         user_pk = self.kwargs.get('user_pk')
         profile = Profile.objects.get(pk=user_pk)
+
+        # check answered value available or not
         if answered is not None:
             log = self.get_object()
             point = profile.points.filter(date=log.date)
+
             point_field = PointField.objects.get(name='Calls/Email/Socmed')
+            # If contact status not None, point field = Servicing/Follow up
+            if log.contact.status != 'None':
+                point_field = PointField.objects.get(name='Servicing/Follow up')
+
             if answered is True:
                 point_type = PointLogType.objects.get(name='Add')
                 if point.count() == 0:
@@ -139,7 +146,11 @@ class CallLogsDetail(generics.RetrieveUpdateAPIView):
                     profile.points.add(create)
                 else:
                     instance = point[0]
+
                     get_attr = instance.attributes.filter(attribute__name='Calls/Email/Socmed')
+                    if log.contact.status != 'None':
+                        get_attr = instance.attributes.filter(attribute__name='Servicing/Follow up')
+
                     total = 1
                     if get_attr.count() > 0:
                         attr = get_attr[0]
@@ -154,7 +165,11 @@ class CallLogsDetail(generics.RetrieveUpdateAPIView):
             else:
                 point_type = PointLogType.objects.get(name='Subtract')
                 instance = point[0]
+                
                 attr = instance.attributes.filter(attribute__name='Calls/Email/Socmed')[0]
+                if log.contact.status != 'None':
+                    attr = instance.attributes.filter(attribute__name='Servicing/Follow up')[0]
+
                 if attr.point > 0:
                     total = attr.point - 1
                     attr.point = total

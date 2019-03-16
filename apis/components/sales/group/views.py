@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .. .._models.profile import Profile
-from .serializers import GroupSalesSerializer, GroupSummarySerializer
+from .serializers import GroupSalesSerializer
+from ..serializers import SummarySerializer
 from .functions.total import TotalSales
 from .functions.sales_filter import SalesFilter
 from .functions.summary import Summary
@@ -27,7 +28,7 @@ class GroupSalesFilter(generics.ListAPIView):
         return sf.result()
 
 class GroupSalesSummary(generics.RetrieveAPIView):
-    serializer_class = GroupSummarySerializer
+    serializer_class = SummarySerializer
 
     def get_queryset(self):
         pk = self.kwargs.get('user_pk')

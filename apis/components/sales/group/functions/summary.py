@@ -31,9 +31,9 @@ class Status:
                 x = 0
                 for s in filtered_sales:
                     x += s.amount
-                return x
-            return 0
-        return 0
+                return { 'cases': len(filtered_sales), 'total': x }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
 
     def submitted(self, sales):
         if len(sales) > 0:
@@ -44,9 +44,9 @@ class Status:
                 x = 0
                 for s in filtered_sales:
                     x += s.amount
-                return x
-            return 0
-        return 0
+                return { 'cases': len(filtered_sales), 'total': x }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
 
     def rejected(self, sales):
         if len(sales) > 0:
@@ -57,9 +57,9 @@ class Status:
                 x = 0
                 for s in filtered_sales:
                     x += s.amount
-                return x
-            return 0
-        return 0
+                return { 'cases': len(filtered_sales), 'total': x }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
 
     def disburst(self, sales):
         if len(sales) > 0:
@@ -70,9 +70,9 @@ class Status:
                 x = 0
                 for s in filtered_sales:
                     x += s.amount
-                return x
-            return 0
-        return 0
+                return { 'cases': len(filtered_sales), 'total': x }
+            return { 'cases': 0, 'total': 0 }
+        return { 'cases': 0, 'total': 0 }
     
     def status_serializer(self, sales):
         return {
