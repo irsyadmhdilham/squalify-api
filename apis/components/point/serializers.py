@@ -72,3 +72,70 @@ class AllPointsSerializer(serializers.Serializer):
     personal = serializers.IntegerField(read_only=True)
     group = serializers.IntegerField(read_only=True)
     agency = serializers.IntegerField(read_only=True)
+
+# Point summary
+class TotalSummarySerializer(serializers.Serializer):
+    current = serializers.IntegerField()
+    previous = serializers.IntegerField()
+    diff_percentage = serializers.FloatField()
+
+class ContactListSerializer(serializers.Serializer):
+    referrals = serializers.IntegerField()
+    ftf = serializers.IntegerField()
+    booth = serializers.IntegerField()
+    socmed = serializers.IntegerField()
+    nesting = serializers.IntegerField()
+    other = serializers.IntegerField()
+    ttt = serializers.IntegerField()
+    client = serializers.IntegerField()
+
+class ContactSummarySerializer(serializers.Serializer):
+    ftf = serializers.IntegerField()
+    referrals = serializers.IntegerField()
+    new_contacts = serializers.IntegerField()
+    new_contacts_percentage = serializers.FloatField()
+    client_conversion = serializers.IntegerField()
+    client_conversion_percentage = serializers.FloatField()
+    contacts = ContactListSerializer()
+
+class EngagementSummarySerializer(serializers.Serializer):
+    calls = serializers.IntegerField()
+    servicing = serializers.IntegerField()
+    appointment = serializers.IntegerField()
+    new_calls = serializers.IntegerField()
+    new_calls_percentage = serializers.IntegerField()
+    new_servicing = serializers.IntegerField()
+    new_servicing_percentage = serializers.FloatField()
+    new_appointment = serializers.IntegerField()
+    new_appointment_percentage = serializers.FloatField()
+
+class SalesSummarySerializer(serializers.Serializer):
+    sales_presentation = serializers.IntegerField()
+    case_closed = serializers.IntegerField()
+    new_sales_presentation = serializers.IntegerField()
+    new_sales_presentation_percentage = serializers.FloatField()
+    new_cases = serializers.IntegerField()
+    new_cases_percentage = serializers.FloatField()
+    total_new_sales = serializers.DecimalField(decimal_places=2, max_digits=10)
+
+class RecruitmentSummarySerializer(serializers.Serializer):
+    career_presentation = serializers.IntegerField()
+    new_recruitment = serializers.IntegerField()
+    new_career_presentation = serializers.IntegerField()
+    new_career_presentation_percentage = serializers.FloatField()
+    new_recruitment = serializers.IntegerField()
+    new_recruitment_percentage = serializers.FloatField()
+
+class CareerSummarySerializer(serializers.Serializer):
+    millionaire_suit = serializers.IntegerField()
+    update_upline = serializers.IntegerField()
+    personal_coaching = serializers.IntegerField()
+    training = serializers.IntegerField()
+
+class SummarySerializer(serializers.Serializer):
+    total = TotalSummarySerializer(read_only=True)
+    contacts = ContactSummarySerializer(read_only=True)
+    engagement = EngagementSummarySerializer(read_only=True)
+    sales = SalesSummarySerializer(read_only=True)
+    recruitment = RecruitmentSummarySerializer(read_only=True)
+    career = CareerSummarySerializer(read_only=True)

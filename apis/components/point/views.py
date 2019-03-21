@@ -10,7 +10,7 @@ from .functions.scoreboard import Scoreboard
 from django.utils import timezone
 from django.db.models import Sum
 
-from .serializers import PointSerializer, ScoreboardSerializer, AllPointsSerializer
+from .serializers import PointSerializer, ScoreboardSerializer, AllPointsSerializer, SummarySerializer
 
 class PointList(generics.ListCreateAPIView):
     serializer_class = PointSerializer
@@ -162,3 +162,12 @@ class AllPoints(APIView):
         }
         serializer = AllPointsSerializer(data)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class PointSummary(generics.RetrieveAPIView):
+    serializer_class = SummarySerializer
+    queryset = Profile.objects.all()
+    
+    def get_object(self):
+        pk = self.kwargs.get('user_pk')
+        period = self.request.query_params.get('p')
+        profile = self.get_queryset().filter(pk=pk)

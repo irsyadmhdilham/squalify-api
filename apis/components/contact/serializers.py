@@ -37,9 +37,12 @@ class ContactSerializer(QueryFieldsMixin, serializers.ModelSerializer):
         )
 
 class ContactLogSerializer(serializers.ModelSerializer):
+    contact_type = serializers.StringRelatedField(read_only=True)
+    status = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Contact
-        fields = ('pk', 'name',)
+        fields = ('pk', 'name', 'status', 'contact_type',)
 
 class CallLogSerializer(serializers.ModelSerializer):
     contact = ContactLogSerializer(read_only=True)

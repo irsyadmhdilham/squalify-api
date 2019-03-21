@@ -111,8 +111,13 @@ class CallLogs(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user_pk = self.kwargs.get('user_pk')
         contact_pk = self.request.data.get('contactId')
+        called = self.request.query_params.get('c')
         contact = Contact.objects.get(pk=contact_pk)
-        instance = serializer.save(contact=contact)
+        instance = None
+        if called == 'true':
+            instance = serializer.save(contact=contact)
+        else:
+            instance = serializer.save(contact=contact)
         Profile.objects.get(pk=user_pk).call_logs.add(instance)
 
 
