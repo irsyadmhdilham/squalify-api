@@ -120,7 +120,7 @@ class SalesSummarySerializer(serializers.Serializer):
 
 class RecruitmentSummarySerializer(serializers.Serializer):
     career_presentation = serializers.IntegerField()
-    new_recruitment = serializers.IntegerField()
+    recruitment = serializers.IntegerField()
     new_career_presentation = serializers.IntegerField()
     new_career_presentation_percentage = serializers.FloatField()
     new_recruitment = serializers.IntegerField()

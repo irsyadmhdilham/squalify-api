@@ -7,6 +7,7 @@ from .. ._models.point import Point, PointField, PointAttribute, PointLog, Point
 
 from .functions.point_calculator import PointCalculator
 from .functions.scoreboard import Scoreboard
+from .functions.summary import Summary
 from django.utils import timezone
 from django.db.models import Sum
 
@@ -170,4 +171,7 @@ class PointSummary(generics.RetrieveAPIView):
     def get_object(self):
         pk = self.kwargs.get('user_pk')
         period = self.request.query_params.get('p')
-        profile = self.get_queryset().filter(pk=pk)
+        profile = self.get_queryset().get(pk=pk)
+        point = profile.points.all()
+        summary = Summary(profile, period)
+        return summary.summary()

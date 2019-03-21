@@ -39,12 +39,13 @@ class PointPeriodFilter:
                 'previous': self.points.filter(date__year=timezone.now().year - 1)
             }
 
-class ContactPeriodFilter:
+class ContactPeriodFilter(PointPeriodFilter):
 
     contacts = None
     period = None
 
     def __init__(self, profile, period):
+        super().__init__(profile, period)
         self.contacts = profile.contacts
         self.period = period
     
@@ -68,11 +69,17 @@ class ContactPeriodFilter:
         elif self.period == 'today':
             previous = timezone.now() - timedelta(days=1)
             return {
-                'current': self.points.filter(created_on__date=timezone.now().date()),
-                'previous': self.points.filter(created_on__date=previous.date())
+                'current': self.contacts.filter(created_on__date=timezone.now().date()),
+                'previous': self.contacts.filter(created_on__date=previous.date())
             }
         else:
             return {
-                'current': self.points.filter(created_on__year=timezone.now().year),
-                'previous': self.points.filter(created_on__year=timezone.now().year - 1)
+                'current': self.contacts.filter(created_on__year=timezone.now().year),
+                'previous': self.contacts.filter(created_on__year=timezone.now().year - 1)
             }
+
+class PeriodFilter(ContactPeriodFilter):
+    
+    def __init__(self, profile, period):
+        super().__init__(profile, period)
+
