@@ -1,5 +1,6 @@
 from django.utils import timezone
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 class PointPeriodFilter:
 
@@ -12,7 +13,7 @@ class PointPeriodFilter:
     
     def period_output(self):
         if self.period == 'month':
-            previous = timezone.now() - timedelta(months=1)
+            previous = timezone.now() - relativedelta(months=1)
             return {
                 'current': self.points.filter(date__month=timezone.now().month),
                 'previous': self.points.filter(date__month=previous.month)
@@ -51,7 +52,7 @@ class ContactPeriodFilter(PointPeriodFilter):
     
     def contact_period_output(self):
         if self.period == 'month':
-            previous = timezone.now() - timedelta(months=1)
+            previous = timezone.now() - relativedelta(months=1)
             return {
                 'current': self.contacts.filter(created_on__month=timezone.now().month),
                 'previous': self.contacts.filter(created_on__month=previous.month)

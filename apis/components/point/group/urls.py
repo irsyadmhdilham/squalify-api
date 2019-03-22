@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import GroupPointList, GroupMemberPointList, DownlineList, GroupMembers
+from .views import GroupPointList, GroupMemberPointList, DownlineList, GroupMembers, GroupSummary
 
 app_name = 'group'
 
@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^(?P<date>[\d-]+)/$', GroupMembers.as_view(), name='group-members'),
     url(r'^(?P<member_pk>\d+)/$', GroupMemberPointList.as_view(), name='member-points'),
     url(r'^(?P<member_pk>\d+)/downline/$', DownlineList.as_view(), name='downline-list'),
+    url(r'^summary/$', GroupSummary.as_view(), name='group-summary'),
 ]

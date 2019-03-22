@@ -61,7 +61,7 @@ class Contacts:
         return 0
 
     def referrals(self):
-        ftf = self.current.filter(attributes__attribute__name='Referrals')
+        ftf = self.current.filter(attributes__attribute__name='Referral')
         total = ftf.aggregate(total=Sum('attributes__point'))['total']
         if total is not None:
             return total
@@ -87,7 +87,7 @@ class Contacts:
         return difference_percentage(previous, current)
     
     def contact_list(self):
-        referrals = self.current_contacts.filter(contact_type__name='Referrals')
+        referrals = self.current_contacts.filter(contact_type__name='Referral')
         booth = self.current_contacts.filter(contact_type__name='Booth')
         ftf = self.current_contacts.filter(contact_type__name='Face to face')
         socmed = self.current_contacts.filter(contact_type__name='Social media')

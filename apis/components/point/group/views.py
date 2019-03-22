@@ -1,5 +1,6 @@
 from rest_framework import generics
 from .serializers import MemberSerializer, MemberPointSerializer, PointsSerializer
+from ..serializers import SummarySerializer
 from .. .._models.profile import Profile
 from django.utils import timezone
 from datetime import date, timedelta
@@ -7,6 +8,8 @@ from django.db.models import Sum
 import asyncio
 from datetime import datetime
 from functools import reduce
+
+from .functions.summary import Summary
 
 class GroupPointList(generics.ListAPIView):
     serializer_class = PointsSerializer
@@ -116,3 +119,14 @@ class DownlineList(generics.ListAPIView):
             }
         map_members = map(serialize, members)
         return map_members
+
+class GroupSummary(generics.RetrieveAPIView):
+    serializer_class = SummarySerializer
+    queryset = Profile.objects.all()
+
+    def get_object(self):
+        pk = self.kwargs.get('user_pk')
+        period = self.request.query_params.get('p')
+        profile = self.get_queryset().get(pk=pk)
+        summary = Summary(profile.group, period)
+        return summary.summary()
