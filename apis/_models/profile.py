@@ -30,12 +30,22 @@ class FcmToken(models.Model):
     def __str__(self):
         return self.user.name
 
+class ContactVia(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class CallLog(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
     remark = models.CharField(max_length=200, null=True, blank=True)
     answered = models.BooleanField(default=False)
+    contact_via = models.ForeignKey(ContactVia, on_delete=models.CASCADE, to_field='name', default='Call')
 
+    def __str__(self):
+        constact = self.contact
+        return f'{self.contact.name}, {self.date}'
 
 def default_settings():
     return {

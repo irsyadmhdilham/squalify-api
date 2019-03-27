@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .. ._models.profile import Profile, CallLog
+from .. ._models.profile import Profile, CallLog, ContactVia
 from .. ._models.point import Point, PointLogType, PointLog, PointField, PointAttribute
 from .. ._models.contact import Contact, ContactType, ContactStatus
 from .. ._models.schedule import Schedule
@@ -113,11 +113,15 @@ class CallLogs(generics.ListCreateAPIView):
         contact_pk = self.request.data.get('contactId')
         status = self.request.data.get('status')
         called = self.request.query_params.get('c')
+        _contact_via = self.request.data.get('contactVia')
+
         contact = Contact.objects.get(pk=contact_pk)
         profile = Profile.objects.get(pk=user_pk)
+        contact_via = ContactVia.objects.get(name=_contact_via)
         instance = None
+
         if called == 'true':
-            instance = serializer.save(contact=contact, answered=True)
+            instance = serializer.save(contact=contact, answered=True, contact_via=contact_via)
             
             point = profile.points.filter(date=timezone.now().date())
             point_field = PointField.objects.get(name='Calls/Email/Socmed')
@@ -152,7 +156,7 @@ class CallLogs(generics.ListCreateAPIView):
                 point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
                 p.logs.add(point_log)
         else:
-            instance = serializer.save(contact=contact)
+            instance = serializer.save(contact=contact, contact_via=contact_via)
         Profile.objects.get(pk=user_pk).call_logs.add(instance)
 
 
@@ -163,7 +167,10 @@ class CallLogsDetail(generics.RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         answered = self.request.data.get('answered')
         user_pk = self.kwargs.get('user_pk')
+        _contact_via = self.request.data.get('contactVia')
+
         profile = Profile.objects.get(pk=user_pk)
+        contact_via = ContactVia.objects.get(name=_contact_via)
 
         # check answered value available or not
         if answered is not None:
@@ -216,7 +223,7 @@ class CallLogsDetail(generics.RetrieveUpdateAPIView):
                     attr.save()
                     point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
                     instance.logs.add(point_log)
-        serializer.save()
+        serializer.save(contact_via=contact_via)
 
 class CallLogsFilter(generics.ListAPIView):
     serializer_class = CallLogSerializer

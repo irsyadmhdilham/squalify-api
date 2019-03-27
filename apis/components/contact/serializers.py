@@ -46,7 +46,8 @@ class ContactLogSerializer(serializers.ModelSerializer):
 
 class CallLogSerializer(serializers.ModelSerializer):
     contact = ContactLogSerializer(read_only=True)
+    contact_via = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = CallLog
-        fields = ('pk', 'date', 'answered', 'contact', 'remark',)
+        fields = ('pk', 'date', 'answered', 'contact', 'remark', 'contact_via',)
