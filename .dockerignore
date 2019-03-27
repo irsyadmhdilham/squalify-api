@@ -1,5 +1,6 @@
 .vscode
 ./makemigrations
+./clearmigrations
 ./runserver
 .gitignore
 .venv

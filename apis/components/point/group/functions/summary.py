@@ -35,16 +35,21 @@ class Total:
             return reduce(lambda a, b: a + b, points)
         return 0
     
-    def difference(self):
+    def difference_percentage(self):
         current = self.current_point()
         previous = self.previous_point()
         return difference_percentage(previous, current)
+
+    def difference(self):
+        current = self.current_point()
+        previous = self.previous_point()
+        return current - previous
     
     def result(self):
         return {
             'current': self.current_point(),
-            'previous': self.previous_point(),
-            'diff_percentage': self.difference()
+            'difference': self.difference(),
+            'diff_percentage': self.difference_percentage()
         }
 
 class Contacts:

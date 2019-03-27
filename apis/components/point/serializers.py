@@ -76,7 +76,7 @@ class AllPointsSerializer(serializers.Serializer):
 # Point summary
 class TotalSummarySerializer(serializers.Serializer):
     current = serializers.IntegerField()
-    previous = serializers.IntegerField()
+    difference = serializers.IntegerField()
     diff_percentage = serializers.FloatField()
 
 class ContactListSerializer(serializers.Serializer):

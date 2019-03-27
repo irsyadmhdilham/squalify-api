@@ -111,11 +111,46 @@ class CallLogs(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user_pk = self.kwargs.get('user_pk')
         contact_pk = self.request.data.get('contactId')
+        status = self.request.data.get('status')
         called = self.request.query_params.get('c')
         contact = Contact.objects.get(pk=contact_pk)
+        profile = Profile.objects.get(pk=user_pk)
         instance = None
         if called == 'true':
-            instance = serializer.save(contact=contact)
+            instance = serializer.save(contact=contact, answered=True)
+            
+            point = profile.points.filter(date=timezone.now().date())
+            point_field = PointField.objects.get(name='Calls/Email/Socmed')
+            # If contact status not None, point field = Servicing/Follow up
+            if status != 'None':
+                point_field = PointField.objects.get(name='Servicing/Follow up')
+
+            point_type = PointLogType.objects.get(name='Add')
+            if point.count() == 0:
+                attr = PointAttribute.objects.create(attribute=point_field, point=1)
+                point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=1)
+                create = Point.objects.create()
+                create.attributes.add(attr)
+                create.logs.add(point_log)
+                profile.points.add(create)
+            else:
+                p = point[0]
+
+                get_attr = p.attributes.filter(attribute__name='Calls/Email/Socmed')
+                if status != 'None':
+                    get_attr = p.attributes.filter(attribute__name='Servicing/Follow up')
+
+                total = 1
+                if get_attr.count() > 0:
+                    attr = get_attr[0]
+                    total = attr.point + 1
+                    attr.point = total
+                    attr.save()
+                else:
+                    attr = PointAttribute.objects.create(attribute=point_field, point=total)
+                    p.attributes.add(attr)
+                point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
+                p.logs.add(point_log)
         else:
             instance = serializer.save(contact=contact)
         Profile.objects.get(pk=user_pk).call_logs.add(instance)
