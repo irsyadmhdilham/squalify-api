@@ -9,10 +9,6 @@ from datetime import timedelta
 from .functions.reminder import Reminder
 from .functions.update_reminder import UpdateReminder
 
-async def task(num):
-    await asyncio.sleep(1)
-    print(f'couroutine :{num}')
-
 class ScheduleList(generics.ListCreateAPIView):
     serializer_class = SchedulesSerializer
     
@@ -24,13 +20,28 @@ class ScheduleList(generics.ListCreateAPIView):
         user_pk = self.kwargs.get('user_pk')
         sd = parser.parse(self.request.data.get('date'))
         rd = self.request.data.get('reminderDate')
+        multi_assign = self.request.data.get('multiAssign')
+        assigned_members = self.request.data.get('assignMembers')
         profile = Profile.objects.get(pk=user_pk)
         instance = None
         if rd is not None:
             reminder = Reminder(sd, rd)
-            instance = serializer.save(reminder=reminder.reminder())
+            instance = serializer.save(reminder=reminder.reminder(), created_by=profile)
         else:
-            instance = serializer.save()
+            instance = serializer.save(created_by=profile)
+        if multi_assign is not None:
+            if multi_assign == 'agency':
+                members = profile.agency.members.exclude(pk=profile.pk)
+                for member in members:
+                    member.schedules.add(instance)
+            elif multi_assign == 'group':
+                members = profile.group.members.exclude(pk=profile.pk)
+                for member in members:
+                    member.schedules.add(instance)
+            elif multi_assign == 'select':
+                members = Profile.objects.in_bulk(assigned_members)
+                for member in members:
+                    member.schedules.add(instance)
         profile.schedules.add(instance)
 
 class ScheduleDetail(generics.RetrieveUpdateDestroyAPIView):

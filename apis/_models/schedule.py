@@ -11,6 +11,7 @@ class Schedule(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
     reminder = models.DateTimeField(null=True, blank=True)
+    created_by = models.ForeignKey('Profile', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title

@@ -80,6 +80,10 @@ class CommentList(generics.ListCreateAPIView):
                 send_notif = NotificationInit(f'{profile.name} commented your post', text, data, True)
                 send_notif.send(fcm_token)
 
+class CommentRemove(generics.DestroyAPIView):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
 class LikeList(generics.ListCreateAPIView):
     serializer_class = LikeSerializer
 

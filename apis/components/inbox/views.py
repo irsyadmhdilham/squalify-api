@@ -276,3 +276,7 @@ class GroupInboxDetail(generics.RetrieveUpdateDestroyAPIView):
             notif_init = NotificationInit(f'Message: {group_chat.title}', text, notif_data, True)
             notif_init.send_group(participants_with_token)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class DestroyInbox(generics.DestroyAPIView):
+    serializer_class = InboxSerializer
+    queryset = Inbox.objects.all()
