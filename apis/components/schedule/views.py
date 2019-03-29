@@ -21,7 +21,7 @@ class ScheduleList(generics.ListCreateAPIView):
         sd = parser.parse(self.request.data.get('date'))
         rd = self.request.data.get('reminderDate')
         multi_assign = self.request.data.get('multiAssign')
-        assigned_members = self.request.data.get('assignMembers')
+        assigned_members = self.request.data.get('assignedMembers')
         profile = Profile.objects.get(pk=user_pk)
         instance = None
         if rd is not None:
@@ -40,7 +40,7 @@ class ScheduleList(generics.ListCreateAPIView):
                     member.schedules.add(instance)
             elif multi_assign == 'select':
                 members = Profile.objects.in_bulk(assigned_members)
-                for member in members:
+                for key, member in members.items():
                     member.schedules.add(instance)
         profile.schedules.add(instance)
 
