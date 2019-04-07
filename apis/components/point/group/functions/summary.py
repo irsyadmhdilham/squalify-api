@@ -1,6 +1,7 @@
 from django.db.models import Sum
 from .period_filter import PeriodFilter
 from functools import reduce
+from django.db.models import Q
 
 def difference_percentage(original, new):
     if original == 0 and new == 0:
@@ -220,10 +221,12 @@ class Sales:
 
     current = None
     previous = None
+    sales = None
 
-    def __init__(self, current, previous):
+    def __init__(self, current, previous, sales):
         self.current = current
         self.previous = previous
+        self.sales = sales
     
     def point_mapper(self, point_list, attribute):
         def mapper(value):
@@ -264,6 +267,12 @@ class Sales:
         previous = self.point_mapper(self.previous, 'Case closed')
         return difference_percentage(previous, current)
     
+    def total_new_sales(self):
+        if len(self.sales) > 0:
+            amount = map(lambda val: val.amount, self.sales)
+            return reduce(lambda a, b: a + b, amount)
+        return 0
+    
     def result(self):
         return {
             'sales_presentation': self.sales_presentation(),
@@ -272,7 +281,7 @@ class Sales:
             'new_sales_presentation_percentage': self.new_sales_presentation_percentage(),
             'new_cases': self.new_cases(),
             'new_cases_percentage': self.new_cases_percentage(),
-            'total_new_sales': 0
+            'total_new_sales': self.total_new_sales()
         }
 
 class Recruitment:
@@ -373,12 +382,59 @@ class Career:
             'training': self.training()
         }
 
+class ConsultantPerfRange:
+
+    consultants = None
+
+    def __init__(self, consultants):
+        self.consultants = consultants
+    
+    def range_filter(self, f, t, more_100=False):
+        if not more_100:
+            members = self.consultants.annotate(total_point=Sum('points__attributes__point')).filter(
+                Q(total_point__gte=f) &
+                Q(total_point__lte=t)
+            )
+            return members.count()
+        members = self.consultants.annotate(total_point=Sum('points__attributes__point')).filter(total_point__gt=100)
+        return members.count()
+
+    def _0_20(self):
+        return self.range_filter(0, 20)
+
+    def _21_40(self):
+        return self.range_filter(21, 40)
+
+    def _41_60(self):
+        return self.range_filter(41, 60)
+    
+    def _61_80(self):
+        return self.range_filter(61, 80)
+    
+    def _81_100(self):
+        return self.range_filter(81, 100)
+    
+    def _100(self):
+        return self.range_filter(None, None, True)
+
+    def result(self):
+        return {
+            '_0_20': self._0_20(),
+            '_21_40': self._21_40(),
+            '_41_60': self._41_60(),
+            '_61_80': self._61_80(),
+            '_81_100': self._81_100(),
+            '_100': self._100()
+        }
+
 class Summary(PeriodFilter):
 
     current = None
     previous = None
     current_contacts = None
     previous_contacts = None
+    sales = None
+    consultants = None
 
     def __init__(self, group, period):
         super().__init__(group, period)
@@ -386,19 +442,23 @@ class Summary(PeriodFilter):
         self.previous = self.period_output()['previous']
         self.current_contacts = self.contact_period_output()['current']
         self.previous_contacts = self.contact_period_output()['previous']
+        self.sales = self.sales_period_output()
+        self.consultants = self.consultant_period_output()
     
     def summary(self):
         total = Total(self.current, self.previous)
         contacts = Contacts(self.current, self.previous, self.current_contacts, self.previous_contacts)
         engagement = Engagement(self.current, self.previous)
-        sales = Sales(self.current, self.previous)
+        sales = Sales(self.current, self.previous, self.sales)
         recruitment = Recruitment(self.current, self.previous)
         career = Career(self.current)
+        consultant_perf_range = ConsultantPerfRange(self.consultants)
         return {
             'total': total.result(),
             'contacts': contacts.result(),
             'engagement': engagement.result(),
             'sales': sales.result(),
             'recruitment': recruitment.result(),
-            'career': career.result()
+            'career': career.result(),
+            'consultant_perf_range': consultant_perf_range.result()
         }

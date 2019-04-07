@@ -132,6 +132,14 @@ class CareerSummarySerializer(serializers.Serializer):
     personal_coaching = serializers.IntegerField()
     training = serializers.IntegerField()
 
+class ConsultantPerfRange(serializers.Serializer):
+    _0_20 = serializers.IntegerField()
+    _21_40 = serializers.IntegerField()
+    _41_60 = serializers.IntegerField()
+    _61_80 = serializers.IntegerField()
+    _81_100 = serializers.IntegerField()
+    _100 = serializers.IntegerField()
+
 class SummarySerializer(serializers.Serializer):
     total = TotalSummarySerializer(read_only=True)
     contacts = ContactSummarySerializer(read_only=True)
@@ -139,3 +147,4 @@ class SummarySerializer(serializers.Serializer):
     sales = SalesSummarySerializer(read_only=True)
     recruitment = RecruitmentSummarySerializer(read_only=True)
     career = CareerSummarySerializer(read_only=True)
+    consultant_perf_range = ConsultantPerfRange(read_only=True)

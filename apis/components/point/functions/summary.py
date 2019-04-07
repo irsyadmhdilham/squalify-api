@@ -229,10 +229,12 @@ class Sales:
 
     current = None
     previous = None
+    sales = None
 
-    def __init__(self, current, previous):
+    def __init__(self, current, previous, sales):
         self.current = current
         self.previous = previous
+        self.sales = sales
     
     def sales_presentation(self):
         sales_presentation = self.current.filter(attributes__attribute__name='Sales presentation')
@@ -288,6 +290,12 @@ class Sales:
             previous = 0
         return difference_percentage(previous, current)
     
+    def total_new_sales(self):
+        total = self.sales.aggregate(total=Sum('amount'))['total']
+        if total is None:
+            return 0
+        return total
+    
     def result(self):
         return {
             'sales_presentation': self.sales_presentation(),
@@ -296,7 +304,7 @@ class Sales:
             'new_sales_presentation_percentage': self.new_sales_presentation_percentage(),
             'new_cases': self.new_cases(),
             'new_cases_percentage': self.new_cases_percentage(),
-            'total_new_sales': 0
+            'total_new_sales': self.total_new_sales()
         }
 
 class Recruitment:
@@ -415,12 +423,25 @@ class Career:
             'training': self.training()
         }
 
+class ConsultantPerfRange:
+    
+    def result(self):
+        return {
+            '_0_20': None,
+            '_21_40': None,
+            '_41_60': None,
+            '_61_80': None,
+            '_81_100': None,
+            '_100': None
+        }
+
 class Summary(PeriodFilter):
 
     current = None
     previous = None
     current_contacts = None
     previous_contacts = None
+    sales = None
 
     def __init__(self, profile, period):
         super().__init__(profile, period)
@@ -428,19 +449,22 @@ class Summary(PeriodFilter):
         self.previous = self.period_output()['previous']
         self.current_contacts = self.contact_period_output()['current']
         self.previous_contacts = self.contact_period_output()['previous']
+        self.sales = self.sales_period_output()
     
     def summary(self):
         total = Total(self.current, self.previous)
         contacts = Contacts(self.current, self.previous, self.current_contacts, self.previous_contacts)
         engagement = Engagement(self.current, self.previous)
-        sales = Sales(self.current, self.previous)
+        sales = Sales(self.current, self.previous, self.sales)
         recruitment = Recruitment(self.current, self.previous)
         career = Career(self.current)
+        consultant_perf_range = ConsultantPerfRange()
         return {
             'total': total.result(),
             'contacts': contacts.result(),
             'engagement': engagement.result(),
             'sales': sales.result(),
             'recruitment': recruitment.result(),
-            'career': career.result()
+            'career': career.result(),
+            'consultant_perf_range': consultant_perf_range.result()
         }

@@ -78,7 +78,54 @@ class ContactPeriodFilter(PointPeriodFilter):
             'previous': previous
         }
 
-class PeriodFilter(ContactPeriodFilter):
+class SalesPeriodFilter(ContactPeriodFilter):
+
+    members = None
+    period = None
+
+    def __init__(self, group, period):
+        super().__init__(group, period)
+        self.members = group.members
+        self.period = period
+    
+    def sales_period_output(self):
+        if self.period == 'month':
+            current = [sales for member in self.members.all() for sales in member.sales.filter(timestamp__month=timezone.now().month)]
+        elif self.period == 'week':
+            day = timezone.now().weekday()
+            start = timezone.now().date() - timedelta(days=day)
+            end = timezone.now().date() + timedelta(days=6 - day)
+            current = [sales for member in self.members.all() for sales in member.sales.filter(timestamp__range=(start, end))]
+        elif self.period == 'today':
+            current = [sales for member in self.members.all() for sales in member.sales.filter(timestamp__date=timezone.now().date())]
+        else:
+            current = [sales for member in self.members.all() for sales in member.sales.filter(timestamp__year=timezone.now().year)]
+        return current
+
+class ConsultantsFilter(SalesPeriodFilter):
+
+    members = None
+    period = None
+
+    def __init__(self, group, period):
+        super().__init__(group, period)
+        self.members = group.members
+        self.period = period
+    
+    def consultant_period_output(self):
+        if self.period == 'month':
+            return self.members.filter(points__date__month=timezone.now().month).distinct()
+        elif self.period == 'week':
+            day = timezone.now().weekday()
+            start = timezone.now().date() - timedelta(days=day)
+            end = timezone.now().date() + timedelta(days=6 - day)
+            return self.members.filter(points__date__range=(start, end)).distinct()
+        elif self.period == 'today':
+            return self.members.filter(points__date__date=timezone.now().date()).distinct()
+        else:
+            return self.members.filter(points__date__year=timezone.now().year).distinct()
+
+class PeriodFilter(ConsultantsFilter):
     
     def __init__(self, group, period):
         super().__init__(group, period)

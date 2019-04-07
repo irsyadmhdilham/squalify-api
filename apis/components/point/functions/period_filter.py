@@ -79,7 +79,32 @@ class ContactPeriodFilter(PointPeriodFilter):
                 'previous': self.contacts.filter(created_on__year=timezone.now().year - 1)
             }
 
-class PeriodFilter(ContactPeriodFilter):
+class SalesPeriodFilter(ContactPeriodFilter):
+
+    sales = None
+    period = None
+
+    def __init__(self, profile, period):
+        super().__init__(profile, period)
+        self.sales = profile.sales
+        self.period = period
+    
+    def sales_period_output(self):
+        if self.period == 'month':
+            previous = timezone.now() - relativedelta(months=1)
+            return self.sales.filter(timestamp__month=timezone.now().month)
+        elif self.period == 'week':
+            day = timezone.now().weekday()
+            start = timezone.now().date() - timedelta(days=day)
+            end = timezone.now().date() + timedelta(days=6 - day)
+            return SalesPeriodFilterself.sales.filter(timestamp__range=(start, end))
+        elif self.period == 'today':
+            previous = timezone.now() - timedelta(days=1)
+            return self.sales.filter(timestamp__date=timezone.now().date())
+        else:
+            return self.sales.filter(timestamp__year=timezone.now().year)
+
+class PeriodFilter(SalesPeriodFilter):
     
     def __init__(self, profile, period):
         super().__init__(profile, period)
