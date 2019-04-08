@@ -3,5 +3,6 @@
 static/admin
 static/rest_framework
 uploads/*
+!no_image.jpeg
 __pycache__
 .venv
