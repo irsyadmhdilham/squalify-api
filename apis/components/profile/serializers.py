@@ -29,6 +29,7 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     agency = AgencySerializer(read_only=True)
     group = GroupSerializer(read_only=True)
     upline = serializers.SerializerMethodField(read_only=True)
+    email = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Profile
@@ -40,7 +41,8 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
             'settings',
             'agency',
             'group',
-            'upline'
+            'upline',
+            'email',
         )
     
     def get_upline(self, obj):
@@ -54,6 +56,9 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
         }
         serializer = UplineSerializer(data)
         return serializer.data
+    
+    def get_email(self, obj):
+        return obj.user.email
 
 class ProfileImageSerializer(serializers.Serializer):
     profile_image = serializers.ImageField()

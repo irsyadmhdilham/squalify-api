@@ -8,15 +8,30 @@ from django.db.models import Q, Sum
 
 class ProfileSerializer(serializers.ModelSerializer):
     designation = serializers.StringRelatedField(read_only=True)
+    email = serializers.SerializerMethodField(read_only=True)
+    upline = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Profile
-        fields = ('pk', 'name', 'profile_image', 'designation',)
+        fields = ('pk', 'name', 'profile_image', 'designation', 'email', 'upline', 'group',)
+    
+    def get_email(self, obj):
+        user = obj.user
+        return user.email
+    
+    def get_upline(self, obj):
+        upline = obj.upline
+        if upline is None:
+            return None
+        return {
+            'pk': upline.pk,
+            'name': upline.name
+        }
 
 class AgencySerializer(QueryFieldsMixin, serializers.ModelSerializer):
     members = ProfileSerializer(many=True, read_only=True)
     industry = serializers.StringRelatedField(read_only=True)
-    owner = serializers.StringRelatedField(read_only=True)
+    owner = ProfileSerializer(read_only=True)
     company = serializers.StringRelatedField(read_only=True)
     posts = serializers.SerializerMethodField()
     points = serializers.SerializerMethodField()
