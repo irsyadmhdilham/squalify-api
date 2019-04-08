@@ -5,6 +5,7 @@ from .serializers import AgencySerializer, ProfileSerializer, AgencyImageSeriali
 from django.utils import timezone
 from .. .functions.image import ImageMutation
 from django.conf import settings
+from django.db.models import Q
 
 base_dir = settings.BASE_DIR
 
@@ -42,4 +43,13 @@ class AgencyImage(generics.RetrieveUpdateAPIView):
 
 class AllAgencies(generics.ListAPIView):
     serializer_class = AgencyAdminSerializer
-    queryset = Agency.objects.all()
+
+    def get_queryset(self):
+        company = self.request.query_params.get('c')
+        industry = self.request.query_params.get('i')
+        if company is not None and industry is not None:
+            return Agency.objects.filter(
+                Q(company__name=company) &
+                Q(industry__name=industry)
+            )
+        return Agency.objects.all()

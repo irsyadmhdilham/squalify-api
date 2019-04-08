@@ -3,10 +3,17 @@ from rest_framework.views import APIView
 from rest_framework import status, exceptions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .. ._models.profile import Profile, FcmToken
+from .. ._models.profile import Profile, FcmToken, Designation
+from .. ._models.agency import Agency
+from .. ._models.group import Group
 from account.models import User
-from .. .functions.create_account import CreateAccount
+from .. .functions.image import ImageMutation
 from rest_framework.authentication import SessionAuthentication, BaseAuthentication
+from django.utils import timezone
+from django.conf import settings
+from ..profile.serializers import ProfileImageSerializer, ProfileSerializer
+
+base_dir = settings.BASE_DIR
 
 class EmailAuthentication(BaseAuthentication):
 
@@ -52,6 +59,16 @@ class AdminAuthentication(APIView):
         token = Token.objects.get(user=user)
         return Response({'succeed': True, 'token': token.key}, status=status.HTTP_200_OK)
 
+class CheckEmailAvailability(APIView):
+
+    def get(self, request, *args, **kwargs):
+        email = request.query_params.get('e')
+        user = User.objects.filter(email=email)
+        if user.count() > 0:
+            return Response(False, status=status.HTTP_200_OK)
+        else:
+            return Response(True, status=status.HTTP_200_OK)
+
 class SignOut(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -67,70 +84,61 @@ class SignOut(APIView):
 class CreateAccount(APIView):
 
     def post(self, request, *args, **kwargs):
-        data = request.data
-        email = data.get('email')
-        password = data.get('password')
-        name = data.get('name')
-        designation = data.get('designation')
-        industry = data.get('industry')
-        company = data.get('company')
-        agency_name = data.get('agency_name')
-        upline_id = data.get('upline_id')
-        agency_id = data.get('agency_id')
+        name = request.data.get('name')
+        email = request.data.get('email')
+        industry = request.data.get('industry')
+        company = request.data.get('company')
+        designation = request.data.get('designation')
+        upline_id = request.data.get('upline_id')
+        agency_id = request.data.get('agency_id')
+        profile_image = request.data.get('profile_image')
 
-        try:
-            """check user signed up or not"""
-            check_user = User.objects.filter(email__exact=email).count()
-            if check_user is not 0:
-                raise ValueError('User already signed up')
-            user = User.objects.create_user(email, password)
-            user.save()
+        # objects
+        _designation = Designation.objects.get(name=designation)
+        
+        if agency_id is not None:
+            agency = Agency.objects.get(pk=agency_id)
+        
+        if upline_id is not None:
+            upline = Profile.objects.get(pk=upline_id)
 
-            """instantiate create account class"""
-            create_account = CreateAccount(
-                user=user,
-                name=name,
-                designation=designation,
-                industry=industry,
-                company=company,
-                agency_name=agency_name,
-                agency_id=agency_id,
-                upline_id=upline_id
-            )
+        # check user signed up or not
+        check_user = User.objects.filter(email__exact=email).count()
+        if check_user > 0:
+            return Response('User already signed up', status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.create_user(email, 'Squalify123')
+        user.save()
 
-            if designation == 'Group Agency Manager':
+        # create user token
+        token = Token.objects.create(user=user)
 
-                """User is Group Agency Manager"""
-                
-                """Create agency"""
-                create_agency = create_account.create_agency()
-                
-                """Create group"""
-                create_group = create_account.create_group()
-                
-                """create profile"""
-                create_profile = create_account.create_profile()
-                
-                """Add members in agency and group"""
-                create_account.add_member_agency()
+        profile = Profile.objects.create(
+            user=user,
+            api_token=token,
+            designation=_designation,
+            name=name
+        )
 
-                return Response({'details': 'Successfully create account'}, status=status.HTTP_200_OK)
-            else:
+        if agency is not None:
+            profile.agency = agency
+            agency.members.add(profile)
+        
+        if upline is not None:
+            profile.upline = upline
+            upline.group.members.add(profile)
+        
+        if designation != 'Unit Trust Consultant':
+            group = Group.objects.create(owner=profile)
+            profile.group = group
 
-                """User is not Group Agency Manager"""
-                
-                if designation != 'Unit Trust Constultant':
-                    """Create group"""
-                    create_group = create_account.create_group()
-                
-                """Create profile"""
-                create_profile = create_account.create_profile()
-                
-                """Add members in agency and group"""
-                create_account.add_member_agency()
-                create_account.add_upline_group()
+        # profile image
+        profile_image._set_name(f'profile_image_{timezone.now().isoformat()}.jpg')
+        image = ImageMutation()
+        profile.profile_image = profile_image
+        profile.save()
 
-                return Response({'details': 'Successfully create account'}, status=status.HTTP_200_OK)
+        image_path = base_dir + ProfileImageSerializer(profile).data['profile_image']
+        image.resize_image(150, image_path)
 
-        except ValueError as err:
-            return Response({ 'error': str(err)},status=status.HTTP_400_BAD_REQUEST)
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)

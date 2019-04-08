@@ -7,7 +7,8 @@ from .views import (
     ProfileImage,
     ChangeEmail,
     ChangePassword,
-    AllProfiles
+    AllProfiles,
+    ResetPassword
 )
 
 app_name = 'profile'
@@ -27,4 +28,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/change-email/$', ChangeEmail.as_view(), name='change-email'),
     url(r'^(?P<pk>\d+)/change-password/$', ChangePassword.as_view(), name='change-password'),
     url(r'^$', AllProfiles.as_view(), name='all-profiles'),
+    url(r'^(?P<pk>\d+)/reset-password/$', ResetPassword.as_view(), name='reset-password'),
 ]

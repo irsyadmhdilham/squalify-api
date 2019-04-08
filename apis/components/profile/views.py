@@ -109,6 +109,16 @@ class ChangePassword(APIView):
         user.save()
         return Response(True, status=status.HTTP_200_OK)
 
+class ResetPassword(APIView):
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        profile = Profile.objects.get(pk=pk)
+        user = profile.user
+        user.set_password('Squalify123')
+        user.save()
+        return Response(True, status=status.HTTP_200_OK)
+
 class AllProfiles(generics.ListAPIView):
     serializer_class = ProfileAdminSerializer
     queryset = Profile.objects.all()

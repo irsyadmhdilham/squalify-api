@@ -10,5 +10,6 @@ from ._admin import (
     sales,
     schedule,
     google,
-    memo
+    memo,
+    group
 )

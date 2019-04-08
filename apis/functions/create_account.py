@@ -25,6 +25,14 @@ def get_upline(upline_id):
     return upline
 
 class CreateAccount:
+
+    user = None
+    name = None
+    agency_name = None
+    designation = None
+    industry = None
+    company = None
+    agenc
     
     def __init__(self, user, name, designation, industry, company, agency_name, agency_id=None, upline_id=None):
         self.user = user
