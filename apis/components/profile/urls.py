@@ -6,7 +6,8 @@ from .views import (
     EmailNotification,
     ProfileImage,
     ChangeEmail,
-    ChangePassword
+    ChangePassword,
+    AllProfiles
 )
 
 app_name = 'profile'
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/settings/email-notification/$', EmailNotification.as_view(), name='email-notification'),
     url(r'^(?P<pk>\d+)/change-email/$', ChangeEmail.as_view(), name='change-email'),
     url(r'^(?P<pk>\d+)/change-password/$', ChangePassword.as_view(), name='change-password'),
+    url(r'^$', AllProfiles.as_view(), name='all-profiles'),
 ]

@@ -44,6 +44,14 @@ class AuthenticationView(APIView):
             data['token'] = profile.api_token.key
         return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
 
+class AdminAuthentication(APIView):
+    authentication_classes = (EmailAuthentication, SessionAuthentication)
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        token = Token.objects.get(user=user)
+        return Response({'succeed': True, 'token': token.key}, status=status.HTTP_200_OK)
+
 class SignOut(APIView):
 
     def post(self, request, *args, **kwargs):

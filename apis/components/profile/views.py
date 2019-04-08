@@ -2,7 +2,7 @@ from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from apis._models.profile import Profile
-from .serializers import ProfileSerializer, ProfileImageSerializer
+from .serializers import ProfileSerializer, ProfileImageSerializer, ProfileAdminSerializer
 from .. .functions.image import ImageMutation
 from django.conf import settings
 from django.utils import timezone
@@ -108,3 +108,7 @@ class ChangePassword(APIView):
         user.set_password(new_password)
         user.save()
         return Response(True, status=status.HTTP_200_OK)
+
+class AllProfiles(generics.ListAPIView):
+    serializer_class = ProfileAdminSerializer
+    queryset = Profile.objects.all()

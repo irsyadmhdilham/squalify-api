@@ -63,3 +63,20 @@ class AgencySerializer(QueryFieldsMixin, serializers.ModelSerializer):
 
 class AgencyImageSerializer(serializers.Serializer):
     agency_image = serializers.ImageField()
+
+class AgencyAdminSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField(read_only=True)
+    company = serializers.StringRelatedField(read_only=True)
+    industry = serializers.StringRelatedField(read_only=True)
+    # members = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Agency
+        fields = ('pk', 'name', 'owner', 'industry', 'company', 'members',)
+    
+    def get_owner(self, obj):
+        owner = obj.owner
+        return {
+            'pk': owner.pk,
+            'name': owner.name
+        }

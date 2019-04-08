@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from apis._models.agency import Agency
-from .serializers import AgencySerializer, ProfileSerializer, AgencyImageSerializer
+from .serializers import AgencySerializer, ProfileSerializer, AgencyImageSerializer, AgencyAdminSerializer
 from django.utils import timezone
 from .. .functions.image import ImageMutation
 from django.conf import settings
@@ -39,3 +39,7 @@ class AgencyImage(generics.RetrieveUpdateAPIView):
         image.resize_image(150, new_path)
         serializer = self.serializer_class(agency, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AllAgencies(generics.ListAPIView):
+    serializer_class = AgencyAdminSerializer
+    queryset = Agency.objects.all()

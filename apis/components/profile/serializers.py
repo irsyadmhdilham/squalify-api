@@ -57,3 +57,29 @@ class ProfileSerializer(QueryFieldsMixin, serializers.ModelSerializer):
 
 class ProfileImageSerializer(serializers.Serializer):
     profile_image = serializers.ImageField()
+
+class ProfileAdminSerializer(serializers.ModelSerializer):
+    agency = serializers.SerializerMethodField(read_only=True)
+    upline = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ('pk', 'name', 'agency', 'upline',)
+    
+    def get_upline(self, obj):
+        upline = obj.upline
+        if upline is None:
+            return None
+        return {
+            'pk': upline.pk,
+            'name': upline.name
+        }
+    
+    def get_agency(self, obj):
+        agency = obj.agency
+        return {
+            'pk': agency.pk,
+            'name': agency.name,
+            'company': agency.company.name,
+            'industry': agency.industry.name
+        }
