@@ -121,7 +121,7 @@ class ConsultantsFilter(SalesPeriodFilter):
             end = timezone.now().date() + timedelta(days=6 - day)
             return self.members.filter(points__date__range=(start, end)).distinct()
         elif self.period == 'today':
-            return self.members.filter(points__date__date=timezone.now().date()).distinct()
+            return self.members.filter(points__date=timezone.now().date()).distinct()
         else:
             return self.members.filter(points__date__year=timezone.now().year).distinct()
 
