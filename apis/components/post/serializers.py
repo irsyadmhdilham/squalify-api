@@ -39,7 +39,9 @@ class PostSerializer(serializers.ModelSerializer):
     contact_rel = ContactSerializer(read_only=True)
     likes = serializers.SerializerMethodField()
     comments = CommentSerializer(read_only=True, many=True)
-    monthly_sales = serializers.SerializerMethodField()
+    monthly_sales = serializers.SerializerMethodField(read_only=True)
+    tips = serializers.SerializerMethodField(read_only=True)
+    sales = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Post
@@ -54,6 +56,8 @@ class PostSerializer(serializers.ModelSerializer):
             'likes',
             'comments',
             'monthly_sales',
+            'tips',
+            'sales',
         )
     
     def get_likes(self, obj):
@@ -69,3 +73,29 @@ class PostSerializer(serializers.ModelSerializer):
         if sum_up['total'] is not None:
             total = sum_up['total']
         return str(round(total, 2))
+    
+    def get_tips(self, obj):
+        sales = obj.sales_rel
+        if sales.count() > 0:
+            tips = sales.latest('timestamp').tips
+            return tips
+        return None
+    
+    def get_sales(self, obj):
+        sales = obj.sales_rel
+        epf = sales.filter(sales_type__name='EPF').aggregate(total=Sum('amount'))['total']
+        cash = sales.filter(sales_type__name='Cash').aggregate(total=Sum('amount'))['total']
+        takaful = sales.filter(sales_type__name='Tafakul').aggregate(total=Sum('amount'))['total']
+        prs = sales.filter(sales_type__name='PRS').aggregate(total=Sum('amount'))['total']
+        asb = sales.filter(sales_type__name='ASB').aggregate(total=Sum('amount'))['total']
+        wasiat = sales.filter(sales_type__name='Wasiat').aggregate(total=Sum('amount'))['total']
+        all_sales = [
+            ('EPF', epf),
+            ('Cash', cash),
+            ('Takaful', takaful),
+            ('PRS', prs),
+            ('ASB', asb),
+            ('Wasiat', wasiat)
+        ]
+        output = filter(lambda val: val[1] != None, all_sales)
+        return output

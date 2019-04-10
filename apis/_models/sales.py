@@ -26,6 +26,7 @@ class Sales(models.Model):
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, null=True, blank=True)
     sales_status = models.ForeignKey(SalesStatus, on_delete=models.CASCADE, to_field='name', default='Submitted')
     client_name = models.CharField(max_length=200, null=True, blank=True)
+    tips = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Sales'

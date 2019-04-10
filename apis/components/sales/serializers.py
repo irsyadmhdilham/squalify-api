@@ -25,6 +25,7 @@ class SalesSerializer(serializers.ModelSerializer):
             'commission',
             'contact',
             'client_name',
+            'tips',
         )
 
 class OutputSerializer(serializers.Serializer):
