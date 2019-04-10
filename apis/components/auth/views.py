@@ -2,9 +2,10 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import status, exceptions
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
 from .. ._models.profile import Profile, FcmToken, Designation
-from .. ._models.agency import Agency
+from .. ._models.agency import Agency, Industry, Company
 from .. ._models.group import Group
 from account.models import User
 from .. .functions.image import ImageMutation
@@ -12,6 +13,7 @@ from rest_framework.authentication import SessionAuthentication, BaseAuthenticat
 from django.utils import timezone
 from django.conf import settings
 from ..profile.serializers import ProfileImageSerializer, ProfileSerializer
+from ..agency.serializers import AgencyImageSerializer
 
 base_dir = settings.BASE_DIR
 
@@ -56,6 +58,8 @@ class AdminAuthentication(APIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
+        if not user.is_staff:
+            raise PermissionDenied('Not staff')
         token = Token.objects.get(user=user)
         return Response({'succeed': True, 'token': token.key}, status=status.HTTP_200_OK)
 
@@ -92,13 +96,16 @@ class CreateAccount(APIView):
         upline_id = request.data.get('upline_id')
         agency_id = request.data.get('agency_id')
         profile_image = request.data.get('profile_image')
+        agency_image = request.data.get('agency_image')
+        agency_name = request.data.get('agency_name')
 
-        # objects
+        # instances
         _designation = Designation.objects.get(name=designation)
         
         if agency_id is not None:
             agency = Agency.objects.get(pk=agency_id)
         
+        upline = None
         if upline_id is not None:
             upline = Profile.objects.get(pk=upline_id)
 
@@ -119,6 +126,25 @@ class CreateAccount(APIView):
             name=name
         )
 
+        # Image mutation instance
+        image = ImageMutation()
+
+        # create agency
+        if agency_name is not None and agency_image is not None:
+            _industry = Industry.objects.get(name=industry)
+            _company = Company.objects.get(name=company)
+            agency = Agency.objects.create(
+                name=agency_name,
+                industry=_industry,
+                company=_company,
+                owner=profile
+            )
+            agency_image._set_name(f'agency_image_{timezone.now().isoformat()}.jpg')
+            agency.agency_image = agency_image
+            agency.save()
+            agency_image_path = base_dir + AgencyImageSerializer(agency).data['agency_image']
+            image.resize_image(150, agency_image_path)
+
         if agency is not None:
             profile.agency = agency
             agency.members.add(profile)
@@ -133,7 +159,6 @@ class CreateAccount(APIView):
 
         # profile image
         profile_image._set_name(f'profile_image_{timezone.now().isoformat()}.jpg')
-        image = ImageMutation()
         profile.profile_image = profile_image
         profile.save()
 

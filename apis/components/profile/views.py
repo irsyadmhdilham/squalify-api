@@ -7,12 +7,22 @@ from .. .functions.image import ImageMutation
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password, ValidationError
+import os
+import shutil
 
 base_dir = settings.BASE_DIR
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+
+    def perform_destroy(self, instance):
+        user = instance.user
+        path = base_dir + f'/uploads/users/{instance.pk}'
+        exists = os.path.exists(path)
+        if exists:
+            shutil.rmtree(path)
+        user.delete()
 
 class ProfileImage(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileImageSerializer

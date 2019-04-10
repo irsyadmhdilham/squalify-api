@@ -39,3 +39,15 @@ class RemoveGroupMember(APIView):
         downline = Profile.objects.get(pk=downline_id)
         owner.group.members.remove(downline)
         return Response(None, status=status.HTTP_200_OK)
+
+class RemoveUpline(APIView):
+
+    def put(self, request, *args, **kwargs):
+        downline_id = request.data.get('downlineId')
+        owner_pk = kwargs.get('owner_pk')
+
+        downline = Profile.objects.get(pk=downline_id)
+        owner = Profile.objects.get(pk=owner_pk)
+
+        owner.group.members.remove(downline)
+        return Response(None, status=status.HTTP_200_OK)
