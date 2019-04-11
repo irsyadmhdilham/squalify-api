@@ -32,6 +32,38 @@ class ContactList(generics.ListCreateAPIView):
             new_contact = serializer.save(contact_type=contact_type, referrer=referrer)
         profile.contacts.add(new_contact)
 
+        # # Add point
+        # if contact_type_val == 'Referral':
+        #     pt = 'Referrals'
+        # elif contact_type_val == 'Face to face' or contact_type_val == 'Nesting' or contact_type_val == 'Booth':
+        #     pt = 'FTF/Nesting/Booth'
+
+        # point = profile.points.filter(date=timezone.now().date())
+        # point_field = PointField.objects.get(name=pt)
+        # point_type = PointLogType.objects.get(name='Add')
+        # if point.count() == 0:
+        #     attr = PointAttribute.objects.create(attribute=point_field, point=1 if pt == 'Referrals' else 2)
+        #     point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=1 if pt == 'Referrals' else 2)
+        #     create = Point.objects.create()
+        #     create.attributes.add(attr)
+        #     create.logs.add(point_log)
+        #     profile.points.add(create)
+        # else:
+        #     p = point[0]
+        #     get_attr = p.attributes.filter(attribute__name=pt)
+
+        #     total = 1 if pt == 'Referrals' else 2
+        #     if get_attr.count() > 0:
+        #         attr = get_attr[0]
+        #         total = attr.point + 1 if pt == 'Referrals' else 2
+        #         attr.point = total
+        #         attr.save()
+        #     else:
+        #         attr = PointAttribute.objects.create(attribute=point_field, point=total)
+        #         p.attributes.add(attr)
+        #     point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
+        #     p.logs.add(point_log)
+
 class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer

@@ -11,6 +11,11 @@ class AgenciesSummary(generics.RetrieveAPIView):
     def get_object(self):
         pk = self.kwargs.get('user_pk')
         period = self.request.query_params.get('p')
-        agencies = Agency.objects.filter(company__name='CWA')
+        email = self.request.user.email
+        if email == 'hq@cwa.com':
+            company = 'CWA'
+        elif email == 'hq@publicmutual.com':
+            company = 'Public Mutual'
+        agencies = Agency.objects.filter(company__name=company)
         summary = Summary(agencies, period)
         return summary.summary()

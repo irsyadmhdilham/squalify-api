@@ -9,7 +9,15 @@ from .. ._models.post import Like, Comment
 from .. ._models.profile import Profile
 from dateutil import parser
 from datetime import timedelta
+from .. ._models.notification import Notification, NotificationType
+from .. .functions.push_notification import NotificationInit
 from django.utils import timezone
+
+"""create notification"""
+def create_notif(notified_by, memo, notif_type):
+    notif_type = NotificationType.objects.get(name=notif_type)
+    notif = Notification.objects.create(notified_by=notified_by, notification_type=notif_type, memo_rel=memo)
+    return notif
 
 class MemoList(generics.ListCreateAPIView):
     serializer_class = MemoSerializer
@@ -31,6 +39,24 @@ class MemoList(generics.ListCreateAPIView):
         posted_by = Profile.objects.get(pk=user_pk)
         memo = serializer.save(posted_by=posted_by)
         agency.memos.add(memo)
+
+        """notification"""
+        members_with_token = (agency.members
+                            .exclude(pk=posted_by.pk)
+                            .annotate(token_count=Count('fcm_token'))
+                            .filter(token_count__gt=0))
+        members = agency.members.exclude(pk=posted_by.pk)
+        new_notif = create_notif(posted_by, memo, 'New memo')
+        for member in members:
+            member.notifications.add(new_notif)
+        notif_data = {
+            'title': 'New memo',
+            'memo_id': str(memo.pk),
+            'notif_id': str(new_notif.pk)
+        }
+        if members_with_token.count() > 0:
+            notif = NotificationInit('New memo', f'{posted_by.name} posted new memo', notif_data)
+            notif.send_group(members_with_token)
 
 class MemoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MemoSerializer

@@ -1,6 +1,7 @@
 from django.db import models
 from .post import Post
 from .inbox import Inbox
+from .memo import Memo
 
 class NotificationType(models.Model):
     name = models.CharField(max_length=30)
@@ -13,6 +14,7 @@ class Notification(models.Model):
     notification_type = models.ForeignKey(NotificationType, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     post_rel = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
+    memo_rel = models.ForeignKey(Memo, on_delete=models.CASCADE, null=True, blank=True)
     read = models.BooleanField(default=False)
     seen = models.BooleanField(default=False)
     inbox_rel = models.ForeignKey(Inbox, on_delete=models.CASCADE, null=True, blank=True)

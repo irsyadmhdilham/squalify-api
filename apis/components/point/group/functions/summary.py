@@ -77,11 +77,11 @@ class Contacts:
         if len(self.current) > 0:
             points = map(mapper, self.current)
             total = reduce(lambda a, b: a + b, points)
-        return 0
+        return total
 
     def referrals(self):
         def mapper(value):
-            filtered = value.attributes.filter(attribute__name='Referral')
+            filtered = value.attributes.filter(attribute__name='Referrals')
             total = filtered.aggregate(total=Sum('point'))['total']
             if total is not None:
                 return total
@@ -90,7 +90,7 @@ class Contacts:
         if len(self.current) > 0:
             points = map(mapper, self.current)
             total = reduce(lambda a, b: a + b, points)
-        return 0
+        return total
     
     def new_contacts(self):
         current = len(self.current_contacts)

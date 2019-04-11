@@ -9,6 +9,7 @@ from dateutil import parser
 from .serializers import SalesSerializer, SummarySerializer
 
 from apis._models.profile import Profile
+from .. ._models.point import Point, PointLogType, PointLog, PointField, PointAttribute
 from apis._models.agency import Agency
 from apis._models.post import Post, PostType
 from apis._models.sales import Sales, SalesType, SalesStatus
@@ -119,6 +120,34 @@ class SalesList(generics.ListCreateAPIView):
             if members_with_token.count() > 0:
                 notif = NotificationInit('New sales closed', f'{profile.name} just closed a sales', notif_data)
                 notif.send_group(members_with_token)
+        
+        # Add point
+        pt = 'Case closed'
+        point = profile.points.filter(date=timezone.now().date())
+        point_field = PointField.objects.get(name=pt)
+        point_type = PointLogType.objects.get(name='Add')
+        if point.count() == 0:
+            attr = PointAttribute.objects.create(attribute=point_field, point=4)
+            point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=4)
+            create = Point.objects.create()
+            create.attributes.add(attr)
+            create.logs.add(point_log)
+            profile.points.add(create)
+        else:
+            p = point[0]
+            get_attr = p.attributes.filter(attribute__name=pt)
+
+            total = 4
+            if get_attr.count() > 0:
+                attr = get_attr[0]
+                total = attr.point + 4
+                attr.point = total
+                attr.save()
+            else:
+                attr = PointAttribute.objects.create(attribute=point_field, point=total)
+                p.attributes.add(attr)
+            point_log = PointLog.objects.create(point_type=point_type, attribute=point_field, point=total)
+            p.logs.add(point_log)
 
 class SalesDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SalesSerializer

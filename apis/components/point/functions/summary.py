@@ -66,7 +66,7 @@ class Contacts:
         return 0
 
     def referrals(self):
-        ftf = self.current.filter(attributes__attribute__name='Referral')
+        ftf = self.current.filter(attributes__attribute__name='Referrals')
         total = ftf.aggregate(total=Sum('attributes__point'))['total']
         if total is not None:
             return total
