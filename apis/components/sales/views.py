@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q, Count
 from django.utils import timezone
+from dateutil import parser
 
 from .serializers import SalesSerializer, SummarySerializer
 
@@ -55,6 +56,8 @@ class SalesList(generics.ListCreateAPIView):
         status = self.request.data.get('sales_status')
         contact = self.request.data.get('contact')
         client = self.request.data.get('client_name')
+        ts = self.request.query_params.get('ts')
+        timestamp = self.request.data.get('timestamp')
 
         # instances
         profile = Profile.objects.get(pk=user_pk)
@@ -74,47 +77,48 @@ class SalesList(generics.ListCreateAPIView):
             instance = serializer.save(sales_type=sales_type_instance, commission=income, sales_status=sales_status)
         profile.sales.add(instance)
 
-        # create/update post
-        today_post = Post.objects.filter(
-            Q(timestamp__date=timezone.now().date()) &
-            Q(posted_by__pk=user_pk)
-        )
-        post = None
-        """
-        check wether post for today has created or not
-        - If not created, then create one
-        """
-        if today_post.count() > 0:
-            # create new post
-            post = today_post[0]
-            post.sales_rel.add(instance)
-            post.save()
-        else:
-            # update created post
-            post_type = PostType.objects.get(name='sales closed')
-            create_post = Post.objects.create(posted_by=profile, post_type=post_type)
-            create_post.save()
-            create_post.sales_rel.add(instance)
-            profile.agency.posts.add(create_post)
-            post = create_post
+        if ts is None:
+            # create/update post
+            today_post = Post.objects.filter(
+                Q(timestamp__date=timezone.now().date()) &
+                Q(posted_by__pk=user_pk)
+            )
+            post = None
+            """
+            check wether post for today has created or not
+            - If not created, then create one
+            """
+            if today_post.count() > 0:
+                # create new post
+                post = today_post[0]
+                post.sales_rel.add(instance)
+                post.save()
+            else:
+                # update created post
+                post_type = PostType.objects.get(name='sales closed')
+                create_post = Post.objects.create(posted_by=profile, post_type=post_type)
+                create_post.save()
+                create_post.sales_rel.add(instance)
+                profile.agency.posts.add(create_post)
+                post = create_post
 
-        # Create notification
-        members_with_token = (profile.agency.members
-                            .exclude(pk=profile.pk)
-                            .annotate(token_count=Count('fcm_token'))
-                            .filter(token_count__gt=0))
-        members = profile.agency.members.exclude(pk=profile.pk)
-        new_notif = create_notif(profile, post, 'closed sales')
-        for member in members:
-            member.notifications.add(new_notif)
-        notif_data = {
-            'title': 'closed sales',
-            'post_id': str(post.pk),
-            'notif_id': str(new_notif.pk)
-        }
-        if members_with_token.count() > 0:
-            notif = NotificationInit('New sales closed', f'{profile.name} just closed a sales', notif_data)
-            notif.send_group(members_with_token)
+            # Create notification
+            members_with_token = (profile.agency.members
+                                .exclude(pk=profile.pk)
+                                .annotate(token_count=Count('fcm_token'))
+                                .filter(token_count__gt=0))
+            members = profile.agency.members.exclude(pk=profile.pk)
+            new_notif = create_notif(profile, post, 'closed sales')
+            for member in members:
+                member.notifications.add(new_notif)
+            notif_data = {
+                'title': 'closed sales',
+                'post_id': str(post.pk),
+                'notif_id': str(new_notif.pk)
+            }
+            if members_with_token.count() > 0:
+                notif = NotificationInit('New sales closed', f'{profile.name} just closed a sales', notif_data)
+                notif.send_group(members_with_token)
 
 class SalesDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SalesSerializer

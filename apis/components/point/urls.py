@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^contact/$', ContactPointView.as_view(), name='contact-points'),
     url(r'^scoreboard/$', ScoreboardPoints.as_view(), name='scoreboard'),
     url(r'^group/', include('apis.components.point.group.urls', namespace='group')),
+    url(r'^headquaters/', include('apis.components.point.headquaters.urls', namespace='headquaters')),
     url(r'^all-points/$', AllPoints.as_view(), name='all-points'),
     url(r'^summary/$', PointSummary.as_view(), name='summary'),
 ]

@@ -33,6 +33,17 @@ class AuthenticationView(APIView):
 
     def post(self, request, *args, **kwargs):
         fcm_token = request.data.get('fcmToken')
+
+        if request.user.is_staff and not request.user.is_superuser:
+            token = Token.objects.get(user=request.user)
+            data = {
+                'user_id': 2,
+                'agency_id': 1,
+                'hq': True,
+                'token': token.key
+            }
+            return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
+
         profile = Profile.objects.get(user=request.user)
         data = {
             'user_id': profile.pk,
@@ -51,6 +62,7 @@ class AuthenticationView(APIView):
             data['token'] = token.key
         else:
             data['token'] = profile.api_token.key
+
         return Response({'auth': True, 'data': data}, status=status.HTTP_200_OK)
 
 class AdminAuthentication(APIView):
