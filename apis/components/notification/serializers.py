@@ -28,4 +28,14 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
-        fields = ('pk', 'notified_by', 'notification_type', 'timestamp', 'post_rel', 'inbox_rel', 'read', 'seen',)
+        fields = (
+            'pk',
+            'notified_by',
+            'notification_type',
+            'timestamp',
+            'post_rel',
+            'memo_rel',
+            'inbox_rel',
+            'read',
+            'seen',
+        )

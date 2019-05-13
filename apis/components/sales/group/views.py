@@ -23,8 +23,10 @@ class GroupSalesFilter(generics.ListAPIView):
         period = self.request.query_params.get('p')
         sales_type = self.request.query_params.get('st')
         status = self.request.query_params.get('s')
+        date_from = self.request.query_params.get('f')
+        date_until = self.request.query_params.get('u')
         group = Profile.objects.get(pk=pk).group
-        sf = SalesFilter(period, sales_type, status, group.members)
+        sf = SalesFilter(period, sales_type, status, group.members, date_from, date_until)
         return sf.result()
 
 class GroupSalesSummary(generics.RetrieveAPIView):

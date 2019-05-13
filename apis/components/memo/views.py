@@ -12,6 +12,7 @@ from datetime import timedelta
 from .. ._models.notification import Notification, NotificationType
 from .. .functions.push_notification import NotificationInit
 from django.utils import timezone
+from django.db.models import Count
 
 """create notification"""
 def create_notif(notified_by, memo, notif_type):
@@ -46,7 +47,7 @@ class MemoList(generics.ListCreateAPIView):
                             .annotate(token_count=Count('fcm_token'))
                             .filter(token_count__gt=0))
         members = agency.members.exclude(pk=posted_by.pk)
-        new_notif = create_notif(posted_by, memo, 'New memo')
+        new_notif = create_notif(posted_by, memo, 'memo')
         for member in members:
             member.notifications.add(new_notif)
         notif_data = {
@@ -55,7 +56,7 @@ class MemoList(generics.ListCreateAPIView):
             'notif_id': str(new_notif.pk)
         }
         if members_with_token.count() > 0:
-            notif = NotificationInit('New memo', f'{posted_by.name} posted new memo', notif_data)
+            notif = NotificationInit('New memo', f'{posted_by.name} posted new memo', notif_data, True)
             notif.send_group(members_with_token)
 
 class MemoDetail(generics.RetrieveUpdateDestroyAPIView):

@@ -8,8 +8,10 @@ class SalesFilter:
     status = None
     sales_type = None
     period = None
+    date_from = None
+    date_until = None
 
-    def __init__(self, sales, period, sales_type, status):
+    def __init__(self, sales, period, sales_type, status, date_from, date_until):
         self.sales = sales
         if period != 'all':
             self.period = period
@@ -17,6 +19,9 @@ class SalesFilter:
             self.sales_type = sales_type
         if status != 'all':
             self.status = status
+        if date_from is not None:
+            self.date_from = date_from
+            self.date_until = date_until
 
     def period_filter(self):
         if self.period == 'year':
@@ -30,6 +35,8 @@ class SalesFilter:
             return self.sales.filter(timestamp__range=(start, end))
         elif self.period == 'today':
             return self.sales.filter(timestamp__date=timezone.now().date())
+        elif self.period == 'select date':
+            return self.sales.filter(timestamp__range=(self.date_from, self.date_until))
         return self.sales.all()
     
     def sales_type_status_filter(self):

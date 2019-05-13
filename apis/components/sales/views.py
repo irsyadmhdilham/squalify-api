@@ -44,9 +44,11 @@ class SalesList(generics.ListCreateAPIView):
         period = self.request.query_params.get('p')
         sales_type = self.request.query_params.get('st')
         status = self.request.query_params.get('s')
+        date_from = self.request.query_params.get('f')
+        date_until = self.request.query_params.get('u')
         profile = Profile.objects.get(pk=user_pk)
         sales = profile.sales
-        sf = SalesFilter(sales, period, sales_type, status)
+        sf = SalesFilter(sales, period, sales_type, status, date_from, date_until)
         return sf.result()
     
     def perform_create(self, serializer):

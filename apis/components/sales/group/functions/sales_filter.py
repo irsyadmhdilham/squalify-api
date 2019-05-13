@@ -9,8 +9,10 @@ class SalesFilter(TotalSales):
     period = None
     sales_type = None
     status = None
+    date_from = None
+    date_until = None
     
-    def __init__(self, period, sales_type, status, members):
+    def __init__(self, period, sales_type, status, members, date_from, date_until):
         self.members = members.all()
         if period != 'all':
             self.period = period
@@ -18,6 +20,10 @@ class SalesFilter(TotalSales):
             self.sales_type = sales_type
         if status != 'all':
             self.status = status
+        if date_from is not None:
+            self.date_from = date_from
+        if date_until is not None:
+            self.date_until = date_until
     
     def personal_period_filter(self, member):
         if self.period == 'year':
@@ -31,6 +37,8 @@ class SalesFilter(TotalSales):
             return member.sales.filter(timestamp__range=(start, end))
         elif self.period == 'today':
             return member.sales.filter(timestamp__date=timezone.now().date())
+        elif self.period == 'select date':
+            return member.sales.filter(timestamp__range=(self.date_from, self.date_until))
         else:
             return member.sales.all()
     
@@ -51,6 +59,8 @@ class SalesFilter(TotalSales):
             elif self.period == 'today':
                 sales = map(lambda val: val.sales.filter(timestamp__date=timezone.now().date()), member.group.members.all())
                 return list(sales)[0]
+            elif self.period == 'select date':
+                sales = map(lambda val: val.sales.filter(timestamp__range=(self.date_from, self.date_until)), member.group.members.all())
             else:
                 sales = map(lambda val: val.sales.all(), member.group.members.all())
                 return list(sales)[0]
