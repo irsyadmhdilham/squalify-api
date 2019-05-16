@@ -127,6 +127,8 @@ class GroupSummary(generics.RetrieveAPIView):
     def get_object(self):
         pk = self.kwargs.get('user_pk')
         period = self.request.query_params.get('p')
+        date_from = self.request.query_params.get('f')
+        date_until = self.request.query_params.get('u')
         profile = self.get_queryset().get(pk=pk)
-        summary = Summary(profile.group, period)
+        summary = Summary(profile.group, period, date_from, date_until)
         return summary.summary()

@@ -122,14 +122,17 @@ class ScoreboardPoints(APIView):
         profile = Profile.objects.get(pk=user_pk)
         members = profile.agency.members.all()
         q = request.query_params.get('q')
+        date_from = request.query_params.get('f')
+        date_until = request.query_params.get('u')
         scoreboard = Scoreboard(members)
-        data = None
         if q == 'month':
             data = scoreboard.month(True)
         elif q == 'today':
             data = scoreboard.today(True)
         elif q == 'week':
             data = scoreboard.week(True)
+        elif q == 'select date':
+            data = scoreboard.select_date(True, date_from, date_until)
         else:
             data = scoreboard.year(True)
         serializer = ScoreboardSerializer(data, many=True, context={'request': request})
@@ -171,7 +174,9 @@ class PointSummary(generics.RetrieveAPIView):
     def get_object(self):
         pk = self.kwargs.get('user_pk')
         period = self.request.query_params.get('p')
+        date_from = self.request.query_params.get('f')
+        date_until = self.request.query_params.get('u')
         profile = self.get_queryset().get(pk=pk)
         point = profile.points.all()
-        summary = Summary(profile, period)
+        summary = Summary(profile, period, date_from, date_until)
         return summary.summary()

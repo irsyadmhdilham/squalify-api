@@ -443,8 +443,8 @@ class Summary(PeriodFilter):
     previous_contacts = None
     sales = None
 
-    def __init__(self, profile, period):
-        super().__init__(profile, period)
+    def __init__(self, profile, period, date_from, date_until):
+        super().__init__(profile, period, date_from, date_until)
         self.current = self.period_output()['current']
         self.previous = self.period_output()['previous']
         self.current_contacts = self.contact_period_output()['current']

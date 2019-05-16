@@ -436,8 +436,8 @@ class Summary(PeriodFilter):
     sales = None
     consultants = None
 
-    def __init__(self, group, period):
-        super().__init__(group, period)
+    def __init__(self, group, period, date_from, date_until):
+        super().__init__(group, period, date_from, date_until)
         self.current = self.period_output()['current']
         self.previous = self.period_output()['previous']
         self.current_contacts = self.contact_period_output()['current']

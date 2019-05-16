@@ -7,13 +7,29 @@ class SalesFilter:
     members = None
     period = None
     sales_type = None
+    date_from = None
+    date_until = None
     
-    def __init__(self, members, period, sales_type):
+    def __init__(self, members, period, sales_type, date_from, date_until):
         self.members = members.all()
-        if period != 'all' and period != 'period':
-            self.period = period
-        if sales_type != 'all' and period != 'sales type':
-            self.sales_type = sales_type
+        self.date_from = date_from
+        self.date_until = date_until
+        # if period != 'all' and period != 'period':
+        self.period = period
+        # if sales_type != 'all' and period != 'sales type':
+        self.sales_type = sales_type
+
+    def select_date(self, sales):
+        output = sales.filter(timestamp__range=(self.date_from, self.date_until))
+        if self.sales_type is not None:
+            output = sales.filter(
+                Q(timestamp__range=(self.date_from, self.date_until)) &
+                Q(sales_type__name=self.sales_type)
+            )
+        total = output.aggregate(total=Sum('amount'))['total']
+        if total is not None:
+            return total
+        return 0
     
     def year(self, sales):
         output = sales.filter(timestamp__year=timezone.now().year)
@@ -75,6 +91,8 @@ class SalesFilter:
             return self.week(sales)
         elif self.period == 'today':
             return self.today(sales)
+        elif self.period == 'select date':
+            return self.select_date(sales)
         else:
             total = sales.aggregate(total=Sum('amount'))['total']
             if total is not None:
@@ -95,4 +113,4 @@ class SalesFilter:
         return self.sort(output)
     
     def sort(self, output):
-        return sorted(output, key=itemgetter('amount'))
+        return sorted(output, key=itemgetter('amount'), reverse=True)
