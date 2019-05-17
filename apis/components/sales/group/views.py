@@ -38,7 +38,10 @@ class GroupSalesSummary(generics.RetrieveAPIView):
     
     def get_object(self):
         sales_type = self.request.query_params.get('st')
-        s = Summary(sales_type, self.get_queryset())
+        period = self.request.query_params.get('p')
+        date_from = self.request.query_params.get('f')
+        date_until = self.request.query_params.get('u')
+        s = Summary(sales_type, self.get_queryset(), period, date_from, date_until)
         return s.result()
 
 class GroupDownlines(generics.ListAPIView):

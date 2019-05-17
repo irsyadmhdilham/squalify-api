@@ -85,34 +85,46 @@ class Status:
 class Summary(Status):
 
     members = None
+    period = None
+    date_from = None
+    date_until = None
     
-    def __init__(self, sales_type, members):
+    def __init__(self, sales_type, members, period, date_from, date_until):
         self.members = members.all()
+        self.period = period
+        self.date_from = date_from
+        self.date_until = date_until
         super().__init__(sales_type)
 
-    def year(self):
-        sales = [sales for member in self.members for sales in member.sales.filter(timestamp__year=timezone.now().year)]
-        return self.status_serializer(sales)
+    # def year(self):
+    #     sales = [sales for member in self.members for sales in member.sales.filter(timestamp__year=timezone.now().year)]
+    #     return self.status_serializer(sales)
 
-    def month(self):
-        sales = [sales for member in self.members for sales in member.sales.filter(timestamp__month=timezone.now().month)]
-        return self.status_serializer(sales)
+    # def month(self):
+    #     sales = [sales for member in self.members for sales in member.sales.filter(timestamp__month=timezone.now().month)]
+    #     return self.status_serializer(sales)
 
-    def week(self):
-        day = timezone.now().weekday()
-        start = timezone.now() - timedelta(days=day)
-        end = timezone.now() + timedelta(days=6 - day)
-        sales = [sales for member in self.members for sales in member.sales.filter(timestamp__range=(start, end))]
-        return self.status_serializer(sales)
+    # def week(self):
+    #     day = timezone.now().weekday()
+    #     start = timezone.now() - timedelta(days=day)
+    #     end = timezone.now() + timedelta(days=6 - day)
+    #     sales = [sales for member in self.members for sales in member.sales.filter(timestamp__range=(start, end))]
+    #     return self.status_serializer(sales)
 
-    def today(self):
-        sales = [sales for member in self.members for sales in member.sales.filter(timestamp__date=timezone.now().date())]
+    # def today(self):
+    #     sales = [sales for member in self.members for sales in member.sales.filter(timestamp__date=timezone.now().date())]
+    #     return self.status_serializer(sales)
+
+    def all_sales(self):
+        sales = [sales for member in self.members for sales in member.sales.all()]
+        return self.status_serializer(sales)
+    
+    def select_date(self):
+        sales = [sales for member in self.members for sales in member.sales.filter(timestamp__range=(self.date_from, self.date_until))]
         return self.status_serializer(sales)
 
     def result(self):
-        return {
-            'year': self.year(),
-            'month': self.month(),
-            'week': self.week(),
-            'today': self.today()
-        }
+        if self.period == 'select date':
+            return self.select_date()
+        else:
+            return self.all_sales()

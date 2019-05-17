@@ -186,5 +186,8 @@ class PersonalSummary(generics.RetrieveAPIView):
     def get_object(self):
         sales = self.get_queryset()
         sales_type = self.request.query_params.get('st')
-        summary = Summary(sales, sales_type)
+        period = self.request.query_params.get('p')
+        date_from = self.request.query_params.get('f')
+        date_until = self.request.query_params.get('u')
+        summary = Summary(sales, sales_type, period, date_from, date_until)
         return summary.result()

@@ -32,14 +32,14 @@ class OutputSerializer(serializers.Serializer):
     cases = serializers.IntegerField(read_only=True)
     total = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
 
-class Status(serializers.Serializer):
+class SummarySerializer(serializers.Serializer):
     in_hand = OutputSerializer(read_only=True)
     submitted = OutputSerializer(read_only=True)
     rejected = OutputSerializer(read_only=True)
     disburst = OutputSerializer(read_only=True)
 
-class SummarySerializer(serializers.Serializer):
-    today = Status(read_only=True)
-    week = Status(read_only=True)
-    month = Status(read_only=True)
-    year = Status(read_only=True)
+# class SummarySerializer(serializers.Serializer):
+#     today = Status(read_only=True)
+#     week = Status(read_only=True)
+#     month = Status(read_only=True)
+#     year = Status(read_only=True)
